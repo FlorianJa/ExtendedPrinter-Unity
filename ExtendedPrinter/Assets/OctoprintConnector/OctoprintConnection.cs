@@ -39,7 +39,7 @@ namespace OctoprintClient
         /// <summary>
         /// Gets or sets the position. of the 3D printer, guesses it if necessary from the GCODE
         /// </summary>
-        public OctoprintPosTracker Position { get; set; }
+        public OctoprintPos Position { get; set; }
         /// <summary>
         /// Gets or sets files in the Folders of the Octoprint Server
         /// </summary>
@@ -52,7 +52,7 @@ namespace OctoprintClient
         /// <summary>
         /// Reads the Hardware state, Temperatures and other information.
         /// </summary>
-        public OctoprintPrinterTracker Printers { get; set; }
+        public OctoprintPrinter Printer { get; set; }
 
         /// <summary>
         /// Creates a <see cref="T:OctoprintClient.OctoprintConnection"/> 
@@ -134,19 +134,19 @@ namespace OctoprintClient
                     }
 
                     JToken printerinfo = current.Value<JToken>("state");
-                    if (printerinfo != null && Printers.StateListens())
+                    if (printerinfo != null && Printer.StateListens())
                     {
                         OctoprintPrinterState opstate = new OctoprintPrinterState(printerinfo);
-                        Printers.CallPrinterState(opstate);
+                        Printer.CallPrinterState(opstate);
                     }
 
                     float? currentz = current.Value<float?>("currentZ");
-                    if (currentz != null && Printers.ZListens())
+                    if (currentz != null && Printer.ZListens())
                     {
-                        Printers.CallCurrentZ((float)currentz);
+                        Printer.CallCurrentZ((float)currentz);
                     }
                     JToken offsets = current.Value<JToken>("offsets");
-                    if (offsets != null && Printers.OffsetListens())
+                    if (offsets != null && Printer.OffsetListens())
                     {
                         List<int> offsetList = new List<int>();
                         for (int i = 0; i < 256; i++)
@@ -166,40 +166,40 @@ namespace OctoprintClient
                         {
                             offsetList.Add((int)offsetBed);
                         }
-                        Printers.CallOffset(offsetList);
+                        Printer.CallOffset(offsetList);
                     }
 
                     JToken temps = current.Value<JToken>("temps");
-                    if (temps != null && temps.HasValues && Printers.TempsListens() )
+                    if (temps != null && temps.HasValues && Printer.TempsListens() )
                     {
                         temps = temps.Value<JToken>(0);
-                        Printers.CallTemp(new OctoprintHistoricTemperatureState(temps));
+                        Printer.CallTemp(new OctoprintHistoricTemperatureState(temps));
 
                     }
                 }
             }
         }
 
-        internal string Get(string v)
+        internal virtual string Get(string v)
         {
             throw new NotImplementedException();
         }
 
-        internal string Delete(string v)
+        internal virtual string Delete(string v)
         {
             throw new NotImplementedException();
         }
-        internal string PostJson(string v, JObject data)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal string PostString(string v, string data)
+        internal virtual string PostJson(string v, JObject data)
         {
             throw new NotImplementedException();
         }
 
-        internal string PostMultipart(string packagestring, string v)
+        internal virtual string PostString(string v, string data)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal virtual string PostMultipart(string packagestring, string v)
         {
             throw new NotImplementedException();
         }
@@ -208,10 +208,10 @@ namespace OctoprintClient
     /// <summary>
     /// The base class for the different Trackers
     /// </summary>
-    public class OctoprintTracker
+    public class OctoprintBase
     {
         protected OctoprintConnection Connection { get; set; }
-        public OctoprintTracker(OctoprintConnection con)
+        public OctoprintBase(OctoprintConnection con)
         {
             Connection = con;
         }

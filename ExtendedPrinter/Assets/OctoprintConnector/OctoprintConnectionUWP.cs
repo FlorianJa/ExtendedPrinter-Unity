@@ -51,7 +51,7 @@ namespace OctoprintClient
         /// </summary>
         /// <returns>The result as a String, doesn't handle Exceptions</returns>
         /// <param name="location">The url sub-address like "http://192.168.1.2/<paramref name="location"/>"</param>
-        public  string Get(string location)
+        internal override string Get(string location)
         {
             string strResponseValue = string.Empty;
             Debug.WriteLine("This was searched:");
@@ -87,7 +87,7 @@ namespace OctoprintClient
         /// <returns>The Result if any exists. Doesn't handle exceptions</returns>
         /// <param name="location">The url sub-address like "http://192.168.1.2/<paramref name="location"/>"</param>
         /// <param name="arguments">The string to post tp the address</param>
-        public string PostString(string location, string arguments)
+        internal override string PostString(string location, string arguments)
         {
             string strResponseValue = string.Empty;
             Debug.WriteLine("This was searched:");
@@ -123,7 +123,7 @@ namespace OctoprintClient
         /// <returns>The Result if any exists. Doesn't handle exceptions</returns>
         /// <param name="location">The url sub-address like "http://192.168.1.2/<paramref name="location"/>"</param>
         /// <param name="arguments">The Newtonsoft Jobject to post tp the address</param>
-        public string PostJson(string location, JObject arguments)
+        internal override string PostJson(string location, JObject arguments)
         {
             string strResponseValue = string.Empty;
             Debug.WriteLine("This was searched:");
@@ -161,7 +161,7 @@ namespace OctoprintClient
         /// </summary>
         /// <returns>The Result if any, shouldn't return anything.</returns>
         /// <param name="location">The url sub-address like "http://192.168.1.2/<paramref name="location"/>"</param>
-        public string Delete(string location)
+        internal override string Delete(string location)
         {
             string strResponseValue = string.Empty;
             Debug.WriteLine("This was deleted:");
@@ -196,7 +196,7 @@ namespace OctoprintClient
         /// <returns>The Result if any.</returns>
         /// <param name="packagestring">A packagestring should be generated elsewhere and input here as a String</param>
         /// <param name="location">The url sub-address like "http://192.168.1.2/<paramref name="location"/>"</param>
-        public string PostMultipart(string packagestring, string location)
+        internal override string PostMultipart(string packagestring, string location)
         {
             Debug.WriteLine("A Multipart was posted to:");
             Debug.WriteLine(EndPoint + location + "?apikey=" + ApiKey);

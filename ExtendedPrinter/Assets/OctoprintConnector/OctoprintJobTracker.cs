@@ -7,7 +7,7 @@ namespace OctoprintClient
     /// <summary>
     /// Tracks Jobs, can get Progress or other information, start, stop or pause jobs.
     /// </summary>
-    public class OctoprintJobTracker : OctoprintTracker
+    public class OctoprintJobTracker : OctoprintBase
     {
 
         /// <summary>

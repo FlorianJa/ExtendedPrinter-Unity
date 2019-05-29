@@ -13,6 +13,7 @@ namespace ChartAndGraph.Legened
     class CanvasLegendItem : MonoBehaviour
     {
         public Image Image = null;
-        public Text Text = null;
+        public Text Name = null;
+        public Text Value = null;
     }
 }

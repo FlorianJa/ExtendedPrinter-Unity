@@ -212,7 +212,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Image: {fileID: 114000010740202500}
-  Text: {fileID: 114000013228447002}
+  Name: {fileID: 114000013228447002}
+  Value: {fileID: 0}
 --- !u!114 &114000013228447002
 MonoBehaviour:
   m_ObjectHideFlags: 1

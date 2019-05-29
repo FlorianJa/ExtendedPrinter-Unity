@@ -27,14 +27,20 @@ namespace OctoprintClient
         /// <param name="aK">The Api Key of the User account you want to use. You can get this in the user settings</param>
         public OctoprintConnectionEditor(string eP, string aK) : base(eP, aK)
         {
-            Position = new OctoprintPosTracker(this);
+            Position = new OctoprintPos(this);
             Files = new OctoprintFileTracker(this);
             Jobs = new OctoprintJobTracker(this);
-            Printers = new OctoprintPrinterTracker(this);
+            Printer = new OctoprintPrinter(this);
 
             WebSocket = new WebSocket(GetWebsocketurl());
             WebSocket.OnMessage += WebSocket_OnMessage;
             WebSocket.ConnectAsync();
+            WebSocket.OnOpen += WebSocket_OnOpen;
+        }
+
+        private void WebSocket_OnOpen(object sender, EventArgs e)
+        {
+            Debug.WriteLine("connected");
         }
 
         private void WebSocket_OnMessage(object sender, MessageEventArgs e)
@@ -48,7 +54,7 @@ namespace OctoprintClient
         /// </summary>
         /// <returns>The result as a String, doesn't handle Exceptions</returns>
         /// <param name="location">The url sub-address like "http://192.168.1.2/<paramref name="location"/>"</param>
-        public new string Get(string location)
+        internal override string Get(string location)
         {
             string strResponseValue = string.Empty;
             Debug.WriteLine("This was searched:");
@@ -69,7 +75,7 @@ namespace OctoprintClient
         /// <returns>The Result if any exists. Doesn't handle exceptions</returns>
         /// <param name="location">The url sub-address like "http://192.168.1.2/<paramref name="location"/>"</param>
         /// <param name="arguments">The string to post tp the address</param>
-        public new string PostString(string location, string arguments)
+        internal override string PostString(string location, string arguments)
         {
             string strResponseValue = string.Empty;
             Debug.WriteLine("This was searched:");
@@ -86,7 +92,7 @@ namespace OctoprintClient
         /// <returns>The Result if any exists. Doesn't handle exceptions</returns>
         /// <param name="location">The url sub-address like "http://192.168.1.2/<paramref name="location"/>"</param>
         /// <param name="arguments">The Newtonsoft Jobject to post tp the address</param>
-        public new string PostJson(string location, JObject arguments)
+        internal override string PostJson(string location, JObject arguments)
         {
             string strResponseValue = string.Empty;
             Debug.WriteLine("This was searched:");
@@ -106,7 +112,7 @@ namespace OctoprintClient
 
             using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
             {
-                var result = streamReader.ReadToEnd();
+                strResponseValue = streamReader.ReadToEnd();
             }
             return strResponseValue;
         }
@@ -116,7 +122,7 @@ namespace OctoprintClient
         /// </summary>
         /// <returns>The Result if any, shouldn't return anything.</returns>
         /// <param name="location">The url sub-address like "http://192.168.1.2/<paramref name="location"/>"</param>
-        public new string Delete(string location)
+        internal override string Delete(string location)
         {
             string strResponseValue = string.Empty;
             Debug.WriteLine("This was deleted:");
@@ -139,7 +145,7 @@ namespace OctoprintClient
         /// <returns>The Result if any.</returns>
         /// <param name="packagestring">A packagestring should be generated elsewhere and input here as a String</param>
         /// <param name="location">The url sub-address like "http://192.168.1.2/<paramref name="location"/>"</param>
-        public new string PostMultipart(string packagestring, string location)
+        internal override string PostMultipart(string packagestring, string location)
         {
             Debug.WriteLine("A Multipart was posted to:");
             Debug.WriteLine(EndPoint + location + "?apikey=" + ApiKey);

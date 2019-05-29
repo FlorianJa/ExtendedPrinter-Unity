@@ -9,7 +9,7 @@ namespace OctoprintClient
     /// <summary>
     /// Tracks Files, can delete, uplad and slice.
     /// </summary>
-    public class OctoprintFileTracker:OctoprintTracker
+    public class OctoprintFileTracker:OctoprintBase
     {
         /// <summary>
         /// Initializes a Filetracker, this shouldn't be done directly and is part of the Connection it needs anyway
