@@ -12,12 +12,12 @@ namespace OctoprintClient
         X = 1 << 0,
         Y = 1 << 1,
         Z = 1 << 2,
-        All =  X | Y | Z
+        All = X | Y | Z
     }
     /// <summary>
     /// Tracks the hardware state and provides Commands
     /// </summary>
-    public class OctoprintPrinter:OctoprintBase
+    public class OctoprintPrinter : OctoprintBase
     {
         /// <summary>
         /// The current State.
@@ -41,7 +41,7 @@ namespace OctoprintClient
         /// Initializes a Printertracker, this shouldn't be done directly and is part of the Connection it needs anyway
         /// </summary>
         /// <param name="con">The Octoprint connection it connects to.</param>
-        public OctoprintPrinter(OctoprintConnection con):base(con)
+        public OctoprintPrinter(OctoprintConnection con) : base(con)
         {
         }
 
@@ -78,7 +78,7 @@ namespace OctoprintClient
         public event Action<OctoprintHistoricTemperatureState> TempHandlers;
         public bool TempsListens()
         {
-            return TempHandlers!=null;
+            return TempHandlers != null;
         }
         public void CallTemp(OctoprintHistoricTemperatureState HT)
         {
@@ -93,7 +93,7 @@ namespace OctoprintClient
         {
             return CurrentZHandlers != null;
         }
-        public void CallCurrentZ( float z )
+        public void CallCurrentZ(float z)
         {
             CurrentZHandlers.Invoke(z);
         }
@@ -111,20 +111,23 @@ namespace OctoprintClient
                 return currentstate;
             }
             string jobInfo = "";
-            try {
-                jobInfo = Connection.Get("api/printer");
-            } catch (WebException e)
+            try
             {
-                if (((HttpWebResponse)e.Response).StatusCode == HttpStatusCode.Conflict) { 
+                jobInfo = Connection.Get("api/printer");
+            }
+            catch (WebException e)
+            {
+                if (((HttpWebResponse)e.Response).StatusCode == HttpStatusCode.Conflict)
+                {
                     OctoprintFullPrinterState returnval = new OctoprintFullPrinterState
-                        {
-                            PrinterState = new OctoprintPrinterState()
-                        };
+                    {
+                        PrinterState = new OctoprintPrinterState()
+                    };
                     returnval.PrinterState.Text = "Error 409 is the Printer Connected at all?\n";
                     return returnval;
                 }
             }
-            JObject data=new JObject();
+            JObject data = new JObject();
             data = JsonConvert.DeserializeObject<JObject>(jobInfo);
             OctoprintFullPrinterState result = new OctoprintFullPrinterState(data);
             currentstate = result;
@@ -138,7 +141,7 @@ namespace OctoprintClient
         /// <returns>The printer state.</returns>
         public OctoprintPrinterState GetPrinterState()
         {
-            string jobInfo="";
+            string jobInfo = "";
             try
             {
                 jobInfo = Connection.Get("api/printer?exclude=temperature,sd");
@@ -242,7 +245,7 @@ namespace OctoprintClient
         /// <param name="axes">Axes.</param>
         internal string MakePrintheadHome(string[] axes)
         {
-            float? x=null, y=null, z=null;
+            float? x = null, y = null, z = null;
             JArray jaxes = new JArray();
             foreach (string axis in axes)
             {
@@ -260,8 +263,9 @@ namespace OctoprintClient
                 { "command", "home" },
                 { "axes", jaxes}
             };
-            try { 
-                returnValue =Connection.PostJson("api/printer/printhead", data);
+            try
+            {
+                returnValue = Connection.PostJson("api/printer/printhead", data);
             }
             catch (WebException e)
             {
@@ -386,7 +390,7 @@ namespace OctoprintClient
         /// <param name="temp">Temperature to set the target to.</param>
         public string SetTemperatureTarget(int temp)
         {
-            return SetTemperatureTarget(new Dictionary<string, int>(){ {"tool0",temp} });
+            return SetTemperatureTarget(new Dictionary<string, int>() { { "tool0", temp } });
         }
 
         /// <summary>
@@ -645,8 +649,8 @@ namespace OctoprintClient
 
         public override string ToString()
         {
-            string returnval="";
-            returnval+="Is operational:\t" + Operational +"\n";
+            string returnval = "";
+            returnval += "Is operational:\t" + Operational + "\n";
             returnval += "Is paused:  " + Paused + "\n";
             returnval += "Is printing:    " + Printing + "\n";
             returnval += "Is Cancelling:  " + Cancelling + "\n";
@@ -654,7 +658,7 @@ namespace OctoprintClient
             returnval += "Is SD Card ready:   " + SDReady + "\n";
             returnval += "Has Error:  " + Error + "\n";
             returnval += "Is Ready:   " + Ready + "\n";
-            returnval += "Is ClosedOrReady:   "+ClosedOrError+"\n";
+            returnval += "Is ClosedOrReady:   " + ClosedOrError + "\n";
             return returnval;
         }
     }
@@ -674,7 +678,7 @@ namespace OctoprintClient
 
         public override string ToString()
         {
-            return "Actual Temperature: "+Actual+"°C\nTarget Temperature: "+Target+"°C\nOffset: "+Offset+"°C\n";
+            return "Actual Temperature: " + Actual + "°C\nTarget Temperature: " + Target + "°C\nOffset: " + Offset + "°C\n";
         }
     }
     public class OctoprintTemperatureState
@@ -685,15 +689,16 @@ namespace OctoprintClient
         public override string ToString()
         {
             string returnval = "Currently:\n";
-            if(Bed!=null)
+            if (Bed != null)
                 returnval += "The Bed Temperature:\n" + Bed.ToString();
             if (Tools != null)
                 foreach (OctoprintTemperature Tool in Tools)
                     returnval += "The Printhead tool:\n" + Tool.ToString();
 
-            if (History != null) {
+            if (History != null)
+            {
                 returnval += "Past Temperature:\n";
-                foreach(OctoprintHistoricTemperatureState State in History)
+                foreach (OctoprintHistoricTemperatureState State in History)
                     returnval += State.ToString();
             }
             return returnval;
@@ -725,11 +730,11 @@ namespace OctoprintClient
 
         public override string ToString()
         {
-            string returnval = "At " + Time+"\n";
-            if(Bed!=null)
+            string returnval = "At " + Time + "\n";
+            if (Bed != null)
                 returnval += "The Bed temperature: \n" + Bed.ToString();
-            if(Tools!=null)
-                foreach(OctoprintTemperature Tool in Tools)
+            if (Tools != null)
+                foreach (OctoprintTemperature Tool in Tools)
                     returnval += "The Printhead tool: \n" + Tool.ToString();
             return returnval;
         }
@@ -753,7 +758,7 @@ namespace OctoprintClient
         public override string ToString()
         {
             string returnval = "State: " + Text + "\n";
-            if(Flags!=null)
+            if (Flags != null)
                 returnval += Flags.ToString();
             return returnval;
         }
@@ -779,7 +784,7 @@ namespace OctoprintClient
             TempState.Tools = new List<OctoprintTemperature>();
             for (int i = 0; i < 256; i++)
             {
-                JToken tooltemp = temperaturedata.Value<JToken>("tool"+i);
+                JToken tooltemp = temperaturedata.Value<JToken>("tool" + i);
                 if (tooltemp != null)
                 {
                     TempState.Tools.Add(new OctoprintTemperature(tooltemp));
@@ -789,7 +794,7 @@ namespace OctoprintClient
                     break;
                 }
             }
-            if (temperaturedata != null && temperaturedata.Value<JToken>("history")!=null)
+            if (temperaturedata != null && temperaturedata.Value<JToken>("history") != null)
             {
                 TempState.History = new List<OctoprintHistoricTemperatureState>();
                 foreach (JObject historydata in temperaturedata["history"])
@@ -806,11 +811,11 @@ namespace OctoprintClient
         public OctoprintPrinterState PrinterState { get; set; }
         public override string ToString()
         {
-            string returnval ="";
+            string returnval = "";
             if (PrinterState != null)
                 returnval += PrinterState.ToString() + "SDState: " + SDState + "\n";
-            if(TempState!=null)
-                returnval+= TempState.ToString();
+            if (TempState != null)
+                returnval += TempState.ToString();
             return returnval;
         }
     }

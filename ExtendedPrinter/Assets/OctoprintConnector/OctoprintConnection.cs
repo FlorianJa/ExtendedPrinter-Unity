@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Threading;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 #if UNITY_EDITOR
@@ -30,7 +29,7 @@ namespace OctoprintClient
         /// The end point URL like https://192.168.1.2/
         /// </summary>
         public string EndPoint { get; set; }
-        
+
         /// <summary>
         /// The end point Api Key like "ABCDE12345"
         /// </summary>
@@ -170,7 +169,7 @@ namespace OctoprintClient
                     }
 
                     JToken temps = current.Value<JToken>("temps");
-                    if (temps != null && temps.HasValues && Printer.TempsListens() )
+                    if (temps != null && temps.HasValues && Printer.TempsListens())
                     {
                         temps = temps.Value<JToken>(0);
                         Printer.CallTemp(new OctoprintHistoricTemperatureState(temps));

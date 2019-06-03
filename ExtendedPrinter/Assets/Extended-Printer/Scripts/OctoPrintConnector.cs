@@ -5,7 +5,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OctoPrintConnector : MonoBehaviour {
+public class OctoPrintConnector : MonoBehaviour
+{
 
     private OctoprintConnection octoprintConnection;
     public string Ip;
@@ -20,7 +21,7 @@ public class OctoPrintConnector : MonoBehaviour {
     public event EventHandler<HomedEventArgs> PositionChanged;
 
     // Use this for initialization
-    void Start ()
+    void Start()
     {
         Connected = false;
 #if UNITY_WSA && !UNITY_EDITOR
@@ -54,7 +55,7 @@ public class OctoPrintConnector : MonoBehaviour {
 
     public void MoveAxis(Axis Axis, float position, bool absolute, int? speed)
     {
-        if(Axis == Axis.X)
+        if (Axis == Axis.X)
         {
             octoprintConnection.Printer.MakePrintheadJog(position, null, null, absolute, speed);
         }
@@ -80,10 +81,13 @@ public class OctoPrintConnector : MonoBehaviour {
         {
             UnityMainThreadDispatcher.Instance().Enqueue(() =>
             {
-                Graph.DataSource.AddPointToCategoryRealtime("ToolTarget", System.DateTime.Now, obj.Tools[0].Target, 1f);
-                Graph.DataSource.AddPointToCategoryRealtime("BedTarget", System.DateTime.Now, obj.Bed.Target, 1f);
-                Graph.DataSource.AddPointToCategoryRealtime("Tool", System.DateTime.Now, obj.Tools[0].Actual, 1f);
-                Graph.DataSource.AddPointToCategoryRealtime("Bed", System.DateTime.Now, obj.Bed.Actual, 1f);
+                if (Graph != null)
+                {
+                    Graph.DataSource.AddPointToCategoryRealtime("ToolTarget", System.DateTime.Now, obj.Tools[0].Target, 1f);
+                    Graph.DataSource.AddPointToCategoryRealtime("BedTarget", System.DateTime.Now, obj.Bed.Target, 1f);
+                    Graph.DataSource.AddPointToCategoryRealtime("Tool", System.DateTime.Now, obj.Tools[0].Actual, 1f);
+                    Graph.DataSource.AddPointToCategoryRealtime("Bed", System.DateTime.Now, obj.Bed.Actual, 1f);
+                }
             });
         }
     }

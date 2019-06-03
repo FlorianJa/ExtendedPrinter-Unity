@@ -1,15 +1,16 @@
-﻿using HoloToolkit.Examples.InteractiveElements;
-using HoloToolkit.Examples.UX;
-using HoloToolkit.Unity.Buttons;
-using HoloToolkit.Unity.Collections;
+﻿using Microsoft.MixedReality.Toolkit.UI;
+using Microsoft.MixedReality.Toolkit.Utilities;
 using OctoprintClient;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 
-public class ButtonGenerator : MonoBehaviour {
+public class ButtonGenerator : MonoBehaviour
+{
 
     public GameObject ButtonPrefab;
     public GameObject CheckBoxPrefab;
@@ -27,7 +28,7 @@ public class ButtonGenerator : MonoBehaviour {
     void Start()
     {
         AllFile = new List<OctoprintFile>();
-       
+
     }
 
     // Update is called once per frame
@@ -35,7 +36,7 @@ public class ButtonGenerator : MonoBehaviour {
     {
         if (connector.Connected && MenuCreated == false)
         {
-            if (GetFileTaks == null || GetFileTaks.Status != TaskStatus.Running)
+            if (GetFileTaks == null)
             {
                 GetFileTaks = Task.Run(() =>
                 {
@@ -50,27 +51,27 @@ public class ButtonGenerator : MonoBehaviour {
             }
         }
 
-        if(AllFileNameReceived && MenuCreated == false)
+        if (AllFileNameReceived && MenuCreated == false)
         {
             foreach (var file in AllFile)
             {
                 var filenameSplitted = file.Name.Split('.')[0];
                 GameObject button = Instantiate(ButtonPrefab, Vector3.zero, Quaternion.identity);
                 button.name = filenameSplitted;
-                button.GetComponent<CompoundButtonText>().Text = filenameSplitted;
+                button.GetComponentInChildren<TextMesh>().text = filenameSplitted;
                 button.transform.parent = transform;
-                var progress = button.AddComponent<ProgressLaunchButton>();
-                progress.UrlToFile = file.Refs_download;
-                progress.MeshCreator = MeshCreator;
-
-                GetComponent<ButtonInteractionReceiver>().interactables.Add(button);
-
+                button.GetComponent<Interactable>().OnClick.AddListener(() => {
+                    Debug.Log("clicked");
+                    StartCoroutine(MeshCreator.LoadObject(file.Refs_download));
+                });
+                button.GetComponent<Interactable>().IsGlobal = true;
             }
 
-            GetComponent<ObjectCollection>().UpdateCollection();
+            GetComponent<GridObjectCollection>().UpdateCollection();
             MenuCreated = true;
         }
     }
+
 }
 
 

@@ -9,13 +9,13 @@ namespace OctoprintClient
     /// <summary>
     /// Tracks Files, can delete, uplad and slice.
     /// </summary>
-    public class OctoprintFileTracker:OctoprintBase
+    public class OctoprintFileTracker : OctoprintBase
     {
         /// <summary>
         /// Initializes a Filetracker, this shouldn't be done directly and is part of the Connection it needs anyway
         /// </summary>
         /// <param name="con">The Octoprint connection it connects to.</param>
-        public OctoprintFileTracker(OctoprintConnection con):base(con)
+        public OctoprintFileTracker(OctoprintConnection con) : base(con)
         {
         }
 
@@ -38,7 +38,7 @@ namespace OctoprintClient
         /// <param name="path">The path to the Folder or File.</param>
         public OctoprintFolder GetFiles(string path)
         {
-            string jobInfo="";
+            string jobInfo = "";
             try
             {
                 jobInfo = Connection.Get("api/files" + path);
@@ -53,7 +53,7 @@ namespace OctoprintClient
                 }
             }
             JObject data = JsonConvert.DeserializeObject<JObject>(jobInfo);
-            OctoprintFolder folder = new OctoprintFolder(data,this) { Name = data.Value<String>("name")??"", Path = data.Value<String>("path")??"", Type = "folder" };
+            OctoprintFolder folder = new OctoprintFolder(data, this) { Name = data.Value<String>("name") ?? "", Path = data.Value<String>("path") ?? "", Type = "folder" };
             return folder;
         }
 
@@ -64,7 +64,7 @@ namespace OctoprintClient
         /// <param name="path">The path of the file that should be selected.</param>
         /// <param name="location">The location (local or sdcard) where this File should be. Normally local</param>
         /// <param name="print">If set, defines if the GCode should be printed directly after being selected. null means false</param>
-        public string Select( string path, string location="local", bool print=false)
+        public string Select(string path, string location = "local", bool print = false)
         {
             JObject data = new JObject
             {
@@ -104,7 +104,7 @@ namespace OctoprintClient
         /// <param name="profile">The Profile of the Slicer.</param>
         /// <param name="profileparam">Parameter of the slicer that need to be overwriten from the Profile.</param>
         /// <param name="print">If set to <c>true</c> prints the GCode after slicing.</param>
-        public string Slice(string location, string path, bool select=false, string gcode="", int posx=100, int posy=100, string slicer="", string profile="", Dictionary<string,string> profileparam=null, bool print=false)
+        public string Slice(string location, string path, bool select = false, string gcode = "", int posx = 100, int posy = 100, string slicer = "", string profile = "", Dictionary<string, string> profileparam = null, bool print = false)
         {
             JObject data = new JObject
             {
@@ -116,7 +116,7 @@ namespace OctoprintClient
 
 
             };
-            if (profileparam!=null && profileparam.Count>0)
+            if (profileparam != null && profileparam.Count > 0)
             {
                 data.Add(JObject.FromObject(profileparam));
             }
@@ -128,7 +128,8 @@ namespace OctoprintClient
             {
                 data.Add("gcode", gcode);
             }
-            try {
+            try
+            {
                 return Connection.PostJson("api/files/" + location + "/" + path, data);
             }
             catch (WebException e)
@@ -146,7 +147,7 @@ namespace OctoprintClient
                     default:
                         return "unknown webexception occured";
                 }
-                   
+
             }
 
 
@@ -193,7 +194,8 @@ namespace OctoprintClient
         /// <param name="path">The path of the File to delete.</param>
         public string Delete(string location, string path)
         {
-            try {
+            try
+            {
                 return Connection.Delete("api/files/" + location + "/" + path);
             }
             catch (WebException e)
@@ -222,7 +224,7 @@ namespace OctoprintClient
         {
             string foldername = path.Split('/')[path.Split('/').Length - 1];
             path = path.Substring(0, path.Length - foldername.Length);
-            string packagestring="" +
+            string packagestring = "" +
                 "--{0}\r\n" +
                 "Content-Disposition: form-data; name=\"foldername\";\r\n" +
                 "\r\n" +
@@ -244,18 +246,18 @@ namespace OctoprintClient
         /// <param name="location">Location to upload to, local or sdcard, not sure if sdcard works, but takes ages anyway.</param>
         /// <param name="select">If set to <c>true</c> selects the File to print next.</param>
         /// <param name="print">If set to <c>true</c> prints the File.</param>
-        public string UploadFile(string filename,  string onlinepath="", string location="local", bool select=false, bool print=false)
+        public string UploadFile(string filename, string onlinepath = "", string location = "local", bool select = false, bool print = false)
         {
-            string fileData =string.Empty;
-            fileData= System.IO.File.ReadAllText(filename);
-            filename=(filename.Split('/')[filename.Split('/').Length-1]).Split('\\')[filename.Split('\\')[filename.Split('\\').Length - 1].Length - 1];
-            string packagestring="" +
+            string fileData = string.Empty;
+            fileData = System.IO.File.ReadAllText(filename);
+            filename = (filename.Split('/')[filename.Split('/').Length - 1]).Split('\\')[filename.Split('\\')[filename.Split('\\').Length - 1].Length - 1];
+            string packagestring = "" +
                 "--{0}\r\n" +
-                "Content-Disposition: form-data; name=\"file\"; filename=\""+filename+"\"\r\n" +
+                "Content-Disposition: form-data; name=\"file\"; filename=\"" + filename + "\"\r\n" +
                 "Content-Type: application/octet-stream\r\n" +
                 "\r\n" +
                 fileData + "\r\n" +
-                
+
                 "--{0}\r\n" +
                 "Content-Disposition: form-data; name=\"path\";\r\n" +
                 "\r\n" +
@@ -269,7 +271,7 @@ namespace OctoprintClient
                 "\r\n" +
                 print + "\r\n" +
                 "--{0}--\r\n";
-            return Connection.PostMultipart(packagestring, "api/files/"+location);
+            return Connection.PostMultipart(packagestring, "api/files/" + location);
         }
     }
 
@@ -333,7 +335,7 @@ namespace OctoprintClient
         public override string ToString()
         {
             string returnvalue = "";
-            returnvalue += Name + ", path: " +Origin+"/"+ Path + " ("+ Type + ") :\n";
+            returnvalue += Name + ", path: " + Origin + "/" + Path + " (" + Type + ") :\n";
             return returnvalue;
         }
     }
@@ -383,7 +385,7 @@ namespace OctoprintClient
                         }
 
                         JToken dimensions = gcodeanalysis.Value<JToken>("dimensions");
-                        if(dimensions != null)
+                        if (dimensions != null)
                         {
                             file.GcodeAnalysis.Dimensions_Depth = dimensions.Value<float?>("depth") ?? -1f;
                             file.GcodeAnalysis.Dimensions_Height = dimensions.Value<float?>("height") ?? -1f;
@@ -409,13 +411,14 @@ namespace OctoprintClient
         public override string ToString()
         {
             string returnvalue = "";
-            returnvalue += Name + ": " + Path + " ("+ Type + ") :\n";
-            foreach (OctoprintFile file in octoprintFiles){
-                returnvalue+="  " + file.ToString()+"\n";
+            returnvalue += Name + ": " + Path + " (" + Type + ") :\n";
+            foreach (OctoprintFile file in octoprintFiles)
+            {
+                returnvalue += "  " + file.ToString() + "\n";
             }
             foreach (OctoprintFolder folder in octoprintFolders)
             {
-                if(folder!=null)
+                if (folder != null)
                     returnvalue += "    " + folder.ToString().Replace("\n", "\n ");
             }
             return returnvalue;

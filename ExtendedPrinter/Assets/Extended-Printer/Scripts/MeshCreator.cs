@@ -5,11 +5,11 @@ using System.IO;
 using System.Globalization;
 using System;
 using System.Threading;
-using HoloToolkit.Examples.InteractiveElements;
+using Microsoft.MixedReality.Toolkit.UI;
 using UnityMeshSimplifier;
 using B83.MeshTools;
 using System.Threading.Tasks;
-using HoloToolkit.UX.Progress;
+//using HoloToolkit.UX.Progress;
 using UnityEngine.Networking;
 
 //using UnityMeshSimplifier.Scripts.UnityMeshSimplifier;
@@ -35,8 +35,8 @@ public class MeshCreator : MonoBehaviour
     private int createdLayers;
     private int simplifiedLayers;
     public int layersvisible = 0;
-    public ButtonGeneratorShowHideMenu ShowHideCheckBoxes;
-    public SliderGestureControl slider;
+    //public ButtonGeneratorShowHideMenu ShowHideCheckBoxes;
+    //public SliderGestureControl slider;
     public bool loading = false;
     private float plasticwidth = 0.6f;
     private int _layersvisible = 0;
@@ -61,7 +61,7 @@ public class MeshCreator : MonoBehaviour
         public MeshSimplifier MeshSimplifier;
         public MeshFilter MeshFilter;
         public bool simplified;
-        
+
     }
     private bool issimplifying = false;
     private bool simplifypossible = false;
@@ -75,15 +75,16 @@ public class MeshCreator : MonoBehaviour
     private string path;
     private bool loadingFromDisk;
     private int EnqueuedMeshes;
-    private int dequeuedMeshes =0;
+    private int dequeuedMeshes = 0;
     private int layernum;
 
     void Start()
     {
-        if (slider)
-        {
-            slider.OnUpdateEvent.AddListener(Updateslider);
-        }
+        //if (slider)
+        //{
+        //    slider.OnUpdateEvent.AddListener(Updateslider);
+        //}
+
         dataPath = Application.persistentDataPath;
         string mainpath = Application.streamingAssetsPath;
         //names = Directory.GetFiles(mainpath, "*.gcode");
@@ -114,19 +115,21 @@ public class MeshCreator : MonoBehaviour
 
     internal IEnumerator LoadObject(string urlToFile)
     {
+        Debug.Log("click in meshcreator");
         //UnityMainThreadDispatcher.Instance().Enqueue(() =>
         //{
-            ProgressIndicator.Instance.SetMessage("Lade Objekt...");
-            ProgressIndicator.Instance.SetProgress(0f);
+        //ProgressIndicator.Instance.SetMessage("Lade Objekt...");
+        //ProgressIndicator.Instance.SetProgress(0f);
         //});
 
-        slider.enabled = false;
-        ShowHideCheckBoxes.gameObject.SetActive(false);
+        //slider.enabled = false;
+        //ShowHideCheckBoxes.gameObject.SetActive(false);
+
         clearchildren();
 
         int startindex = urlToFile.LastIndexOf("/") + 1;
         string savePath = dataPath + FolderToRawGCodes + urlToFile.Substring(startindex);
-        
+
         //create a parent for the objects we create now
         RootForObject = new GameObject(GetObjectNameFromPath(savePath));
         RootForObject.transform.SetParent(transform);
@@ -173,7 +176,7 @@ public class MeshCreator : MonoBehaviour
 
     private void LoadObjectFromDisk(string path)
     {
-        
+
         EnqueuedMeshes = 0;
         //int layernum = 0;
 
@@ -184,7 +187,7 @@ public class MeshCreator : MonoBehaviour
 
         foreach (var folder in Directory.GetDirectories(rootFolderOfObject))
         {
-                EnqueuedMeshes += Directory.GetFiles(folder).Length;
+            EnqueuedMeshes += Directory.GetFiles(folder).Length;
         }
         loadingFromDisk = true;
         foreach (var folder in Directory.GetDirectories(rootFolderOfObject))
@@ -200,7 +203,7 @@ public class MeshCreator : MonoBehaviour
             //Material typeMaterial = null;
             //typeMaterial = GetMeshTypeMaterial(type.name);
 
-            
+
             foreach (var file in Directory.GetFiles(folder))
             {
                 //create new object for each layer and add meshfilter and renderer
@@ -259,7 +262,7 @@ public class MeshCreator : MonoBehaviour
             foreach (var file in Directory.GetFiles(folder))
             {
                 var l = Convert.ToInt32(file.Substring(file.LastIndexOf(@" ") + 1, file.LastIndexOf(".") - file.LastIndexOf(@" ") - 1));
-                if(!sortedLayers.ContainsKey(l))
+                if (!sortedLayers.ContainsKey(l))
                 {
                     sortedLayers.Add(l, new List<string>());
                     sortedLayers[l].Add(file);
@@ -276,9 +279,9 @@ public class MeshCreator : MonoBehaviour
         {
             foreach (var file in layers.Value)
             {
-                var typeString = file.Substring(file.LastIndexOf(@"\") + 1, file.LastIndexOf(' ') - file.LastIndexOf(@"\")-1);
-                
-                if(!allLayerObjects.ContainsKey(typeString))
+                var typeString = file.Substring(file.LastIndexOf(@"\") + 1, file.LastIndexOf(' ') - file.LastIndexOf(@"\") - 1);
+
+                if (!allLayerObjects.ContainsKey(typeString))
                 {
                     var type = new GameObject(typeString);
                     type.transform.SetParent(RootForObject.transform);
@@ -316,13 +319,13 @@ public class MeshCreator : MonoBehaviour
             yield return null;
         }
 
-        
+
         layersvisible = layernum;
         _layersvisible = layernum;
-        slider.SetSpan(0, layernum);
-        slider.SetSliderValue(layernum);
-        ShowHideCheckBoxes.Rebuild();
-        ShowHideCheckBoxes.gameObject.SetActive(true);
+        //slider.SetSpan(0, layernum);
+        //slider.SetSliderValue(layernum);
+        //ShowHideCheckBoxes.Rebuild();
+        //ShowHideCheckBoxes.gameObject.SetActive(true);
         StartCoroutine(closeProgress());
     }
     /// <summary>
@@ -373,7 +376,7 @@ public class MeshCreator : MonoBehaviour
         int indexOfLastForwardSlash = path.LastIndexOf(@"/");
         int indexOfFileExtention = path.LastIndexOf(".");
 
-        if ((indexOfLastForwardSlash > 0 || indexOfLastBackSlash>0) && indexOfFileExtention > 0)
+        if ((indexOfLastForwardSlash > 0 || indexOfLastBackSlash > 0) && indexOfFileExtention > 0)
         {
             int startIndex = indexOfLastBackSlash > 0 ? indexOfLastBackSlash : indexOfLastForwardSlash;
 
@@ -387,17 +390,19 @@ public class MeshCreator : MonoBehaviour
 
     private void Updateslider(float arg0)
     {
-        layersvisible = (int)slider.SliderValue;
+        //layersvisible = (int)slider.SliderValue;
     }
 
-    public void load(string name)
+    public void load(string path)
     {
-        slider.enabled = false;
-        ShowHideCheckBoxes.enabled = false;
+        Debug.Log("in meshcreator");
+        //slider.enabled = false;
+        //ShowHideCheckBoxes.enabled = false;
         clearchildren();
         string mainpath = Application.streamingAssetsPath;
-        names = Directory.GetFiles(mainpath, "*.gcode");
 
+        names = Directory.GetFiles(mainpath, "*.gcode");
+        
         for (int i = 0; i < names.Length; i++)
         {
             if (names[i].Contains(name) && names[i].EndsWith(".gcode"))
@@ -419,8 +424,8 @@ public class MeshCreator : MonoBehaviour
                 }
             }
         }
-        ShowHideCheckBoxes.enabled = true;
-        slider.enabled = true;
+        //ShowHideCheckBoxes.enabled = true;
+        //slider.enabled = true;
     }
     /// <summary>
     /// call this before you recreate to regenerate with new clustersizes
@@ -1092,18 +1097,18 @@ public class MeshCreator : MonoBehaviour
         if (newloaded)
         {
             newloaded = false;
-            slider.SetSpan(0, layersvisible);
-            slider.SetSliderValue(layersvisible);
-            ShowHideCheckBoxes.Rebuild();
+            //slider.SetSpan(0, layersvisible);
+            //slider.SetSliderValue(layersvisible);
+            //ShowHideCheckBoxes.Rebuild();
         }
 
-        if(loadingFromDisk == true)
+        if (loadingFromDisk == true)
         {
             StartCoroutine(LoadObjectFromDiskCR(path));
             loadingFromDisk = false;
         }
 
-        if(loadQueue.Count > 0 && loadingFromDisk)
+        if (loadQueue.Count > 0 && loadingFromDisk)
         {
 
             var KeyValuepPairLayer = loadQueue.Dequeue();
@@ -1143,7 +1148,7 @@ public class MeshCreator : MonoBehaviour
 
             allLayerObjects[parent].Add(l, layer);
             dequeuedMeshes++;
-            if(dequeuedMeshes == EnqueuedMeshes)
+            if (dequeuedMeshes == EnqueuedMeshes)
             {
                 RootForObject.transform.localPosition = new Vector3(1, 1, 1);
                 RootForObject.transform.localScale = new Vector3(1, 1, 1);
@@ -1151,9 +1156,9 @@ public class MeshCreator : MonoBehaviour
 
                 layersvisible = layernum;
                 _layersvisible = layernum;
-                slider.SetSpan(0, layernum);
-                slider.SetSliderValue(layernum);
-                ShowHideCheckBoxes.Rebuild();
+                //slider.SetSpan(0, layernum);
+                //slider.SetSliderValue(layernum);
+                //ShowHideCheckBoxes.Rebuild();
                 StartCoroutine(closeProgress());
                 loadingFromDisk = false;
             }
@@ -1222,22 +1227,23 @@ public class MeshCreator : MonoBehaviour
 
     private IEnumerator closeProgress()
     {
-        if (ProgressIndicator.Instance.IsLoading)
-        {
-            // Give the user a final notification that loading has finished (optional)
-            ProgressIndicator.Instance.SetMessage("Object geladen.");
-            ProgressIndicator.Instance.SetProgress(1f);
+        //if (ProgressIndicator.Instance.IsLoading)
+        //{
+        //    // Give the user a final notification that loading has finished (optional)
+        //    ProgressIndicator.Instance.SetMessage("Object geladen.");
+        //    ProgressIndicator.Instance.SetProgress(1f);
 
-            // Close the loading dialog
-            // ProgressIndicator.Instance.IsLoading will report true until its 'Closing' animation has ended
-            // This typically takes about 1 second
-            ProgressIndicator.Instance.Close();
+        //    // Close the loading dialog
+        //    // ProgressIndicator.Instance.IsLoading will report true until its 'Closing' animation has ended
+        //    // This typically takes about 1 second
+        //    ProgressIndicator.Instance.Close();
 
-            while (ProgressIndicator.Instance.IsLoading)
-            {
-                yield return null;
-            }
-        }
+        //    while (ProgressIndicator.Instance.IsLoading)
+        //    {
+        //        yield return null;
+        //    }
+        //}
+        yield return null;
     }
 
     internal void ToogleReload()
