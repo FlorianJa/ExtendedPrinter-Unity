@@ -273,6 +273,34 @@ namespace OctoprintClient
         }
     }
 
+    public class GcodeAnalysis
+    {
+        /// <summary>
+        /// time in seconds
+        /// </summary>
+        public float EstimatedPrintTime { get; set; }
+        /// <summary>
+        /// length in mm
+        /// </summary>
+        public float FilamentLength { get; set; }
+        /// <summary>
+        /// volumen in m³
+        /// </summary>
+        public float FilamentVolume { get; set; }
+        /// <summary>
+        /// depth in mm
+        /// </summary>
+        public float Dimensions_Depth { get; set; }
+        /// <summary>
+        /// height in mm
+        /// </summary>
+        public float Dimensions_Height { get; set; }
+        /// <summary>
+        /// width in mm
+        /// </summary>
+        public float Dimensions_Width { get; set; }
+    }
+
     public class OctoprintFile
     {
         public OctoprintFile(JObject filedata)
@@ -297,9 +325,7 @@ namespace OctoprintClient
         public string Origin { get; set; }
         public string Refs_resource { get; set; }
         public string Refs_download { get; set; }
-        public int GcodeAnalysis_estimatedPrintTime { get; set; }
-        public int GcodeAnalysis_filament_length { get; set; }
-        public int GcodeAnalysis_filament_volume { get; set; }
+        public GcodeAnalysis GcodeAnalysis = new GcodeAnalysis();
         public int Print_failure { get; set; }
         public int Print_success { get; set; }
         public int Print_last_date { get; set; }
@@ -343,12 +369,25 @@ namespace OctoprintClient
                     JToken gcodeanalysis = filedata.Value<JToken>("gcodeAnalysis");
                     if (gcodeanalysis != null)
                     {
-                        file.GcodeAnalysis_estimatedPrintTime = gcodeanalysis.Value<int?>("estimatedPrintTime") ?? 0;
+                        file.GcodeAnalysis.EstimatedPrintTime = gcodeanalysis.Value<int?>("estimatedPrintTime") ?? 0;
+
                         JToken filament = gcodeanalysis.Value<JToken>("filament");
                         if (filament != null)
                         {
-                            file.GcodeAnalysis_filament_length = filament.Value<int?>("length") ?? -1;
-                            file.GcodeAnalysis_filament_volume = filament.Value<int?>("volume") ?? -1;
+                            JToken tool0 = filament.Value<JToken>("tool0");
+                            if (tool0 != null)
+                            {
+                                file.GcodeAnalysis.FilamentLength = tool0.Value<int?>("length") ?? -1;
+                                file.GcodeAnalysis.FilamentVolume = tool0.Value<int?>("volume") ?? -1;
+                            }
+                        }
+
+                        JToken dimensions = gcodeanalysis.Value<JToken>("dimensions");
+                        if(dimensions != null)
+                        {
+                            file.GcodeAnalysis.Dimensions_Depth = dimensions.Value<float?>("depth") ?? -1f;
+                            file.GcodeAnalysis.Dimensions_Height = dimensions.Value<float?>("height") ?? -1f;
+                            file.GcodeAnalysis.Dimensions_Width = dimensions.Value<float?>("width") ?? -1f;
                         }
                     }
                     JToken print = filedata.Value<JToken>("print");

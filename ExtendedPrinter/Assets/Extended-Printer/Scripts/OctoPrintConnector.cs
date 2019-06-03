@@ -12,20 +12,36 @@ public class OctoPrintConnector : MonoBehaviour {
     public string ApiKey;
     public GraphChart Graph;
 
+    public bool Connected
+    {
+        get; private set;
+    }
+
     public event EventHandler<HomedEventArgs> PositionChanged;
 
     // Use this for initialization
     void Start ()
     {
+        Connected = false;
 #if UNITY_WSA && !UNITY_EDITOR
         octoprintConnection = new OctoprintConnectionUWP(Ip, ApiKey);
 #else
         octoprintConnection = new OctoprintConnectionEditor(Ip, ApiKey);
+        Connected = true;
 #endif
 
         octoprintConnection.Printer.TempHandlers += Printers_TempHandlers;
         octoprintConnection.Printer.PrinterstateHandlers += Printers_PrinterstateHandlers;
         octoprintConnection.Printer.Homed += Printer_Homed;
+    }
+
+    /// <summary>
+    /// returns all files on octoprint server in folder hierarchy format
+    /// </summary>
+    /// <returns></returns>
+    public OctoprintFolder GetAllFiles()
+    {
+        return octoprintConnection.Files.GetFiles();
     }
 
     private void Printer_Homed(object sender, HomedEventArgs e)
@@ -60,13 +76,16 @@ public class OctoPrintConnector : MonoBehaviour {
 
     private void Printers_TempHandlers(OctoprintHistoricTemperatureState obj)
     {
-        UnityMainThreadDispatcher.Instance().Enqueue(() =>
+        if (UnityMainThreadDispatcher.Instance() != null)
         {
-            Graph.DataSource.AddPointToCategoryRealtime("ToolTarget", System.DateTime.Now, obj.Tools[0].Target, 1f); 
-            Graph.DataSource.AddPointToCategoryRealtime("BedTarget", System.DateTime.Now, obj.Bed.Target, 1f); 
-            Graph.DataSource.AddPointToCategoryRealtime("Tool", System.DateTime.Now, obj.Tools[0].Actual, 1f); 
-            Graph.DataSource.AddPointToCategoryRealtime("Bed", System.DateTime.Now, obj.Bed.Actual, 1f);
-        });
+            UnityMainThreadDispatcher.Instance().Enqueue(() =>
+            {
+                Graph.DataSource.AddPointToCategoryRealtime("ToolTarget", System.DateTime.Now, obj.Tools[0].Target, 1f);
+                Graph.DataSource.AddPointToCategoryRealtime("BedTarget", System.DateTime.Now, obj.Bed.Target, 1f);
+                Graph.DataSource.AddPointToCategoryRealtime("Tool", System.DateTime.Now, obj.Tools[0].Actual, 1f);
+                Graph.DataSource.AddPointToCategoryRealtime("Bed", System.DateTime.Now, obj.Bed.Actual, 1f);
+            });
+        }
     }
 
 
