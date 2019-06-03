@@ -35,7 +35,7 @@ public class MeshCreator : MonoBehaviour
     private int createdLayers;
     private int simplifiedLayers;
     public int layersvisible = 0;
-    //public ButtonGeneratorShowHideMenu ShowHideCheckBoxes;
+    public ButtonGeneratorShowHideMenu ShowHideCheckBoxes;
     //public SliderGestureControl slider;
     public bool loading = false;
     private float plasticwidth = 0.6f;
@@ -123,7 +123,7 @@ public class MeshCreator : MonoBehaviour
         //});
 
         //slider.enabled = false;
-        //ShowHideCheckBoxes.gameObject.SetActive(false);
+        ShowHideCheckBoxes.gameObject.SetActive(false);
 
         clearchildren();
 
@@ -238,7 +238,7 @@ public class MeshCreator : MonoBehaviour
         //_layersvisible = layernum;
         //slider.SetSpan(0, layernum);
         //slider.SetSliderValue(layernum);
-        //ShowHideCheckBoxes.Rebuild();
+        ShowHideCheckBoxes.Rebuild();
         loadingFromDisk = false;
     }
     private IEnumerator LoadObjectFromDiskCR(string path)
@@ -324,8 +324,8 @@ public class MeshCreator : MonoBehaviour
         _layersvisible = layernum;
         //slider.SetSpan(0, layernum);
         //slider.SetSliderValue(layernum);
-        //ShowHideCheckBoxes.Rebuild();
-        //ShowHideCheckBoxes.gameObject.SetActive(true);
+        ShowHideCheckBoxes.Rebuild();
+        ShowHideCheckBoxes.gameObject.SetActive(true);
         StartCoroutine(closeProgress());
     }
     /// <summary>
@@ -397,7 +397,7 @@ public class MeshCreator : MonoBehaviour
     {
         Debug.Log("in meshcreator");
         //slider.enabled = false;
-        //ShowHideCheckBoxes.enabled = false;
+        ShowHideCheckBoxes.enabled = false;
         clearchildren();
         string mainpath = Application.streamingAssetsPath;
 
@@ -424,7 +424,7 @@ public class MeshCreator : MonoBehaviour
                 }
             }
         }
-        //ShowHideCheckBoxes.enabled = true;
+        ShowHideCheckBoxes.enabled = true;
         //slider.enabled = true;
     }
     /// <summary>
@@ -1099,7 +1099,7 @@ public class MeshCreator : MonoBehaviour
             newloaded = false;
             //slider.SetSpan(0, layersvisible);
             //slider.SetSliderValue(layersvisible);
-            //ShowHideCheckBoxes.Rebuild();
+            ShowHideCheckBoxes.Rebuild();
         }
 
         if (loadingFromDisk == true)
@@ -1158,7 +1158,7 @@ public class MeshCreator : MonoBehaviour
                 _layersvisible = layernum;
                 //slider.SetSpan(0, layernum);
                 //slider.SetSliderValue(layernum);
-                //ShowHideCheckBoxes.Rebuild();
+                ShowHideCheckBoxes.Rebuild();
                 StartCoroutine(closeProgress());
                 loadingFromDisk = false;
             }
