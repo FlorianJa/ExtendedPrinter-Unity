@@ -36,7 +36,7 @@ public class MeshCreator : MonoBehaviour
     private int simplifiedLayers;
     public int layersvisible = 0;
     public ButtonGeneratorShowHideMenu ShowHideCheckBoxes;
-    //public SliderGestureControl slider;
+    public PinchSlider slider;
     public bool loading = false;
     private float plasticwidth = 0.6f;
     private int _layersvisible = 0;
@@ -80,10 +80,10 @@ public class MeshCreator : MonoBehaviour
 
     void Start()
     {
-        //if (slider)
-        //{
-        //    slider.OnUpdateEvent.AddListener(Updateslider);
-        //}
+        if (slider)
+        {
+            slider.OnValueUpdated.AddListener(Updateslider);
+        }
 
         dataPath = Application.persistentDataPath;
         string mainpath = Application.streamingAssetsPath;
@@ -122,7 +122,7 @@ public class MeshCreator : MonoBehaviour
         //ProgressIndicator.Instance.SetProgress(0f);
         //});
 
-        //slider.enabled = false;
+        slider.enabled = false;
         ShowHideCheckBoxes.gameObject.SetActive(false);
 
         clearchildren();
@@ -174,73 +174,73 @@ public class MeshCreator : MonoBehaviour
         }
     }
 
-    private void LoadObjectFromDisk(string path)
-    {
+    //private void LoadObjectFromDisk(string path)
+    //{
 
-        EnqueuedMeshes = 0;
-        //int layernum = 0;
+    //    EnqueuedMeshes = 0;
+    //    //int layernum = 0;
 
-        //create object to put all mesh types in
-        var objectName = GetObjectNameFromPath(path);
+    //    //create object to put all mesh types in
+    //    var objectName = GetObjectNameFromPath(path);
 
-        var rootFolderOfObject = dataPath + "/" + objectName;
+    //    var rootFolderOfObject = dataPath + "/" + objectName;
 
-        foreach (var folder in Directory.GetDirectories(rootFolderOfObject))
-        {
-            EnqueuedMeshes += Directory.GetFiles(folder).Length;
-        }
-        loadingFromDisk = true;
-        foreach (var folder in Directory.GetDirectories(rootFolderOfObject))
-        {
-            //create object for each mesh type
-            //var type = new GameObject(folder.Substring(folder.LastIndexOf(@"\") + 1));
-            //type.transform.SetParent(RootForObject.transform);
+    //    foreach (var folder in Directory.GetDirectories(rootFolderOfObject))
+    //    {
+    //        EnqueuedMeshes += Directory.GetFiles(folder).Length;
+    //    }
+    //    loadingFromDisk = true;
+    //    foreach (var folder in Directory.GetDirectories(rootFolderOfObject))
+    //    {
+    //        //create object for each mesh type
+    //        //var type = new GameObject(folder.Substring(folder.LastIndexOf(@"\") + 1));
+    //        //type.transform.SetParent(RootForObject.transform);
 
-            //allLayerObjects.Add(type.name, new Dictionary<int, GameObject>());
-            //parentObjects.Add(type.name, type);
-            //parentvisible.Add(type.name, true);
+    //        //allLayerObjects.Add(type.name, new Dictionary<int, GameObject>());
+    //        //parentObjects.Add(type.name, type);
+    //        //parentvisible.Add(type.name, true);
 
-            //Material typeMaterial = null;
-            //typeMaterial = GetMeshTypeMaterial(type.name);
-
-
-            foreach (var file in Directory.GetFiles(folder))
-            {
-                //create new object for each layer and add meshfilter and renderer
-                //var layer = new GameObject(file.Substring(file.LastIndexOf(@"\") + 1, file.LastIndexOf(".") - file.LastIndexOf(@"\") - 1));
-                //var meshFilter = layer.AddComponent<MeshFilter>();
-                //var renderer = layer.AddComponent<MeshRenderer>();
-                //renderer.material = typeMaterial;
-
-                //get mesh from file
-                var mesh = MeshSerializer.DeserializeMesh(File.ReadAllBytes(file));
-                //meshFilter.mesh = mesh;
-                //layer.transform.SetParent(type.transform);
-
-                ////get the biggest layer number
-                //var l = Convert.ToInt32(layer.name.Substring(layer.name.LastIndexOf(" ") + 1));
-                //if (l > layernum)
-                //{
-                //    layernum = l;
-                //}
-
-                //allLayerObjects[type.name].Add(l, layer);
-
-                loadQueue.Enqueue(new KeyValuePair<string, Mesh>(file.Substring(file.LastIndexOf(@"\") + 1, file.LastIndexOf(".") - file.LastIndexOf(@"\") - 1), mesh));
-            }
-        }
-
-        //RootForObject.transform.localPosition = new Vector3(1, 1, 1);
-        //RootForObject.transform.localScale = new Vector3(1, 1, 1);
+    //        //Material typeMaterial = null;
+    //        //typeMaterial = GetMeshTypeMaterial(type.name);
 
 
-        //layersvisible = layernum;
-        //_layersvisible = layernum;
-        //slider.SetSpan(0, layernum);
-        //slider.SetSliderValue(layernum);
-        ShowHideCheckBoxes.Rebuild();
-        loadingFromDisk = false;
-    }
+    //        foreach (var file in Directory.GetFiles(folder))
+    //        {
+    //            //create new object for each layer and add meshfilter and renderer
+    //            //var layer = new GameObject(file.Substring(file.LastIndexOf(@"\") + 1, file.LastIndexOf(".") - file.LastIndexOf(@"\") - 1));
+    //            //var meshFilter = layer.AddComponent<MeshFilter>();
+    //            //var renderer = layer.AddComponent<MeshRenderer>();
+    //            //renderer.material = typeMaterial;
+
+    //            //get mesh from file
+    //            var mesh = MeshSerializer.DeserializeMesh(File.ReadAllBytes(file));
+    //            //meshFilter.mesh = mesh;
+    //            //layer.transform.SetParent(type.transform);
+
+    //            ////get the biggest layer number
+    //            //var l = Convert.ToInt32(layer.name.Substring(layer.name.LastIndexOf(" ") + 1));
+    //            //if (l > layernum)
+    //            //{
+    //            //    layernum = l;
+    //            //}
+
+    //            //allLayerObjects[type.name].Add(l, layer);
+
+    //            loadQueue.Enqueue(new KeyValuePair<string, Mesh>(file.Substring(file.LastIndexOf(@"\") + 1, file.LastIndexOf(".") - file.LastIndexOf(@"\") - 1), mesh));
+    //        }
+    //    }
+
+    //    //RootForObject.transform.localPosition = new Vector3(1, 1, 1);
+    //    //RootForObject.transform.localScale = new Vector3(1, 1, 1);
+
+
+    //    //layersvisible = layernum;
+    //    //_layersvisible = layernum;
+    //    //slider.SetSpan(0, layernum);
+    //    //slider.SetSliderValue(layernum);
+    //    ShowHideCheckBoxes.Rebuild();
+    //    loadingFromDisk = false;
+    //}
     private IEnumerator LoadObjectFromDiskCR(string path)
     {
         int layernum = 0;
@@ -322,8 +322,9 @@ public class MeshCreator : MonoBehaviour
 
         layersvisible = layernum;
         _layersvisible = layernum;
-        //slider.SetSpan(0, layernum);
-        //slider.SetSliderValue(layernum);
+        slider.enabled = true;
+        slider.MaxValue=layernum;
+        slider.SliderValue=layernum;
         ShowHideCheckBoxes.Rebuild();
         ShowHideCheckBoxes.gameObject.SetActive(true);
         StartCoroutine(closeProgress());
@@ -388,45 +389,45 @@ public class MeshCreator : MonoBehaviour
         }
     }
 
-    private void Updateslider(float arg0)
+    public void Updateslider(SliderEventData eventData)
     {
-        //layersvisible = (int)slider.SliderValue;
+        layersvisible = (int)eventData.NewValue;
     }
 
-    public void load(string path)
-    {
-        Debug.Log("in meshcreator");
-        //slider.enabled = false;
-        ShowHideCheckBoxes.enabled = false;
-        clearchildren();
-        string mainpath = Application.streamingAssetsPath;
+    //public void load(string path)
+    //{
+    //    Debug.Log("in meshcreator");
+    //    slider.enabled = false;
+    //    ShowHideCheckBoxes.enabled = false;
+    //    clearchildren();
+    //    string mainpath = Application.streamingAssetsPath;
 
-        names = Directory.GetFiles(mainpath, "*.gcode");
+    //    names = Directory.GetFiles(mainpath, "*.gcode");
         
-        for (int i = 0; i < names.Length; i++)
-        {
-            if (names[i].Contains(name) && names[i].EndsWith(".gcode"))
-            {
-                if (CheckForExsitingObject(names[i]) && !_regenerateModel)
-                {
-                    //create a parent for the objects we create now
-                    RootForObject = new GameObject(GetObjectNameFromPath(names[i]));
-                    RootForObject.transform.SetParent(transform);
-                    LoadObjectFromDisk(names[i]);
-                }
-                else
-                {
-                    //create a parent for the objects we create now
-                    RootForObject = new GameObject(GetObjectNameFromPath(names[i]));
-                    RootForObject.transform.SetParent(transform);
-                    Task.Run(() => CreateObjectFromGCode(names[i]));
-                    break;
-                }
-            }
-        }
-        ShowHideCheckBoxes.enabled = true;
-        //slider.enabled = true;
-    }
+    //    for (int i = 0; i < names.Length; i++)
+    //    {
+    //        if (names[i].Contains(name) && names[i].EndsWith(".gcode"))
+    //        {
+    //            if (CheckForExsitingObject(names[i]) && !_regenerateModel)
+    //            {
+    //                //create a parent for the objects we create now
+    //                RootForObject = new GameObject(GetObjectNameFromPath(names[i]));
+    //                RootForObject.transform.SetParent(transform);
+    //                LoadObjectFromDisk(names[i]);
+    //            }
+    //            else
+    //            {
+    //                //create a parent for the objects we create now
+    //                RootForObject = new GameObject(GetObjectNameFromPath(names[i]));
+    //                RootForObject.transform.SetParent(transform);
+    //                Task.Run(() => CreateObjectFromGCode(names[i]));
+    //                break;
+    //            }
+    //        }
+    //    }
+    //    ShowHideCheckBoxes.enabled = true;
+    //    slider.enabled = true;
+    //}
     /// <summary>
     /// call this before you recreate to regenerate with new clustersizes
     /// </summary>
@@ -1097,8 +1098,8 @@ public class MeshCreator : MonoBehaviour
         if (newloaded)
         {
             newloaded = false;
-            //slider.SetSpan(0, layersvisible);
-            //slider.SetSliderValue(layersvisible);
+            slider.MaxValue= layersvisible;
+            slider.SliderValue=layersvisible;
             ShowHideCheckBoxes.Rebuild();
         }
 
@@ -1156,8 +1157,8 @@ public class MeshCreator : MonoBehaviour
 
                 layersvisible = layernum;
                 _layersvisible = layernum;
-                //slider.SetSpan(0, layernum);
-                //slider.SetSliderValue(layernum);
+                slider.MaxValue=layernum;
+                slider.SliderValue=layernum;
                 ShowHideCheckBoxes.Rebuild();
                 StartCoroutine(closeProgress());
                 loadingFromDisk = false;

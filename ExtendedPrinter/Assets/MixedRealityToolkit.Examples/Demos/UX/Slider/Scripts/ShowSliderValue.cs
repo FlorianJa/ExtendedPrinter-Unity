@@ -23,7 +23,7 @@ namespace Microsoft.MixedReality.Toolkit.Examples.Demos
 
             if (textMesh != null)
             {
-                textMesh.text = $"{eventData.NewValue:F2}";
+                textMesh.text = $"{eventData.NewValue:F0}";
             }
         }
     }

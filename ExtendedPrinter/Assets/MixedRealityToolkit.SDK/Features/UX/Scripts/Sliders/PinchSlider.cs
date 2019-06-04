@@ -21,9 +21,11 @@ namespace Microsoft.MixedReality.Toolkit.UI
         [SerializeField]
         private GameObject thumbRoot = null;
 
-        [Range(0, 1)]
+
+        public int MaxValue;
+        //[Range(0, 100)]
         [SerializeField]
-        private float sliderValue = 0.5f;
+        private float sliderValue = 100;
         public float SliderValue
         {
             get { return sliderValue; }
@@ -164,7 +166,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
 
         private void UpdateUI()
         {
-            var newSliderPos = SliderStartPosition + sliderThumbOffset + SliderTrackDirection * sliderValue;
+            var newSliderPos = SliderStartPosition + sliderThumbOffset + SliderTrackDirection * (sliderValue/MaxValue);
             thumbRoot.transform.position = newSliderPos;
         }
 
@@ -209,7 +211,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
             if (activePointer == null && !eventData.used)
             {
                 activePointer = eventData.Pointer;
-                startSliderValue = sliderValue;
+                startSliderValue = sliderValue;//MaxValue);
                 startPointerPosition = activePointer.Position;
                 startSliderPosition = gameObject.transform.position;
                 if (OnInteractionStarted != null)
@@ -226,10 +228,10 @@ namespace Microsoft.MixedReality.Toolkit.UI
         {
             if (eventData.Pointer == activePointer && !eventData.used)
             {
-                var delta = activePointer.Position - startPointerPosition;
+                var delta = (activePointer.Position - startPointerPosition)*MaxValue;
                 var handDelta = Vector3.Dot(SliderTrackDirection.normalized, delta);
 
-                SliderValue = Mathf.Clamp(startSliderValue + handDelta / SliderTrackDirection.magnitude, 0, 1);
+                SliderValue = (int)Mathf.Clamp(startSliderValue + handDelta / SliderTrackDirection.magnitude, 0, MaxValue);
 
                 // Mark the pointer data as used to prevent other behaviors from handling input events
                 eventData.Use();
