@@ -28,18 +28,22 @@ public class ButtonGenerator : MonoBehaviour
     void Start()
     {
         AllFile = new List<OctoprintFile>();
-
+        print("start button generator");
     }
 
     // Update is called once per frame
     void Update()
     {
+        //print("0");
         if (connector.Connected && MenuCreated == false)
         {
+            //print("1");
             if (GetFileTaks == null)
             {
+                //print("2");
                 GetFileTaks = Task.Run(() =>
                 {
+                    //print("3");
                     var rootfolder = connector.GetAllFiles();
                     foreach (var file in rootfolder.octoprintFiles)
                     {
@@ -53,6 +57,7 @@ public class ButtonGenerator : MonoBehaviour
 
         if (AllFileNameReceived && MenuCreated == false)
         {
+            //print("4");
             foreach (var file in AllFile)
             {
                 var filenameSplitted = file.Name.Split('.')[0];
@@ -61,7 +66,7 @@ public class ButtonGenerator : MonoBehaviour
                 button.GetComponentInChildren<TextMesh>().text = filenameSplitted;
                 button.transform.parent = transform;
                 button.GetComponent<Interactable>().OnClick.AddListener(() => {
-                    Debug.Log("clicked");
+                    print("button clicked");// Debug.Log("clicked");
                     StartCoroutine(MeshCreator.LoadObject(file.Refs_download));
                 });
                 button.GetComponent<Interactable>().IsGlobal = true;

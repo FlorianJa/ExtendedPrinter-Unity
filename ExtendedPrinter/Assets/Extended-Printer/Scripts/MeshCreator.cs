@@ -115,7 +115,7 @@ public class MeshCreator : MonoBehaviour
 
     internal IEnumerator LoadObject(string urlToFile)
     {
-        Debug.Log("click in meshcreator");
+        print("click in meshcreator");
         //UnityMainThreadDispatcher.Instance().Enqueue(() =>
         //{
         //ProgressIndicator.Instance.SetMessage("Lade Objekt...");
