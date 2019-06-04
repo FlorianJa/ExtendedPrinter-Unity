@@ -10,6 +10,7 @@ public class ButtonGeneratorShowHideMenu : MonoBehaviour
     public GameObject CheckboxPrefab;
     public GameObject GCodeRoot;
     public MeshCreator MeshCreator;
+    public List<GameObject> checkBoxes = new List<GameObject>();
     // Use this for initialization
     void Start()
     {
@@ -36,15 +37,17 @@ public class ButtonGeneratorShowHideMenu : MonoBehaviour
         //GetComponent<GridObjectCollection>().NodeList.RemoveRange(0, GetComponent<ObjectCollection>().NodeList.Count);
         //GetComponent<ObjectCollection>().NodeList = new List<CollectionNode>();
 
-        foreach (Transform child in transform)
+        foreach (var box in checkBoxes)
         {
-            Destroy(child.gameObject);
+            DestroyImmediate(box);
         }
+        checkBoxes.Clear();
 
         foreach (Transform child in GCodeRoot.transform.GetChild(0).transform)
         {
             var name = child.gameObject.name;
             GameObject checkBox = Instantiate(CheckboxPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+            checkBoxes.Add(checkBox);
             checkBox.name = name;
             checkBox.transform.parent = transform;
             //meshcreator.TogglePartActive(obj.name);
