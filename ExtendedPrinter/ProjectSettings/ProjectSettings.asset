@@ -508,7 +508,7 @@ PlayerSettings:
     14: 
   platformArchitecture: {}
   scriptingBackend:
-    Metro: 2
+    Metro: 1
   il2cppCompilerConfiguration: {}
   managedStrippingLevel: {}
   incrementalIl2cppBuild: {}
@@ -579,7 +579,14 @@ PlayerSettings:
       VideosLibrary: False
       VoipCall: False
       WebCam: False
-  metroTargetDeviceFamilies: {}
+  metroTargetDeviceFamilies:
+    Desktop: False
+    Holographic: False
+    IoT: False
+    IoTHeadless: False
+    Mobile: False
+    Team: False
+    Xbox: False
   metroFTAName: 
   metroFTAFileTypes: []
   metroProtocolName: 

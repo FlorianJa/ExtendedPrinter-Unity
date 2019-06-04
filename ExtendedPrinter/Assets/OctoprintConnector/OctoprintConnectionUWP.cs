@@ -1,4 +1,4 @@
-#if UNITY_WSA_10_0 && !UNITY_EDITOR
+#if !UNITY_EDITOR
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -30,10 +30,10 @@ namespace OctoprintClient
 
         public OctoprintConnectionUWP(string eP, string aK) : base(eP, aK)
         {
-            Position = new OctoprintPosTracker(this);
+            Position = new OctoprintPos(this);
             Files = new OctoprintFileTracker(this);
             Jobs = new OctoprintJobTracker(this);
-            Printers = new OctoprintPrinterTracker(this);
+            Printer = new OctoprintPrinter(this);
 
             WebSocket = new WebSocket(GetWebsocketurl());
             WebSocket.ConnectAsync();
