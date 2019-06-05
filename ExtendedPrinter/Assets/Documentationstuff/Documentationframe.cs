@@ -6,6 +6,7 @@ public class Documentationframe : MonoBehaviour
 {
     public Documentationframe nextframe = null;
     public Vector3 movecommand = new Vector3(-1, -1, -1);
+    public int tempgoal = -1;
     public OctoPrintConnector oc =null;
     public float timeout = -1.0f;
 
@@ -40,22 +41,35 @@ public class Documentationframe : MonoBehaviour
             {
                 oc.MoveAxis(OctoprintClient.Axis.Z, movecommand.z, true, speed);
             }
+            if (tempgoal != -1)
+            {
+                oc.SetExtruderTemp(tempgoal);
+            }
         }
     }
 
     public void next()
     {
-        //print("framechange to " + nextframe.name);
-        foreach (MeshRenderer mr in GetComponentsInChildren<MeshRenderer>())
+        if (oc != null||tempgoal==-1)
         {
-            mr.enabled = false;
-        }
-        foreach (BoxCollider bc in GetComponentsInChildren<BoxCollider>())
-        {
-            bc.enabled = false;
-        }
-        if (nextframe != null){
-            nextframe.popup();
+            if (tempgoal == -1 || tempgoal > oc.GetExtruderTemp())
+            {
+
+                timeoutinternal = -1.0f;
+                //print("framechange to " + nextframe.name);
+                foreach (MeshRenderer mr in GetComponentsInChildren<MeshRenderer>())
+                {
+                    mr.enabled = false;
+                }
+                foreach (BoxCollider bc in GetComponentsInChildren<BoxCollider>())
+                {
+                    bc.enabled = false;
+                }
+                if (nextframe != null)
+                {
+                    nextframe.popup();
+                }
+            }
         }
     }
 

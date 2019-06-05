@@ -70,6 +70,15 @@ public class OctoPrintConnector : MonoBehaviour
         }
     }
 
+    public void SetExtruderTemp(int to)
+    {
+        octoprintConnection.Printer.SetTemperatureTarget(to);
+    }
+
+    public double GetExtruderTemp()
+    {
+        return octoprintConnection.Printer.GetFullPrinterState().TempState.Tools[0].Actual;
+    }
 
     private void Printers_PrinterstateHandlers(OctoprintPrinterState obj)
     {
