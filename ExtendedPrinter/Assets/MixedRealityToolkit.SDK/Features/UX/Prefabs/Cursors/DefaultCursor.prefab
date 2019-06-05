@@ -451,7 +451,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9296b71443954db1b4571935a43e5266, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 0.15
+  radius: 0.075
   color: {r: 0.24528301, g: 0.24528301, b: 0.24528301, a: 1}
 --- !u!1 &1000012072213228
 GameObject:

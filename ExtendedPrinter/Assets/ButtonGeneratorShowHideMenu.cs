@@ -50,6 +50,7 @@ public class ButtonGeneratorShowHideMenu : MonoBehaviour
             checkBoxes.Add(checkBox);
             checkBox.name = name;
             checkBox.transform.parent = transform;
+            
             //meshcreator.TogglePartActive(obj.name);
             checkBox.GetComponentInChildren<TextMesh>().text = name;
             //checkBox.GetComponent<Interactable>().IsGlobal = false;
@@ -64,6 +65,11 @@ public class ButtonGeneratorShowHideMenu : MonoBehaviour
             
         }
         GetComponent<GridObjectCollection>().UpdateCollection();
+
+        foreach (var checkBox in checkBoxes)
+        {
+            checkBox.transform.localRotation = Quaternion.identity;
+        }
     }
     // Update is called once per frame
     void Update()

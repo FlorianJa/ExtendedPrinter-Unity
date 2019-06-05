@@ -16,6 +16,7 @@ public class ButtonGenerator : MonoBehaviour
     public GameObject CheckBoxPrefab;
     public OctoPrintConnector connector;
     public MeshCreator MeshCreator;
+    public ToolTip ToolTip;
 
     private bool MenuCreated = false;
     private Task GetFileTaks;
@@ -23,6 +24,7 @@ public class ButtonGenerator : MonoBehaviour
     private List<OctoprintFile> AllFile;
 
     private bool AllFileNameReceived = false;
+    private List<GameObject> allButtons = new List<GameObject>();
 
     // Use this for initialization
     void Start()
@@ -66,13 +68,29 @@ public class ButtonGenerator : MonoBehaviour
                 button.GetComponentInChildren<TextMesh>().text = filenameSplitted;
                 button.transform.parent = transform;
                 button.GetComponent<Interactable>().OnClick.AddListener(() => {
+
                     print("button clicked");// Debug.Log("clicked");
-                    StartCoroutine(MeshCreator.LoadObject(file.Refs_download));
+                    if (!MeshCreator.loading)
+                    {
+                        DateTime time = new DateTime();
+                        time = time.AddSeconds((double)file.GcodeAnalysis.EstimatedPrintTime);
+                        print(file.GcodeAnalysis.EstimatedPrintTime + " " + time);
+                        var filamentLength = file.GcodeAnalysis.FilamentLength / 1000f;
+                        ToolTip.ToolTipText = String.Format("{0}\nDruckdauer: {1} hh:mm\nFilament: {2}m", file.Name, time.ToShortTimeString(), filamentLength.ToString("F"));
+
+                        StartCoroutine(MeshCreator.LoadObject(file.Refs_download));
+                    }
                 });
                 button.GetComponent<Interactable>().IsGlobal = true;
+                allButtons.Add(button);
             }
 
             GetComponent<GridObjectCollection>().UpdateCollection();
+
+            foreach (var button in allButtons)
+            {
+                button.transform.localRotation = Quaternion.identity;
+            }
             MenuCreated = true;
         }
     }

@@ -71,7 +71,7 @@ public class MeshCreator : MonoBehaviour
     private object MeshCreatorInputQueueLock = new object();
     private string dataPath;
     private bool _regenerateModel = false;
-    private bool loadingStarted = false;
+    private bool filesLoadingfinished = false;
     private string path;
     private bool loadingFromDisk;
     private int EnqueuedMeshes;
@@ -115,61 +115,69 @@ public class MeshCreator : MonoBehaviour
 
     internal IEnumerator LoadObject(string urlToFile)
     {
-        print("click in meshcreator");
-        //UnityMainThreadDispatcher.Instance().Enqueue(() =>
-        //{
-        //ProgressIndicator.Instance.SetMessage("Lade Objekt...");
-        //ProgressIndicator.Instance.SetProgress(0f);
-        //});
-
-        slider.enabled = false;
-        ShowHideCheckBoxes.gameObject.SetActive(false);
-
-        clearchildren();
-
-        int startindex = urlToFile.LastIndexOf("/") + 1;
-        string savePath = dataPath + FolderToRawGCodes + urlToFile.Substring(startindex);
-
-        //create a parent for the objects we create now
-        RootForObject = new GameObject(GetObjectNameFromPath(savePath));
-        RootForObject.transform.SetParent(transform);
-
-        if (!CheckForExsitingObject(urlToFile))
+        if (!loading)
         {
-            if (!File.Exists(savePath))
+            loading = true;
+            print("click in meshcreator");
+            //UnityMainThreadDispatcher.Instance().Enqueue(() =>
+            //{
+            //ProgressIndicator.Instance.SetMessage("Lade Objekt...");
+            //ProgressIndicator.Instance.SetProgress(0f);
+            //});
+
+            slider.enabled = false;
+            slider.gameObject.SetActive(false);
+            ShowHideCheckBoxes.gameObject.SetActive(false);
+
+            clearchildren();
+
+            int startindex = urlToFile.LastIndexOf("/") + 1;
+            string savePath = dataPath + FolderToRawGCodes + urlToFile.Substring(startindex);
+
+            //create a parent for the objects we create now
+            RootForObject = new GameObject(GetObjectNameFromPath(savePath));
+            RootForObject.transform.SetParent(transform);
+            RootForObject.transform.localPosition = Vector3.zero;
+            RootForObject.transform.localScale = Vector3.one;
+            RootForObject.transform.localRotation = Quaternion.identity;
+
+            if (!CheckForExsitingObject(urlToFile))
             {
-                // download gcode file from octoprint server
-                UnityWebRequest www = UnityWebRequest.Get(urlToFile);
-                yield return www.SendWebRequest();
-                if (www.isNetworkError || www.isHttpError)
+                if (!File.Exists(savePath))
                 {
-                    Debug.Log(www.error);
-                }
-                else
-                {
-                    if (!Directory.Exists(dataPath + "/RawGCodes/"))
+                    // download gcode file from octoprint server
+                    UnityWebRequest www = UnityWebRequest.Get(urlToFile);
+                    yield return www.SendWebRequest();
+                    if (www.isNetworkError || www.isHttpError)
                     {
-                        Directory.CreateDirectory(dataPath + "/RawGCodes/");
+                        Debug.Log(www.error);
                     }
-                    System.IO.File.WriteAllText(savePath, www.downloadHandler.text);
+                    else
+                    {
+                        if (!Directory.Exists(dataPath + "/RawGCodes/"))
+                        {
+                            Directory.CreateDirectory(dataPath + "/RawGCodes/");
+                        }
+                        System.IO.File.WriteAllText(savePath, www.downloadHandler.text);
+
+                    }
+
 
                 }
 
+                //if (loading == false)
+                //{
+                    Task.Run(() => CreateObjectFromGCode(savePath));
+                //}
 
             }
-
-            if (loading == false)
+            else
             {
-                Task.Run(() => CreateObjectFromGCode(savePath));
-            }
-
-        }
-        else
-        {
-            if (loadingFromDisk == false)
-            {
-                path = urlToFile;
-                loadingFromDisk = true;
+                if (loadingFromDisk == false)
+                {
+                    path = urlToFile;
+                    loadingFromDisk = true;
+                }
             }
         }
     }
@@ -252,7 +260,7 @@ public class MeshCreator : MonoBehaviour
 
         RootForObject.transform.localPosition = Vector3.zero;
         RootForObject.transform.localScale = Vector3.one;
-
+        RootForObject.transform.localRotation = Quaternion.identity;
 
         SortedDictionary<int, List<string>> sortedLayers = new SortedDictionary<int, List<string>>();
 
@@ -287,6 +295,7 @@ public class MeshCreator : MonoBehaviour
                     type.transform.SetParent(RootForObject.transform);
                     type.transform.localScale = Vector3.one;
                     type.transform.localPosition = Vector3.zero;
+                    type.transform.localRotation = Quaternion.identity;
                     allLayerObjects.Add(type.name, new Dictionary<int, GameObject>());
                     parentObjects.Add(type.name, type);
                     parentvisible.Add(type.name, true);
@@ -300,13 +309,16 @@ public class MeshCreator : MonoBehaviour
                 var meshFilter = layer.AddComponent<MeshFilter>();
                 var renderer = layer.AddComponent<MeshRenderer>();
                 renderer.material = typeMaterial;
-
+                renderer.receiveShadows = false;
+                renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                
                 //get mesh from file
                 var mesh = MeshSerializer.DeserializeMesh(File.ReadAllBytes(file));
                 meshFilter.mesh = mesh;
                 layer.transform.SetParent(parentObjects[typeString].transform);
                 layer.transform.localScale = Vector3.one;
                 layer.transform.localPosition = Vector3.zero;
+                layer.transform.localRotation = Quaternion.identity;
                 //get the biggest layer number
                 var l = Convert.ToInt32(layer.name.Substring(layer.name.LastIndexOf(" ") + 1));
                 if (l > layernum)
@@ -323,11 +335,13 @@ public class MeshCreator : MonoBehaviour
         layersvisible = layernum;
         _layersvisible = layernum;
         slider.enabled = true;
+        slider.gameObject.SetActive(true);
         slider.MaxValue=layernum;
         slider.SliderValue=layernum;
         ShowHideCheckBoxes.Rebuild();
         ShowHideCheckBoxes.gameObject.SetActive(true);
         StartCoroutine(closeProgress());
+        loading = false;
     }
     /// <summary>
     /// gets the material from dictionary by mesh type
@@ -447,7 +461,7 @@ public class MeshCreator : MonoBehaviour
         //Read the text from directly from the test.txt file
         //StreamReader reader = new StreamReader(new FileStream(filename, FileMode.Open));
         loading = true;
-        loadingStarted = true;
+        filesLoadingfinished = false;
         string[] Lines = File.ReadAllLines(filename);
         print("loading " + filename);
         List<string> meshnames = new List<string>();
@@ -598,7 +612,8 @@ public class MeshCreator : MonoBehaviour
             }*/
         }
         layersvisible = layernum;
-        loading = false;
+        //loading = false;
+        filesLoadingfinished = true;
         newloaded = true;
     }
 
@@ -925,8 +940,11 @@ public class MeshCreator : MonoBehaviour
         GameObject part = new GameObject(meshname);
         part.AddComponent(typeof(MeshFilter));
         part.AddComponent(typeof(MeshRenderer));
-        part.GetComponent<MeshRenderer>().material = materialDictionary[0].mat;
-        part.GetComponent<MeshRenderer>().enabled = false;
+        var renderer = part.GetComponent<MeshRenderer>();
+        renderer.material = materialDictionary[0].mat;
+        renderer.enabled = false;
+        renderer.receiveShadows = false;
+        renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         foreach (MaterialPreference mp in materialDictionary)
         {
             if (mp.name == meshname.Split(' ')[0])
@@ -935,8 +953,7 @@ public class MeshCreator : MonoBehaviour
             }
         }
         //part.GetComponent<MeshRenderer>().material = GetComponent<MeshRenderer>().material;
-        part.transform.position = this.transform.position;
-        part.transform.localScale = this.transform.localScale;
+        
         part.name = meshname;
         part.GetComponent<MeshFilter>().mesh = mesh;
         string meshparentname = meshname.Split(' ')[0];
@@ -954,7 +971,13 @@ public class MeshCreator : MonoBehaviour
             allLayerObjects.Add(meshparentname, new Dictionary<int, GameObject>());
             allLayerObjects[meshparentname].Add(int.Parse(meshname.Split(' ')[1]), part);
             parentobj.transform.SetParent(RootForObject.transform);
+            parentobj.transform.localPosition = Vector3.zero;
+            parentobj.transform.localScale = Vector3.one;
+            parentobj.transform.localRotation = Quaternion.identity;
         }
+        part.transform.localPosition = Vector3.zero;
+        part.transform.localScale = Vector3.one;
+        part.transform.localRotation = Quaternion.identity;
         mesh.vertices = newVertices;
         mesh.normals = newNormals;
         mesh.uv = newUV;
@@ -1105,8 +1128,8 @@ public class MeshCreator : MonoBehaviour
 
         if (loadingFromDisk == true)
         {
-            StartCoroutine(LoadObjectFromDiskCR(path));
             loadingFromDisk = false;
+            StartCoroutine(LoadObjectFromDiskCR(path));
         }
 
         if (loadQueue.Count > 0 && loadingFromDisk)
@@ -1162,6 +1185,7 @@ public class MeshCreator : MonoBehaviour
                 ShowHideCheckBoxes.Rebuild();
                 StartCoroutine(closeProgress());
                 loadingFromDisk = false;
+                loading = false;
             }
 
         }
@@ -1216,12 +1240,16 @@ public class MeshCreator : MonoBehaviour
             createmesh(mci.meshname, mci.newVertices, mci.newNormals, mci.newUV, mci.newTriangles, RootForObject.transform);
         }
 
-        if (createdLayers == simplifiedLayers && loading == false && loadingStarted == true)
+        if (createdLayers == simplifiedLayers && loading && filesLoadingfinished)
         {
             StartCoroutine(closeProgress());
-            loadingStarted = false;
+            filesLoadingfinished = false;
             simplifiedLayers = 0;
             createdLayers = 0;
+            ShowHideCheckBoxes.gameObject.SetActive(true);
+            slider.enabled = true;
+            slider.gameObject.SetActive(true);
+            loading = false;
         }
 
     }
