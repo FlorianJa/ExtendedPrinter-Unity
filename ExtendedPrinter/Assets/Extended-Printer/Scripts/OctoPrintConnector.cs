@@ -106,6 +106,15 @@ public class OctoPrintConnector : MonoBehaviour
     public void HomePrinter()
     {
         octoprintConnection.Printer.HomePrinter();
+    }
 
+    public void SelectFile(string path)
+    {
+        octoprintConnection.Files.Select(path);
+    }
+
+    public void StartPrint()
+    {
+        octoprintConnection.Jobs.StartJob();
     }
 }

@@ -176,6 +176,23 @@ namespace OctoprintClient
 
                     }
                 }
+                else
+                {
+                    JToken _event = obj.Value<JToken>("event");
+
+                    if(_event != null)
+                    {
+                        JToken payload = obj.Value<JToken>("payload");
+                        if(payload != null)
+                        {
+                            JToken state_id = obj.Value<JToken>("state_id");
+                            if(state_id != null)
+                            {
+
+                            }
+                        }
+                    }
+                }
             }
         }
 

@@ -72,12 +72,15 @@ public class ButtonGenerator : MonoBehaviour
                     print("button clicked");// Debug.Log("clicked");
                     if (!MeshCreator.loading)
                     {
-                        DateTime time = new DateTime();
-                        time = time.AddSeconds((double)file.GcodeAnalysis.EstimatedPrintTime);
-                        print(file.GcodeAnalysis.EstimatedPrintTime + " " + time);
-                        var filamentLength = file.GcodeAnalysis.FilamentLength / 1000f;
-                        ToolTip.ToolTipText = String.Format("{0}\nDruckdauer: {1} hh:mm\nFilament: {2}m", file.Name, time.ToShortTimeString(), filamentLength.ToString("F"));
+                        TimeSpan t = TimeSpan.FromSeconds(file.GcodeAnalysis.EstimatedPrintTime);
 
+                        string time = string.Format("{0:D2}h:{1:D2}m",
+                                        t.Hours,
+                                        t.Minutes);
+
+                        var filamentLength = file.GcodeAnalysis.FilamentLength / 1000f;
+                        ToolTip.ToolTipText = String.Format("{0}\nDruckdauer: {1}\nFilament: {2}m", file.Name, time, filamentLength.ToString("F"));
+                        connector.SelectFile(file.Name);
                         StartCoroutine(MeshCreator.LoadObject(file.Refs_download));
                     }
                 });
