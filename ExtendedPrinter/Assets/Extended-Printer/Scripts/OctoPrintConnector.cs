@@ -11,7 +11,7 @@ public class OctoPrintConnector : MonoBehaviour
     private OctoprintConnection octoprintConnection;
     public string Ip;
     public string ApiKey;
-    //public GraphChart Graph;
+    public GraphChart Graph;
 
     public bool Connected
     {
@@ -87,19 +87,19 @@ public class OctoPrintConnector : MonoBehaviour
 
     private void Printers_TempHandlers(OctoprintHistoricTemperatureState obj)
     {
-        //if (UnityMainThreadDispatcher.Instance() != null)
-        //{
-        //    UnityMainThreadDispatcher.Instance().Enqueue(() =>
-        //    {
-        //        if (Graph != null)
-        //        {
-        //            Graph.DataSource.AddPointToCategoryRealtime("ToolTarget", System.DateTime.Now, obj.Tools[0].Target, 1f);
-        //            Graph.DataSource.AddPointToCategoryRealtime("BedTarget", System.DateTime.Now, obj.Bed.Target, 1f);
-        //            Graph.DataSource.AddPointToCategoryRealtime("Tool", System.DateTime.Now, obj.Tools[0].Actual, 1f);
-        //            Graph.DataSource.AddPointToCategoryRealtime("Bed", System.DateTime.Now, obj.Bed.Actual, 1f);
-        //        }
-        //    });
-        //}
+        if (UnityMainThreadDispatcher.Instance() != null)
+        {
+            UnityMainThreadDispatcher.Instance().Enqueue(() =>
+            {
+                if (Graph != null)
+                {
+                    Graph.DataSource.AddPointToCategoryRealtime("ToolTarget", System.DateTime.Now, obj.Tools[0].Target, 1f);
+                    Graph.DataSource.AddPointToCategoryRealtime("BedTarget", System.DateTime.Now, obj.Bed.Target, 1f);
+                    Graph.DataSource.AddPointToCategoryRealtime("Tool", System.DateTime.Now, obj.Tools[0].Actual, 1f);
+                    Graph.DataSource.AddPointToCategoryRealtime("Bed", System.DateTime.Now, obj.Bed.Actual, 1f);
+                }
+            });
+        }
     }
 
 
