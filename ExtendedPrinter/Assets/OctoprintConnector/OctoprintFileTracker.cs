@@ -371,7 +371,7 @@ namespace OctoprintClient
                     JToken gcodeanalysis = filedata.Value<JToken>("gcodeAnalysis");
                     if (gcodeanalysis != null)
                     {
-                        file.GcodeAnalysis.EstimatedPrintTime = gcodeanalysis.Value<int?>("estimatedPrintTime") ?? 0;
+                        file.GcodeAnalysis.EstimatedPrintTime = gcodeanalysis.Value<float?>("estimatedPrintTime") ?? 0;
 
                         JToken filament = gcodeanalysis.Value<JToken>("filament");
                         if (filament != null)

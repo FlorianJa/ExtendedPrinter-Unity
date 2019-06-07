@@ -72,7 +72,7 @@ public class ButtonGenerator : MonoBehaviour
                     print("button clicked");// Debug.Log("clicked");
                     if (!MeshCreator.loading)
                     {
-                        TimeSpan t = TimeSpan.FromSeconds(file.GcodeAnalysis.EstimatedPrintTime);
+                        TimeSpan t = TimeSpan.FromSeconds(file.GcodeAnalysis.EstimatedPrintTime/10f);
 
                         string time = string.Format("{0:D2}h:{1:D2}m",
                                         t.Hours,

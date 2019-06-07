@@ -1,9 +1,11 @@
 ﻿using ChartAndGraph;
+using Microsoft.MixedReality.Toolkit.UI;
 using OctoprintClient;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class OctoPrintConnector : MonoBehaviour
 {
@@ -12,7 +14,11 @@ public class OctoPrintConnector : MonoBehaviour
     public string Ip;
     public string ApiKey;
     public GraphChart Graph;
+    
+    public ToolTip toolTip;
+    public GameObject Legende;
 
+    private bool isPrinting = false;
     public bool Connected
     {
         get; private set;
@@ -35,6 +41,55 @@ public class OctoPrintConnector : MonoBehaviour
         octoprintConnection.Printer.TempHandlers += Printers_TempHandlers;
         octoprintConnection.Printer.PrinterstateHandlers += Printers_PrinterstateHandlers;
         octoprintConnection.Printer.Homed += Printer_Homed;
+        octoprintConnection.Jobs.ProgressinfoHandler += Jobs_Progressinfo;
+
+    }
+
+    private void Jobs_Progressinfo(OctoprintJobProgress obj)
+    {
+        if(isPrinting)
+        {
+
+            TimeSpan timeLeft = TimeSpan.FromSeconds(obj.PrintTimeLeft);
+            TimeSpan timePrinted = TimeSpan.FromSeconds(obj.PrintTime);
+            string time1;
+            if (timePrinted.Hours > 0)
+            {
+                time1 = string.Format("{0:D2}h:{1:D2}m:{2:D2}s",
+                                        timePrinted.Hours,
+                                        timePrinted.Minutes,
+                                        timePrinted.Seconds);
+            }
+            else
+            {
+                time1 = string.Format("{0:D2}m:{1:D2}s",
+                                        timePrinted.Minutes,
+                                        timePrinted.Seconds);
+            }
+
+            string time2;
+            if (timeLeft.Hours > 0)
+            {
+                time2 = string.Format("{0:D2}h:{1:D2}m:{2:D2}s",
+                                        timeLeft.Hours,
+                                        timeLeft.Minutes,
+                                        timeLeft.Seconds);
+            }
+            else
+            {
+                time2 = string.Format("{0:D2}m:{1:D2}s",
+                                        timeLeft.Minutes,
+                                        timeLeft.Seconds);
+            }
+
+            toolTip.ToolTipText = String.Format("Dauer: {0}\n Verbleibend: {1}\n Fortschritt: {2}%",time1,time2,obj.Completion.ToString("F0"));
+
+
+            if(obj.Completion==100)
+            {
+                isPrinting = false;
+            }
+        }
     }
 
     /// <summary>
@@ -97,6 +152,11 @@ public class OctoPrintConnector : MonoBehaviour
                     Graph.DataSource.AddPointToCategoryRealtime("BedTarget", System.DateTime.Now, obj.Bed.Target, 1f);
                     Graph.DataSource.AddPointToCategoryRealtime("Tool", System.DateTime.Now, obj.Tools[0].Actual, 1f);
                     Graph.DataSource.AddPointToCategoryRealtime("Bed", System.DateTime.Now, obj.Bed.Actual, 1f);
+
+                    Legende.transform.GetChild(0).GetComponentInChildren<Text>().text = "ToolTarget: " + obj.Tools[0].Target.ToString("F0") + "°C";
+                    Legende.transform.GetChild(1).GetComponentInChildren<Text>().text = "BedTarget: " + obj.Bed.Target.ToString("F0") + "°C";
+                    Legende.transform.GetChild(2).GetComponentInChildren<Text>().text = "Tool: " + obj.Tools[0].Actual.ToString("F0") + "°C";
+                    Legende.transform.GetChild(3).GetComponentInChildren<Text>().text = "Bed: " + obj.Bed.Actual.ToString("F0") + "°C";
                 }
             });
         }
@@ -116,5 +176,6 @@ public class OctoPrintConnector : MonoBehaviour
     public void StartPrint()
     {
         octoprintConnection.Jobs.StartJob();
+        isPrinting = true;
     }
 }
