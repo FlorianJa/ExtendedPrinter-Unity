@@ -55,46 +55,48 @@ public class OctoPrintConnector : MonoBehaviour
     {
         if(isPrinting)
         {
-
-            TimeSpan timeLeft = TimeSpan.FromSeconds(obj.PrintTimeLeft);
-            TimeSpan timePrinted = TimeSpan.FromSeconds(obj.PrintTime);
-            string time1;
-            if (timePrinted.Hours > 0)
+            UnityMainThreadDispatcher.Instance().Enqueue(() =>
             {
-                time1 = string.Format("{0:D2}h:{1:D2}m:{2:D2}s",
-                                        timePrinted.Hours,
-                                        timePrinted.Minutes,
-                                        timePrinted.Seconds);
-            }
-            else
-            {
-                time1 = string.Format("{0:D2}m:{1:D2}s",
-                                        timePrinted.Minutes,
-                                        timePrinted.Seconds);
-            }
+                TimeSpan timeLeft = TimeSpan.FromSeconds(obj.PrintTimeLeft);
+                TimeSpan timePrinted = TimeSpan.FromSeconds(obj.PrintTime);
+                string time1;
+                if (timePrinted.Hours > 0)
+                {
+                    time1 = string.Format("{0:D2}h:{1:D2}m:{2:D2}s",
+                                            timePrinted.Hours,
+                                            timePrinted.Minutes,
+                                            timePrinted.Seconds);
+                }
+                else
+                {
+                    time1 = string.Format("{0:D2}m:{1:D2}s",
+                                            timePrinted.Minutes,
+                                            timePrinted.Seconds);
+                }
 
-            string time2;
-            if (timeLeft.Hours > 0)
-            {
-                time2 = string.Format("{0:D2}h:{1:D2}m:{2:D2}s",
-                                        timeLeft.Hours,
-                                        timeLeft.Minutes,
-                                        timeLeft.Seconds);
-            }
-            else
-            {
-                time2 = string.Format("{0:D2}m:{1:D2}s",
-                                        timeLeft.Minutes,
-                                        timeLeft.Seconds);
-            }
+                string time2;
+                if (timeLeft.Hours > 0)
+                {
+                    time2 = string.Format("{0:D2}h:{1:D2}m:{2:D2}s",
+                                            timeLeft.Hours,
+                                            timeLeft.Minutes,
+                                            timeLeft.Seconds);
+                }
+                else
+                {
+                    time2 = string.Format("{0:D2}m:{1:D2}s",
+                                            timeLeft.Minutes,
+                                            timeLeft.Seconds);
+                }
 
-            toolTip.ToolTipText = String.Format("Dauer: {0}\n Verbleibend: {1}\n Fortschritt: {2}%",time1,time2,obj.Completion.ToString("F0"));
+                toolTip.ToolTipText = String.Format("Dauer: {0}\n Verbleibend: {1}\n Fortschritt: {2}%", time1, time2, obj.Completion.ToString("F0"));
 
 
-            if(obj.Completion==100)
-            {
-                isPrinting = false;
-            }
+                if (obj.Completion == 100)
+                {
+                    isPrinting = false;
+                }
+            });
         }
     }
 
