@@ -377,8 +377,8 @@ namespace OctoprintClient
             {
                 if ((string)filedata["type"] == "folder")
                 {
-                    OctoprintFolder folder = t.GetFiles("/"+(string)filedata["path"]);
-                    octoprintFolders.Add(folder);
+                    //OctoprintFolder folder = t.GetFiles("/"+(string)filedata["path"]);
+                    //octoprintFolders.Add(folder);
                 }
                 else
                 {

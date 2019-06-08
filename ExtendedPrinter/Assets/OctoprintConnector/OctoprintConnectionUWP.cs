@@ -10,6 +10,8 @@ using Newtonsoft.Json.Linq;
 using Windows.Web.Http;
 using System.Net.Http;
 using WebSocketSharp;
+using Windows.Storage.Streams;
+using System.Net.Http.Headers;
 
 namespace OctoprintClient
 
@@ -59,8 +61,9 @@ namespace OctoprintClient
 
             //Create an HTTP client object
             Windows.Web.Http.HttpClient httpClient = new Windows.Web.Http.HttpClient();
-            var headers = httpClient.DefaultRequestHeaders;
-            headers.Add("X-Api-Key", ApiKey);
+            //var headers = 
+                httpClient.DefaultRequestHeaders.Add("X-Api-Key", ApiKey); 
+            //headers.Add("X-Api-Key", ApiKey);
             Uri requestUri = new Uri(EndPoint + location);
             //Send the GET request asynchronously and retrieve the response as a string.
             Windows.Web.Http.HttpResponseMessage httpResponse = new Windows.Web.Http.HttpResponseMessage();
@@ -69,7 +72,7 @@ namespace OctoprintClient
             {
                 //Send the GET request
                 httpResponse = httpClient.GetAsync(requestUri).AsTask().GetAwaiter().GetResult();
-                httpResponse.EnsureSuccessStatusCode();
+                //httpResponse.EnsureSuccessStatusCode();
                 httpResponseBody = httpResponse.Content.ReadAsStringAsync().AsTask().GetAwaiter().GetResult();
                 strResponseValue = httpResponseBody;
             }
@@ -106,7 +109,7 @@ namespace OctoprintClient
                 HttpStringContent arg = new HttpStringContent(arguments);
                 //Send the GET request
                 httpResponse = httpClient.PostAsync(requestUri, arg).AsTask().GetAwaiter().GetResult();
-                httpResponse.EnsureSuccessStatusCode();
+                //httpResponse.EnsureSuccessStatusCode();
                 httpResponseBody = httpResponse.Content.ReadAsStringAsync().AsTask().GetAwaiter().GetResult();
                 strResponseValue = httpResponseBody;
             }
@@ -131,21 +134,25 @@ namespace OctoprintClient
             String argumentString = string.Empty;
             argumentString = JsonConvert.SerializeObject(arguments);
 
+            //var content = new StringContent(arguments.ToString(), Encoding.UTF8, "application/json");
+
+
             //Create an HTTP client object
             Windows.Web.Http.HttpClient httpClient = new Windows.Web.Http.HttpClient();
             var headers = httpClient.DefaultRequestHeaders;
             headers.Add("X-Api-Key", ApiKey);
-            headers.Accept.Add(new Windows.Web.Http.Headers.HttpMediaTypeWithQualityHeaderValue("application/json"));
+            //headers.Accept.Add(new Windows.Web.Http.Headers.HttpMediaTypeWithQualityHeaderValue("application/json"));
             Uri requestUri = new Uri(EndPoint + location);
             //Send the GET request asynchronously and retrieve the response as a string.
             Windows.Web.Http.HttpResponseMessage httpResponse = new Windows.Web.Http.HttpResponseMessage();
             string httpResponseBody = "";
             try
             {
-                HttpStringContent arg = new HttpStringContent(argumentString);
+                HttpStringContent arg = new HttpStringContent(argumentString, UnicodeEncoding.Utf8, "application/json");
+                //arg.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 //Send the GET request
                 httpResponse = httpClient.PostAsync(requestUri, arg).AsTask().GetAwaiter().GetResult();
-                httpResponse.EnsureSuccessStatusCode();
+                //httpResponse.EnsureSuccessStatusCode();
                 httpResponseBody = httpResponse.Content.ReadAsStringAsync().AsTask().GetAwaiter().GetResult();
                 strResponseValue = httpResponseBody;
             }
@@ -179,7 +186,7 @@ namespace OctoprintClient
             {
                 //Send the GET request
                 httpResponse = httpClient.DeleteAsync(requestUri).AsTask().GetAwaiter().GetResult();
-                httpResponse.EnsureSuccessStatusCode();
+                //httpResponse.EnsureSuccessStatusCode();
                 httpResponseBody = httpResponse.Content.ReadAsStringAsync().AsTask().GetAwaiter().GetResult();
                 strResponseValue = httpResponseBody;
             }
