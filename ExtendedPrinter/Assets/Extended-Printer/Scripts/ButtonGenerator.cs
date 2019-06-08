@@ -17,6 +17,8 @@ public class ButtonGenerator : MonoBehaviour
     public OctoPrintConnector connector;
     public MeshCreator MeshCreator;
     public ToolTip ToolTip;
+    public GameObject Gcode;
+    public Interactable PrintButton;
 
     private bool MenuCreated = false;
     private Task GetFileTaks;
@@ -84,10 +86,12 @@ public class ButtonGenerator : MonoBehaviour
                             var filamentLength = file.GcodeAnalysis.FilamentLength / 1000f;
                             ToolTip.ToolTipText = String.Format("{0}\nDruckdauer: {1}\nFilament: {2}m", file.Name, time, filamentLength.ToString("F"));
                             connector.SelectFile(file.Name);
+                            PrintButton.Enabled = true;
+                            Gcode.SetActive(true);
                             StartCoroutine(MeshCreator.LoadObject(file.Refs_download));
                         }
                     });
-                    button.GetComponent<Interactable>().IsGlobal = true;
+                    //button.GetComponent<Interactable>().IsGlobal = true;
                     allButtons.Add(button);
                 }
             }

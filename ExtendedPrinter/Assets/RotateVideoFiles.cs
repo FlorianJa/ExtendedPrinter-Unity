@@ -6,7 +6,7 @@ using UnityEngine.Video;
 public class RotateVideoFiles : MonoBehaviour
 {
     public VideoClip[] Videos;
-    int counter = 0;
+    int counter = 1;
     public void Start()
     {
         GetComponent<VideoPlayer>().loopPointReached += RotateVideoFiles_loopPointReached;
@@ -15,5 +15,6 @@ public class RotateVideoFiles : MonoBehaviour
     private void RotateVideoFiles_loopPointReached(VideoPlayer source)
     {
         GetComponent<VideoPlayer>().clip = Videos[(counter++) % 2];
+        GetComponent<VideoPlayer>().Play();
     }
 }

@@ -11,6 +11,9 @@ namespace OctoprintClient
     /// </summary>
     public class OctoprintFileTracker : OctoprintBase
     {
+        public string previousSelectedFile;
+        private string currentSelected;
+
         /// <summary>
         /// Initializes a Filetracker, this shouldn't be done directly and is part of the Connection it needs anyway
         /// </summary>
@@ -24,7 +27,6 @@ namespace OctoprintClient
         /// </summary>
         public OctoprintFolder GetFiles()
         {
-            print("GetAllFiles");
             string jobInfo = Connection.Get("api/files");
             JObject data = JsonConvert.DeserializeObject<JObject>(jobInfo);
             OctoprintFolder rootfolder = new OctoprintFolder(data, this) { Name = "root", Path = "/", Type = "root" };
@@ -67,20 +69,29 @@ namespace OctoprintClient
         /// <param name="print">If set, defines if the GCode should be printed directly after being selected. null means false</param>
         public string Select(string path, string location = "local", bool print = false)
         {
+            
+            previousSelectedFile = currentSelected;
+            currentSelected = "api/files/" + location + "/" + path;
+            return select(currentSelected, print);
+        }
+        private string select(string path, bool print = false)
+        {
+        
             JObject data = new JObject
             {
                 { "command", "select" },
                 { "print", print}
             };
-
-
+            
             try
             {
-                return Connection.PostJson("api/files/" + location + "/" + path, data);
+                
+
+                return Connection.PostJson(path, data);
             }
             catch (WebException e)
             {
-                switch (((HttpWebResponse)e.Response).StatusCode)
+                switch (((HttpWebResponse) e.Response).StatusCode)
                 {
                     case HttpStatusCode.Conflict:
                         return "409 The Printer is propably not operational";
@@ -89,6 +100,13 @@ namespace OctoprintClient
                 }
 
             }
+        }
+        internal void SelectPreviousFile()
+        {
+            var tmp = currentSelected;
+            currentSelected = previousSelectedFile;
+            previousSelectedFile = tmp;
+            select(currentSelected);
         }
 
         /// <summary>
@@ -238,6 +256,8 @@ namespace OctoprintClient
             return Connection.PostMultipart(packagestring, "/api/files/local");
         }
 
+        
+
         /// <summary>
         /// Uploads a file from local to the Server
         /// </summary>
@@ -357,7 +377,7 @@ namespace OctoprintClient
             {
                 if ((string)filedata["type"] == "folder")
                 {
-                    OctoprintFolder folder = t.GetFiles((string)filedata["path"]);
+                    OctoprintFolder folder = t.GetFiles("/"+(string)filedata["path"]);
                     octoprintFolders.Add(folder);
                 }
                 else

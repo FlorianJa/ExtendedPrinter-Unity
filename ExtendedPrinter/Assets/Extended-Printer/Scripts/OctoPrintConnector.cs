@@ -20,6 +20,10 @@ public class OctoPrintConnector : MonoBehaviour
     public GameObject Legende;
 
     public GameObject Video;
+    public GameObject SelectionMenu;
+    public GameObject OperatingButtons;
+    public GameObject ChangeFilamentEnd;
+
     private bool isPrinting = false;
     private bool isFilamentChanging;
     private bool videoIsPlaying;
@@ -48,7 +52,56 @@ public class OctoPrintConnector : MonoBehaviour
         octoprintConnection.Printer.PrinterstateHandlers += Printers_PrinterstateHandlers;
         octoprintConnection.Printer.Homed += Printer_Homed;
         octoprintConnection.Jobs.ProgressinfoHandler += Jobs_Progressinfo;
+        octoprintConnection.Printer.StateChanged += Printer_StateChanged;
+        octoprintConnection.Printer.PrintFinished += Printer_PrintFinished;
 
+    }
+
+    private void Printer_PrintFinished(object sender, PrintFinishedEventArgs e)
+    {
+        if (isPrinting)
+        {
+            isPrinting = false;
+            TimeSpan timePrinted = TimeSpan.FromSeconds(e.Time);
+            string time1;
+            if (timePrinted.Hours > 0)
+            {
+                time1 = string.Format("{0:D2}h:{1:D2}m:{2:D2}s",
+                                        timePrinted.Hours,
+                                        timePrinted.Minutes,
+                                        timePrinted.Seconds);
+            }
+            else
+            {
+                time1 = string.Format("{0:D2}m:{1:D2}s",
+                                        timePrinted.Minutes,
+                                        timePrinted.Seconds);
+            }
+
+            UnityMainThreadDispatcher.Instance().Enqueue(() =>
+            {
+                toolTip.ToolTipText = "Druck abgeschlossen.\nDauer: " + time1;
+                SelectionMenu.SetActive(true);
+                OperatingButtons.SetActive(true);
+            });
+        }
+        if(isFilamentChanging)
+        {
+            UnityMainThreadDispatcher.Instance().Enqueue(() =>
+            {
+                videoIsPlaying = true;
+                toolTip.ToolTipText = "Das Filament kann nun entfernt und neues eingeführt werden.";
+                Video.GetComponent<MeshRenderer>().enabled = true;
+                Video.GetComponentInChildren<VideoPlayer>().clip = Video.GetComponentInChildren<RotateVideoFiles>().Videos[0];
+                Video.GetComponentInChildren<VideoPlayer>().Play();
+                ChangeFilamentEnd.SetActive(true);
+            });
+        }
+    }
+
+    private void Printer_StateChanged(object sender, StateChangedEventArgs e)
+    {
+        
     }
 
     private void Jobs_Progressinfo(OctoprintJobProgress obj)
@@ -92,10 +145,10 @@ public class OctoPrintConnector : MonoBehaviour
                 toolTip.ToolTipText = String.Format("Dauer: {0}\n Verbleibend: {1}\n Fortschritt: {2}%", time1, time2, obj.Completion.ToString("F0"));
 
 
-                if (obj.Completion == 100)
-                {
-                    isPrinting = false;
-                }
+                //if (obj.Completion == 100)
+                //{
+                //    isPrinting = false;
+                //}
             });
         }
     }
@@ -166,13 +219,7 @@ public class OctoPrintConnector : MonoBehaviour
                     Legende.transform.GetChild(2).GetComponentInChildren<Text>().text = "Tool: " + obj.Tools[0].Actual.ToString("F0") + "°C";
                     Legende.transform.GetChild(3).GetComponentInChildren<Text>().text = "Bed: " + obj.Bed.Actual.ToString("F0") + "°C";
                 }
-                if(isFilamentChanging && obj.Tools[0].Actual > 195 && !videoIsPlaying)
-                {
-                    videoIsPlaying = true;
-                    toolTip.ToolTipText = "Das Filament kann nun entfernt und neues eingeführt werden.";
-                    Video.GetComponent<MeshRenderer>().enabled = true;
-                    Video.GetComponentInChildren<VideoPlayer>().Play();
-                }
+                
             });
         }
     }
@@ -200,10 +247,19 @@ public class OctoPrintConnector : MonoBehaviour
         {
             videoIsPlaying = false;
             isFilamentChanging = true;
-            octoprintConnection.Printer.HomePrinter();
-            octoprintConnection.Printer.MakePrintheadJog(140, 30, 40, true, 6000);
-            //octoprintConnection.Printer.SelectTool("tool0");
-            octoprintConnection.Printer.SetTemperatureTarget(200);
+            //octoprintConnection.Printer.HomePrinter();
+            //octoprintConnection.Printer.MakePrintheadJog(140, 30, 40, true, 6000);
+            ////octoprintConnection.Printer.SelectTool("tool0");
+            //octoprintConnection.Printer.SetTemperatureTarget(200);
+
+            octoprintConnection.Files.Select("changeFilament.gcode", "local/helper", true);
         }
+    }
+
+    public void StopFilamentChange()
+    {
+        isFilamentChanging = false;
+        octoprintConnection.Printer.SetTemperatureTarget(0);
+        octoprintConnection.Files.SelectPreviousFile();
     }
 }

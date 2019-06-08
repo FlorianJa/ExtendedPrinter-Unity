@@ -36,6 +36,23 @@ namespace OctoprintClient
 
 
         public event EventHandler<HomedEventArgs> Homed;
+        public event EventHandler<PrintFinishedEventArgs> PrintFinished;
+
+        private PrinterState state = PrinterState.Undefined;
+        private PrinterState oldState = PrinterState.Undefined;
+        public PrinterState State
+        {
+            get
+            {
+                return state;
+            }
+            set
+            {
+                oldState = state;
+                state = value;
+                StateChanged?.Invoke(this, new StateChangedEventArgs(oldState,state));
+            }
+        }
 
         /// <summary>
         /// Initializes a Printertracker, this shouldn't be done directly and is part of the Connection it needs anyway
@@ -76,6 +93,8 @@ namespace OctoprintClient
         /// Action for Eventhandling the Websocket Temperature info
         /// </summary>
         public event Action<OctoprintHistoricTemperatureState> TempHandlers;
+
+        public event EventHandler<StateChangedEventArgs> StateChanged;
         public bool TempsListens()
         {
             return TempHandlers != null;
@@ -222,6 +241,11 @@ namespace OctoprintClient
 
             }
             return returnValue;
+        }
+
+        internal void OnPrintFinished(float time)
+        {
+            PrintFinished?.Invoke(this, new PrintFinishedEventArgs(time));
         }
 
         public string HomePrinter()
@@ -621,6 +645,42 @@ namespace OctoprintClient
 
             }
         }
+    }
+
+    public class PrintFinishedEventArgs:EventArgs
+    {
+        public float Time;
+
+        public PrintFinishedEventArgs(float time)
+        {
+            Time = time;
+        }
+    }
+
+    public class StateChangedEventArgs:EventArgs
+    {
+        public PrinterState OldState;
+        public PrinterState NewState;
+        public StateChangedEventArgs(PrinterState oldState, PrinterState newState)
+        {
+            OldState = oldState;
+            NewState = newState;
+        }
+    }
+
+    public enum PrinterState
+    {
+        Operational, 
+        Paused,
+        Printing,
+        Cancelling,
+        SDReady,
+        Error,
+        Ready,
+        ClosedOrError,
+        Starting,
+        Finishing,
+        Undefined
     }
 
     public class OctoprintPrinterFlags

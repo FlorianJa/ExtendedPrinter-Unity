@@ -183,15 +183,31 @@ namespace OctoprintClient
 
                     if(_event != null)
                     {
-                        JToken payload = obj.Value<JToken>("payload");
-                        if(payload != null)
-                        {
-                            JToken state_id = obj.Value<JToken>("state_id");
-                            if(state_id != null)
-                            {
+                        var eventtype = _event.Value<string>("type");
 
+                        if (eventtype == "PrinterStateChanged")
+                        {
+                            var payload = _event.Value<JToken>("payload");
+                            if (payload != null)
+                            {
+                                var state_string = payload.Value<string>("state_string");
+                                if (state_string != null)
+                                {
+                                    var state = (PrinterState)Enum.Parse(typeof(PrinterState), state_string);
+                                    Printer.State = state;
+                                }
                             }
                         }
+                        else if (eventtype == "PrintDone")
+                        {
+                            var payload = _event.Value<JToken>("payload");
+                            if (payload != null)
+                            {
+                                var time = payload.Value<float>("time");
+                                Printer.OnPrintFinished(time);
+                            }
+                        }
+                        
                     }
                 }
             }
@@ -225,7 +241,7 @@ namespace OctoprintClient
     /// <summary>
     /// The base class for the different Trackers
     /// </summary>
-    public class OctoprintBase :MonoBehaviour
+    public class OctoprintBase
     {
         protected OctoprintConnection Connection { get; set; }
         public OctoprintBase(OctoprintConnection con)
