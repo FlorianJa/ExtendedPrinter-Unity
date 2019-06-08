@@ -24,6 +24,7 @@ namespace OctoprintClient
         /// </summary>
         public OctoprintFolder GetFiles()
         {
+            print("GetAllFiles");
             string jobInfo = Connection.Get("api/files");
             JObject data = JsonConvert.DeserializeObject<JObject>(jobInfo);
             OctoprintFolder rootfolder = new OctoprintFolder(data, this) { Name = "root", Path = "/", Type = "root" };

@@ -62,30 +62,34 @@ public class ButtonGenerator : MonoBehaviour
             //print("4");
             foreach (var file in AllFile)
             {
-                var filenameSplitted = file.Name.Split('.')[0];
-                GameObject button = Instantiate(ButtonPrefab, Vector3.zero, Quaternion.identity);
-                button.name = filenameSplitted;
-                button.GetComponentInChildren<TextMesh>().text = filenameSplitted;
-                button.transform.parent = transform;
-                button.GetComponent<Interactable>().OnClick.AddListener(() => {
-
-                    print("button clicked");// Debug.Log("clicked");
-                    if (!MeshCreator.loading)
+                if (file.Name.EndsWith(".gcode"))
+                {
+                    var filenameSplitted = file.Name.Split('.')[0];
+                    GameObject button = Instantiate(ButtonPrefab, Vector3.zero, Quaternion.identity);
+                    button.name = filenameSplitted;
+                    button.GetComponentInChildren<TextMesh>().text = filenameSplitted;
+                    button.transform.parent = transform;
+                    button.GetComponent<Interactable>().OnClick.AddListener(() =>
                     {
-                        TimeSpan t = TimeSpan.FromSeconds(file.GcodeAnalysis.EstimatedPrintTime/10f);
 
-                        string time = string.Format("{0:D2}h:{1:D2}m",
-                                        t.Hours,
-                                        t.Minutes);
+                        print("button clicked");// Debug.Log("clicked");
+                        if (!MeshCreator.loading)
+                        {
+                            TimeSpan t = TimeSpan.FromSeconds(file.GcodeAnalysis.EstimatedPrintTime / 10f);
 
-                        var filamentLength = file.GcodeAnalysis.FilamentLength / 1000f;
-                        ToolTip.ToolTipText = String.Format("{0}\nDruckdauer: {1}\nFilament: {2}m", file.Name, time, filamentLength.ToString("F"));
-                        connector.SelectFile(file.Name);
-                        StartCoroutine(MeshCreator.LoadObject(file.Refs_download));
-                    }
-                });
-                button.GetComponent<Interactable>().IsGlobal = true;
-                allButtons.Add(button);
+                            string time = string.Format("{0:D2}h:{1:D2}m",
+                                            t.Hours,
+                                            t.Minutes);
+
+                            var filamentLength = file.GcodeAnalysis.FilamentLength / 1000f;
+                            ToolTip.ToolTipText = String.Format("{0}\nDruckdauer: {1}\nFilament: {2}m", file.Name, time, filamentLength.ToString("F"));
+                            connector.SelectFile(file.Name);
+                            StartCoroutine(MeshCreator.LoadObject(file.Refs_download));
+                        }
+                    });
+                    button.GetComponent<Interactable>().IsGlobal = true;
+                    allButtons.Add(button);
+                }
             }
 
             GetComponent<GridObjectCollection>().UpdateCollection();

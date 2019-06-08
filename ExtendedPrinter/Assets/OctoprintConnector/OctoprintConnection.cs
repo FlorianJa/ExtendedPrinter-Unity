@@ -5,6 +5,7 @@ using System.IO;
 using System.Net;
 using System.Threading;
 using Newtonsoft.Json.Linq;
+using UnityEngine;
 
 #if UNITY_EDITOR
 using WebSocketSharp;
@@ -110,7 +111,7 @@ namespace OctoprintClient
             }
             catch
             {
-                Debug.WriteLine("Couldent parse data. Not enough data?");
+                System.Diagnostics.Debug.WriteLine("Couldent parse data. Not enough data?");
             }
             if (obj != null)
             {
@@ -224,7 +225,7 @@ namespace OctoprintClient
     /// <summary>
     /// The base class for the different Trackers
     /// </summary>
-    public class OctoprintBase
+    public class OctoprintBase :MonoBehaviour
     {
         protected OctoprintConnection Connection { get; set; }
         public OctoprintBase(OctoprintConnection con)

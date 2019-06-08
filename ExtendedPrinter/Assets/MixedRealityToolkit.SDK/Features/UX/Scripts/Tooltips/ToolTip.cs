@@ -634,5 +634,10 @@ namespace Microsoft.MixedReality.Toolkit.UI
             if (label.transform.parent != contentParent.transform)
                 label.transform.SetParent(contentParent.transform.parent, true);
         }
+
+        public void SetToolTipText(string text)
+        {
+            ToolTipText = text;
+        }
     }
 }

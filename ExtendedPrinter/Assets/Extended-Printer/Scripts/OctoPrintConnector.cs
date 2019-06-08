@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class OctoPrintConnector : MonoBehaviour
 {
@@ -18,7 +19,11 @@ public class OctoPrintConnector : MonoBehaviour
     public ToolTip toolTip;
     public GameObject Legende;
 
+    public GameObject Video;
     private bool isPrinting = false;
+    private bool isFilamentChanging;
+    private bool videoIsPlaying;
+
     public bool Connected
     {
         get; private set;
@@ -30,8 +35,9 @@ public class OctoPrintConnector : MonoBehaviour
     void Start()
     {
         Connected = false;
-#if UNITY_WSA_10_0 && !UNITY_EDITOR
+#if UNITY_WSA && !UNITY_EDITOR
         octoprintConnection = new OctoprintConnectionUWP(Ip, ApiKey);
+        print("octoprintConnection");
 #else
         octoprintConnection = new OctoprintConnectionEditor(Ip, ApiKey);
 
@@ -158,6 +164,13 @@ public class OctoPrintConnector : MonoBehaviour
                     Legende.transform.GetChild(2).GetComponentInChildren<Text>().text = "Tool: " + obj.Tools[0].Actual.ToString("F0") + "°C";
                     Legende.transform.GetChild(3).GetComponentInChildren<Text>().text = "Bed: " + obj.Bed.Actual.ToString("F0") + "°C";
                 }
+                if(isFilamentChanging && obj.Tools[0].Actual > 195 && !videoIsPlaying)
+                {
+                    videoIsPlaying = true;
+                    toolTip.ToolTipText = "Das Filament kann nun entfernt und neues eingeführt werden.";
+                    Video.GetComponent<MeshRenderer>().enabled = true;
+                    Video.GetComponentInChildren<VideoPlayer>().Play();
+                }
             });
         }
     }
@@ -177,5 +190,18 @@ public class OctoPrintConnector : MonoBehaviour
     {
         octoprintConnection.Jobs.StartJob();
         isPrinting = true;
+    }
+
+    public void StartFilamentChange()
+    {
+        if(!isPrinting && !isFilamentChanging)
+        {
+            videoIsPlaying = false;
+            isFilamentChanging = true;
+            octoprintConnection.Printer.HomePrinter();
+            octoprintConnection.Printer.MakePrintheadJog(140, 30, 40, true, 6000);
+            //octoprintConnection.Printer.SelectTool("tool0");
+            octoprintConnection.Printer.SetTemperatureTarget(200);
+        }
     }
 }
