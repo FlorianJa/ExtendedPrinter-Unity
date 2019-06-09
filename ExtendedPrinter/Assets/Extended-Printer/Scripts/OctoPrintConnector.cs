@@ -15,18 +15,22 @@ public class OctoPrintConnector : MonoBehaviour
     public string Ip;
     public string ApiKey;
     public GraphChart Graph;
-    
+
     public ToolTip toolTip;
     public GameObject Legende;
 
     public GameObject Video;
     public GameObject SelectionMenu;
     public GameObject OperatingButtons;
-    public GameObject ChangeFilamentEnd;
+    public GameObject ChangeFilamentNext;
+    public GameObject StartPrintButton;
+    public GameObject StarFilamentChangeButton;
 
     private bool isPrinting = false;
     private bool isFilamentChanging;
+    private bool filamentChangeBegin;
     private bool videoIsPlaying;
+    private bool filamentChangeEnd;
 
     public bool Connected
     {
@@ -85,28 +89,41 @@ public class OctoPrintConnector : MonoBehaviour
                 OperatingButtons.SetActive(true);
             });
         }
-        if(isFilamentChanging)
+        if (isFilamentChanging && filamentChangeBegin)
         {
+            filamentChangeBegin = false;
             UnityMainThreadDispatcher.Instance().Enqueue(() =>
             {
                 videoIsPlaying = true;
-                toolTip.ToolTipText = "Das Filament kann nun entfernt und neues eingeführt werden.";
+                toolTip.ToolTipText = "Löse den Hebel und zieh das Filament senkrecht heraus.";
                 Video.GetComponent<MeshRenderer>().enabled = true;
                 Video.GetComponentInChildren<VideoPlayer>().clip = Video.GetComponentInChildren<RotateVideoFiles>().Videos[0];
                 Video.GetComponentInChildren<VideoPlayer>().Play();
-                ChangeFilamentEnd.SetActive(true);
+                ChangeFilamentNext.SetActive(true);
+            });
+        }
+        if (isFilamentChanging && filamentChangeEnd)
+        {
+            filamentChangeEnd = false;
+            UnityMainThreadDispatcher.Instance().Enqueue(() =>
+            {
+                toolTip.ToolTipText = "Filamentwechsel abgeschlossen";
+                ChangeFilamentNext.SetActive(false);
+                StartPrintButton.SetActive(true);
+                StarFilamentChangeButton.SetActive(true);
+                SelectionMenu.SetActive(true);
             });
         }
     }
 
     private void Printer_StateChanged(object sender, StateChangedEventArgs e)
     {
-        
+
     }
 
     private void Jobs_Progressinfo(OctoprintJobProgress obj)
     {
-        if(isPrinting)
+        if (isPrinting)
         {
             UnityMainThreadDispatcher.Instance().Enqueue(() =>
             {
@@ -219,7 +236,7 @@ public class OctoPrintConnector : MonoBehaviour
                     Legende.transform.GetChild(2).GetComponentInChildren<Text>().text = "Tool: " + obj.Tools[0].Actual.ToString("F0") + "°C";
                     Legende.transform.GetChild(3).GetComponentInChildren<Text>().text = "Bed: " + obj.Bed.Actual.ToString("F0") + "°C";
                 }
-                
+
             });
         }
     }
@@ -243,7 +260,7 @@ public class OctoPrintConnector : MonoBehaviour
 
     public void StartFilamentChange()
     {
-        if(!isPrinting && !isFilamentChanging)
+        if (!isPrinting && !isFilamentChanging)
         {
             videoIsPlaying = false;
             isFilamentChanging = true;
@@ -251,7 +268,7 @@ public class OctoPrintConnector : MonoBehaviour
             //octoprintConnection.Printer.MakePrintheadJog(140, 30, 40, true, 6000);
             ////octoprintConnection.Printer.SelectTool("tool0");
             //octoprintConnection.Printer.SetTemperatureTarget(200);
-
+            filamentChangeBegin = true;
             octoprintConnection.Files.Select("changeFilament.gcode", "local/helper", true);
         }
     }
@@ -261,5 +278,14 @@ public class OctoPrintConnector : MonoBehaviour
         isFilamentChanging = false;
         octoprintConnection.Printer.SetTemperatureTarget(0);
         octoprintConnection.Files.SelectPreviousFile();
+    }
+
+    public void FilamentExtrusion()
+    {
+        if(isFilamentChanging)
+        {
+            filamentChangeEnd = true;
+            octoprintConnection.Files.Select("extrudFliament.gcode", "local/helper", true);
+        }
     }
 }
