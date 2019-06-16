@@ -20,6 +20,8 @@ public class ButtonGenerator : MonoBehaviour
     public GameObject Gcode;
     public Interactable PrintButton;
 
+    public GameObject MovementController;
+
     private bool MenuCreated = false;
     private Task GetFileTaks;
 
@@ -71,26 +73,11 @@ public class ButtonGenerator : MonoBehaviour
                     button.name = filenameSplitted;
                     button.GetComponentInChildren<TextMesh>().text = filenameSplitted;
                     button.transform.parent = transform;
-                    button.GetComponent<Interactable>().OnClick.AddListener(() =>
+                    button.GetComponent<Interactable>().OnClick.AddListener(delegate
                     {
-
-                        print("button clicked");// Debug.Log("clicked");
-                        if (!MeshCreator.loading)
-                        {
-                            TimeSpan t = TimeSpan.FromSeconds(file.GcodeAnalysis.EstimatedPrintTime / 10f);
-
-                            string time = string.Format("{0:D2}h:{1:D2}m",
-                                            t.Hours,
-                                            t.Minutes);
-
-                            var filamentLength = file.GcodeAnalysis.FilamentLength / 1000f;
-                            ToolTip.ToolTipText = String.Format("{0}\nDruckdauer: {1}\nFilament: {2}m", file.Name, time, filamentLength.ToString("F"));
-                            connector.SelectFile(file.Name);
-                            PrintButton.Enabled = true;
-                            Gcode.SetActive(true);
-                            StartCoroutine(MeshCreator.LoadObject(file.Refs_download));
-                        }
+                        SetLabelTesxt(file.Name);
                     });
+                    
                     //button.GetComponent<Interactable>().IsGlobal = true;
                     allButtons.Add(button);
                 }
@@ -106,6 +93,52 @@ public class ButtonGenerator : MonoBehaviour
         }
     }
 
+    private void SetLabelTesxt(string name)
+    {
+        print("button clicked");// Debug.Log("clicked");
+        if (!MeshCreator.loading)
+        {
+            string time = string.Empty;
+            OctoprintFile file = null;
+            foreach (var _file in AllFile)
+            {
+                if (_file.Name == name)
+                {
+                    file = _file;
+                    TimeSpan t = TimeSpan.FromSeconds(_file.GcodeAnalysis.EstimatedPrintTime);
+
+                    time = string.Format("{0}h:{1}m",
+                                t.Hours,
+                                t.Minutes);
+                    break;
+                }
+            }
+            //TimeSpan t = TimeSpan.FromSeconds();
+
+            //string time = //string.Format("{0}h:{1}m",
+            //                t.Hours,
+            //                t.Minutes);
+            int minutes = (int)file.GcodeAnalysis.EstimatedPrintTime / 60;
+            int hours = 0;
+            if (minutes >= 60)
+            {
+                hours = minutes / 60;
+                minutes = minutes - (hours * 60);
+            }
+
+            time = hours + "h:" + minutes + "m";
+
+            var filamentLength = file.GcodeAnalysis.FilamentLength / 1000f;
+            ToolTip.ToolTipText = String.Format("{0}\nDruckdauer: {1}\nFilament: {2}m", file.Name, time, filamentLength.ToString("F"));
+            connector.SelectFile(file.Name);
+            PrintButton.Enabled = true;
+            Gcode.SetActive(true);
+
+            MovementController.SetActive(false);
+            
+            StartCoroutine(MeshCreator.LoadObject(file.Refs_download));
+        }
+    }
 }
 
 

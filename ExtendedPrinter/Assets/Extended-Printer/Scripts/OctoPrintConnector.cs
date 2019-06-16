@@ -203,6 +203,20 @@ public class OctoPrintConnector : MonoBehaviour
         }
     }
 
+    public void MoveXAxisRelativ(float distance)
+    {
+        MoveAxis(Axis.X, distance, false, 1000);
+    }
+    public void MoveZAxisRelativ(float distance)
+    {
+        MoveAxis(Axis.Z, distance, false, 1000);
+    }
+
+    public void MoveYAxisRelativ(float distance)
+    {
+        MoveAxis(Axis.Y, distance, false, 1000);
+    }
+
     public void SetExtruderTemp(int to)
     {
         octoprintConnection.Printer.SetTemperatureTarget(to);
