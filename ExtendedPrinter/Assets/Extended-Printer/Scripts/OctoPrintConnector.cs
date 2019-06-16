@@ -31,6 +31,9 @@ public class OctoPrintConnector : MonoBehaviour
     private bool filamentChangeBegin;
     private bool videoIsPlaying;
     private bool filamentChangeEnd;
+    private bool isMovedManually;
+
+    public event EventHandler MoveCompleted;
 
     public bool Connected
     {
@@ -113,6 +116,11 @@ public class OctoPrintConnector : MonoBehaviour
                 StarFilamentChangeButton.SetActive(true);
                 SelectionMenu.SetActive(true);
             });
+        }
+        if(isMovedManually)
+        {
+            isMovedManually = false;
+            MoveCompleted?.Invoke(this, null);
         }
     }
 
@@ -203,18 +211,41 @@ public class OctoPrintConnector : MonoBehaviour
         }
     }
 
-    public void MoveXAxisRelativ(float distance)
+    public void MovePrintHeadUp()
     {
-        MoveAxis(Axis.X, distance, false, 1000);
+        
+        isMovedManually = true;
+        octoprintConnection.Files.Select("moveUp.gcode", "local/helper", true);
     }
-    public void MoveZAxisRelativ(float distance)
+    public void MovePrintHeadDown()
     {
-        MoveAxis(Axis.Z, distance, false, 1000);
-    }
 
-    public void MoveYAxisRelativ(float distance)
+        isMovedManually = true;
+        octoprintConnection.Files.Select("moveDown.gcode", "local/helper", true);
+    }
+    public void MovePrintHeadRight()
     {
-        MoveAxis(Axis.Y, distance, false, 1000);
+
+        isMovedManually = true;
+        octoprintConnection.Files.Select("moveRight.gcode", "local/helper", true);
+    }
+    public void MovePrintHeadLeft()
+    {
+
+        isMovedManually = true;
+        octoprintConnection.Files.Select("moveLeft.gcode", "local/helper", true);
+    }
+    public void MoveBuildplateFront()
+    {
+
+        isMovedManually = true;
+        octoprintConnection.Files.Select("moveFront.gcode", "local/helper", true);
+    }
+    public void MoveBuildplateBack()
+    {
+
+        isMovedManually = true;
+        octoprintConnection.Files.Select("moveBack.gcode", "local/helper", true);
     }
 
     public void SetExtruderTemp(int to)

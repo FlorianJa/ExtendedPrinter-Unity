@@ -1,5 +1,6 @@
 ﻿using Microsoft.MixedReality.Toolkit.UI;
 using OctoprintClient;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,6 +31,79 @@ public class MoveBoundingBox : MonoBehaviour
 
     public Transform PrinterHead;
     public Transform BuildPlate;
+
+    public OctoPrintConnector OctoPrintConnector;
+    public float distance = 0.01f;
+    private bool manuallyDisabled;
+
+    public void Start()
+    {
+        OctoPrintConnector.MoveCompleted += OctoPrintConnector_MoveCompleted;
+    }
+
+    private void OctoPrintConnector_MoveCompleted(object sender, System.EventArgs e)
+    {
+        UnityMainThreadDispatcher.Instance().Enqueue(EnableArrows);
+    }
+
+    public void MoveUp()
+    {
+        MoveZAxis(distance);
+        OctoPrintConnector.MovePrintHeadUp();
+        DisableArrows();
+    }
+    public void MoveDown()
+    {
+        MoveZAxis(-distance);
+        OctoPrintConnector.MovePrintHeadDown();
+        DisableArrows();
+    }
+    public void MoveRight()
+    {
+        MoveXAxis(distance);
+        OctoPrintConnector.MovePrintHeadRight();
+        DisableArrows();
+    }
+    public void MoveLeft()
+    {
+        MoveXAxis(-distance);
+        OctoPrintConnector.MovePrintHeadLeft();
+        DisableArrows();
+    }
+    public void MoveFront()
+    {
+        MoveYAxis(distance);
+        OctoPrintConnector.MoveBuildplateFront();
+        DisableArrows();
+    }
+    public void MoveBack()
+    {
+        MoveYAxis(-distance);
+        OctoPrintConnector.MoveBuildplateBack();
+        DisableArrows();
+    }
+
+    private void DisableArrows()
+    {
+        manuallyDisabled = true;
+        ArrowTop.Enabled = false;
+        ArrowRight.Enabled = false;
+        ArrowBottom.Enabled = false;
+        ArrowLeft.Enabled = false;
+        ArrowFront.Enabled = false;
+        ArrowBack.Enabled = false;
+    }
+    private void EnableArrows()
+    {
+        manuallyDisabled = false;
+        ArrowTop.Enabled = true;
+        ArrowRight.Enabled = true;
+        ArrowBottom.Enabled = true;
+        ArrowLeft.Enabled = true;
+        ArrowFront.Enabled = true;
+        ArrowBack.Enabled = true;
+    }
+
 
     /// <summary>
     /// 
@@ -78,58 +152,60 @@ public class MoveBoundingBox : MonoBehaviour
 
     public void Update()
     {
-        if(X + 0.01f > MaxX)
+        if (!manuallyDisabled)
         {
-            ArrowRight.Enabled = false;
-        }
-        else
-        {
-            ArrowRight.Enabled = true;
-        }
+            if (X + 0.01f > MaxX)
+            {
+                ArrowRight.Enabled = false;
+            }
+            else
+            {
+                ArrowRight.Enabled = true;
+            }
 
-        if(X - 0.01f < MinX)
-        {
-            ArrowLeft.Enabled = false;
-        }
-        else
-        {
-            ArrowLeft.Enabled = true;
-        }
+            if (X - 0.01f < MinX)
+            {
+                ArrowLeft.Enabled = false;
+            }
+            else
+            {
+                ArrowLeft.Enabled = true;
+            }
 
-        if(Z + 0.01 > MaxZ)
-        {
-            ArrowTop.Enabled = false;
-        }
-        else
-        {
-            ArrowTop.Enabled = true;
-        }
+            if (Z + 0.01 > MaxZ)
+            {
+                ArrowTop.Enabled = false;
+            }
+            else
+            {
+                ArrowTop.Enabled = true;
+            }
 
-        if(Z - 0.01 < MinZ)
-        {
-            ArrowBottom.Enabled = false;
-        }
-        else
-        {
-            ArrowBottom.Enabled = true;
-        }
+            if (Z - 0.01 < MinZ)
+            {
+                ArrowBottom.Enabled = false;
+            }
+            else
+            {
+                ArrowBottom.Enabled = true;
+            }
 
-        if (Y - 0.01 < MinY)
-        {
-            ArrowBack.Enabled = false;
+            if (Y - 0.01 < MinY)
+            {
+                ArrowBack.Enabled = false;
+            }
+            else
+            {
+                ArrowBack.Enabled = true;
+            }
+            if (Y + 0.01 > MaxY)
+            {
+                ArrowFront.Enabled = false;
+            }
+            else
+            {
+                ArrowFront.Enabled = true;
+            }
         }
-        else
-        {
-            ArrowBack.Enabled = true;
-        }
-        if (Y + 0.01 > MaxY)
-        {
-            ArrowFront.Enabled = false;
-        }
-        else
-        {
-            ArrowFront.Enabled = true;
-        }
-
     }
 }
