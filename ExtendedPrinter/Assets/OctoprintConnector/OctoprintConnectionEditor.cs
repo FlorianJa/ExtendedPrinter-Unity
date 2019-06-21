@@ -145,7 +145,7 @@ namespace OctoprintClient
         /// <returns>The Result if any.</returns>
         /// <param name="packagestring">A packagestring should be generated elsewhere and input here as a String</param>
         /// <param name="location">The url sub-address like "http://192.168.1.2/<paramref name="location"/>"</param>
-        internal override string PostMultipart(string packagestring, string location)
+        internal override string PostMultipart(string packagestring, string location, string path = "")
         {
             Debug.WriteLine("A Multipart was posted to:");
             Debug.WriteLine(EndPoint + location + "?apikey=" + ApiKey);

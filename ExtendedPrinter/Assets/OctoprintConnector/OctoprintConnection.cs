@@ -181,9 +181,18 @@ namespace OctoprintClient
                 {
                     JToken _event = obj.Value<JToken>("event");
 
-                    if(_event != null)
+                    if (_event != null)
                     {
-                        var eventtype = _event.Value<string>("type");
+                        string eventtype = string.Empty;
+                        try
+                        {
+                            eventtype = _event.Value<string>("type");
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                        
 
                         if (eventtype == "PrinterStateChanged")
                         {
@@ -207,7 +216,7 @@ namespace OctoprintClient
                                 Printer.OnPrintFinished(time);
                             }
                         }
-                        
+
                     }
                 }
             }
@@ -232,10 +241,12 @@ namespace OctoprintClient
             throw new NotImplementedException();
         }
 
-        internal virtual string PostMultipart(string packagestring, string v)
+        internal virtual string PostMultipart(string packagestring, string v, string path = "")
         {
+           
             throw new NotImplementedException();
         }
+        
     }
 
     /// <summary>

@@ -29,16 +29,57 @@ public class MoveBoundingBox : MonoBehaviour
     public Interactable ArrowFront;
     public Interactable ArrowBack;
 
-    public Transform PrinterHead;
-    public Transform BuildPlate;
+    public GameObject PrinterHead;
+    public GameObject BuildPlate;
 
     public OctoPrintConnector OctoPrintConnector;
     public float distance = 0.01f;
     private bool manuallyDisabled;
+    private Vector3 printheadHomePosition = new Vector3(-0.019f, 0.01f, 0f);
+    private Vector3 buildePlateHomePosition = new Vector3(0, 0, 0.258f);
+    public ToolTip toolTip;
 
     public void Start()
     {
         OctoPrintConnector.MoveCompleted += OctoPrintConnector_MoveCompleted;
+        PrinterHead.GetComponent<ManipulationHandler>().OnManipulationStarted.AddListener((med) => DisableArrows());
+        PrinterHead.GetComponent<ManipulationHandler>().OnManipulationEnded.AddListener((med) => MovePrinterHeadToPosition(med));
+
+        BuildPlate.GetComponent<ManipulationHandler>().OnManipulationStarted.AddListener((med) => DisableArrows());
+        BuildPlate.GetComponent<ManipulationHandler>().OnManipulationEnded.AddListener((med) => MoveBuildplateToPosition(med));
+
+    }
+
+    private void MoveBuildplateToPosition(ManipulationEventData med)
+    {
+        var tmp = new Vector3(med.ManipulationSource.transform.localPosition.x * 1000f,
+                                (med.ManipulationSource.transform.localPosition.z) * 1000f,
+                                (med.ManipulationSource.transform.localPosition.y) * 1000f);
+
+        Y = tmp.y / 1000f;
+        OctoPrintConnector.MovePrinter(tmp, true, false, true, false);
+        ShowPosition();
+    }
+
+    public void ShowPosition()
+    {
+        //toolTip.SetToolTipText("Aktuelle Position:\n" +
+        //                                "X: " + (X * 1000).ToString() + "\n" +
+        //                                "Y: " + (Y * 1000).ToString() + "\n" +
+        //                                "Z: " + (Z * 1000).ToString() + "\n"
+        //                                );
+    }
+
+    private void MovePrinterHeadToPosition(ManipulationEventData med)
+    {
+        var tmp = new Vector3(med.ManipulationSource.transform.localPosition.x * 1000f,
+                                med.ManipulationSource.transform.localPosition.z * 1000f, 
+                                med.ManipulationSource.transform.localPosition.y * 1000f);
+
+        X = tmp.x / 1000f;
+        Z = tmp.z / 1000f;
+        OctoPrintConnector.MovePrinter(tmp, true,true,false,true);
+        ShowPosition();
     }
 
     private void OctoPrintConnector_MoveCompleted(object sender, System.EventArgs e)
@@ -83,7 +124,7 @@ public class MoveBoundingBox : MonoBehaviour
         DisableArrows();
     }
 
-    private void DisableArrows()
+    public void DisableArrows()
     {
         manuallyDisabled = true;
         ArrowTop.Enabled = false;
@@ -93,7 +134,7 @@ public class MoveBoundingBox : MonoBehaviour
         ArrowFront.Enabled = false;
         ArrowBack.Enabled = false;
     }
-    private void EnableArrows()
+    public void EnableArrows()
     {
         manuallyDisabled = false;
         ArrowTop.Enabled = true;
@@ -112,42 +153,46 @@ public class MoveBoundingBox : MonoBehaviour
     /// <param name="distance">in Meter</param>
     public void MoveXAxis(float distance)
     {
-        var tmp = PrinterHead.localPosition;
+        var tmp = PrinterHead.transform.localPosition;
         if (X + distance > MinX && X + distance < MaxX)
         {
             X += distance;
-            PrinterHead.localPosition = new Vector3(tmp.x + distance, tmp.y, tmp.z);
+            PrinterHead.transform.localPosition = new Vector3(tmp.x + distance, tmp.y, tmp.z);
         }
+        ShowPosition();
     }
 
     public void MoveZAxis(float distance)
     {
-        var tmp = PrinterHead.localPosition;
+        var tmp = PrinterHead.transform.localPosition;
         if (Z + distance > MinZ && Z + distance < MaxZ)
         {
             Z += distance;
-            PrinterHead.localPosition = new Vector3(tmp.x, tmp.y + distance, tmp.z);
+            PrinterHead.transform.localPosition = new Vector3(tmp.x, tmp.y + distance, tmp.z);
         }
+        ShowPosition();
     }
 
     public void MoveYAxis(float distance)
     {
-        var tmp = BuildPlate.localPosition;
+        var tmp = BuildPlate.transform.localPosition;
         if (Y + distance > MinY && Z + distance < MaxY)
         {
             Y += distance;
-            BuildPlate.localPosition = new Vector3(tmp.x, tmp.y, tmp.z - distance);
+            BuildPlate.transform.localPosition = new Vector3(tmp.x, tmp.y, tmp.z + distance);
         }
+        ShowPosition();
     }
 
     public void Home()
     {
-        PrinterHead.localPosition = Vector3.zero;
-        BuildPlate.localPosition = Vector3.zero;
+        PrinterHead.transform.localPosition = printheadHomePosition;
+        BuildPlate.transform.localPosition = buildePlateHomePosition;
 
         X = -0.019f;
         Y= 0.258f;
         Z= 0.010f;
+        ShowPosition();
     }
 
     public void Update()

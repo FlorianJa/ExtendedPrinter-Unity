@@ -267,12 +267,14 @@ namespace OctoprintClient
         /// <param name="location">Location to upload to, local or sdcard, not sure if sdcard works, but takes ages anyway.</param>
         /// <param name="select">If set to <c>true</c> selects the File to print next.</param>
         /// <param name="print">If set to <c>true</c> prints the File.</param>
-        public string UploadFile(string filename, string onlinepath = "", string location = "local", bool select = false, bool print = false)
+        public string UploadFile(string path, string filename, string onlinepath = "", string location = "local", bool select = false, bool print = false)
         {
             string fileData = string.Empty;
-            fileData = System.IO.File.ReadAllText(filename);
-            filename = (filename.Split('/')[filename.Split('/').Length - 1]).Split('\\')[filename.Split('\\')[filename.Split('\\').Length - 1].Length - 1];
-            string packagestring = "" +
+            fileData = System.IO.File.ReadAllText(path);
+            //filename = (filename.Split('/')[filename.Split('/').Length - 1]).Split('\\')[filename.Split('\\')[filename.Split('\\').Length - 1].Length - 1];
+            string packagestring;
+#if UNITY_EDITOR
+            packagestring= "" +
                 "--{0}\r\n" +
                 "Content-Disposition: form-data; name=\"file\"; filename=\"" + filename + "\"\r\n" +
                 "Content-Type: application/octet-stream\r\n" +
@@ -292,7 +294,10 @@ namespace OctoprintClient
                 "\r\n" +
                 print + "\r\n" +
                 "--{0}--\r\n";
-            return Connection.PostMultipart(packagestring, "api/files/" + location);
+#else
+            packagestring = fileData;
+#endif
+            return Connection.PostMultipart(packagestring, "api/files/" + location, onlinepath);
         }
     }
 

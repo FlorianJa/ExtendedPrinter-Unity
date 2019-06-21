@@ -4,6 +4,9 @@ using OctoprintClient;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
@@ -211,6 +214,48 @@ public class OctoPrintConnector : MonoBehaviour
         }
     }
 
+    public void MovePrinter(Vector3 position, bool absolute, bool moveX = true, bool moveY = true, bool moveZ = true)
+    {
+        isMovedManually = true;
+        StringBuilder sb = new StringBuilder();
+
+
+        if(absolute)
+        {
+            sb.AppendLine("G90");
+        }
+        else
+        {
+            sb.AppendLine("G91");
+        }
+
+        sb.Append("G1 ");
+        if (moveX) sb.Append("X" + position.x.ToString("F2", CultureInfo.GetCultureInfo("en-US")) + " ");
+        if (moveY) sb.Append("Y" + position.y.ToString("F2", CultureInfo.GetCultureInfo("en-US")) + " ");
+        if (moveZ) sb.Append("Z" + position.z.ToString("F2", CultureInfo.GetCultureInfo("en-US")) + " ");  
+        sb.AppendLine("F6000");
+
+        sb.AppendLine("M400");
+
+        if(!absolute)
+        {
+            sb.AppendLine("G90");
+        }
+        var filename = Application.persistentDataPath + @"\customMove.gcode";
+        if (File.Exists(filename))
+        {
+
+        }
+
+        using (StreamWriter sw = File.CreateText(filename))
+        {
+            sw.Write(sb.ToString());
+        }
+
+        octoprintConnection.Files.UploadFile(filename, "customMove.gcode", "helper", "local", false, false);
+        octoprintConnection.Files.Select("customMove.gcode", "local/helper", true);
+
+    }
     public void MovePrintHeadUp()
     {
         
@@ -246,6 +291,13 @@ public class OctoPrintConnector : MonoBehaviour
 
         isMovedManually = true;
         octoprintConnection.Files.Select("moveBack.gcode", "local/helper", true);
+    }
+
+    public void HomeFile()
+    {
+
+        isMovedManually = true;
+        octoprintConnection.Files.Select("Home.gcode", "local/helper", true);
     }
 
     public void SetExtruderTemp(int to)
