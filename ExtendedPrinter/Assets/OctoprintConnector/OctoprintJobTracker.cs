@@ -40,7 +40,8 @@ namespace OctoprintClient
         {
             return ProgressinfoHandler != null;
         }
-        public void CallProgress(OctoprintJobProgress p) {
+        public void CallProgress(OctoprintJobProgress p)
+        {
             ProgressinfoHandler.Invoke(p);
         }
 
@@ -79,7 +80,7 @@ namespace OctoprintClient
         /// <param name="command">The Command to execute on the Job.</param>
         /// <param name="action">The exact action withing the command to take.</param>
         private string Post(string command, string action)
-        { 
+        {
             string returnValue = string.Empty;
             JObject data = new JObject
             {
@@ -87,11 +88,11 @@ namespace OctoprintClient
             };
             if (action != "")
             {
-                data.Add("action",action);
+                data.Add("action", action);
             }
             try
             {
-                returnValue =Connection.PostJson("api/job", data);
+                returnValue = Connection.PostJson("api/job", data);
             }
             catch (WebException e)
             {
@@ -169,7 +170,7 @@ namespace OctoprintClient
         public double Volume { get; set; }
         public override string ToString()
         {
-            return "Length: " + Lenght + "\nVolume: "+Volume;
+            return "Length: " + Lenght + "\nVolume: " + Volume;
         }
     }
     public class OctoprintJobInfo
@@ -197,7 +198,7 @@ namespace OctoprintClient
             JToken file = job.Value<JToken>("file");
             File = new OctoprintFile((JObject)file);
         }
-       
+
         public override string ToString()
         {
             return "EstimatedPrinttime: " + EstimatedPrintTime + "\nAt File: " + File + "\nUsing Fillament: \n" + Filament;
@@ -210,7 +211,7 @@ namespace OctoprintClient
             Completion = progress.Value<double?>("completion") ?? -1.0;
             Filepos = progress.Value<int?>("filepos") ?? -1;
             PrintTime = progress.Value<int?>("printTime") ?? -1;
-            PrintTimeLeft = progress.Value<int?>("printTimeLeft")??-1;
+            PrintTimeLeft = progress.Value<int?>("printTimeLeft") ?? -1;
         }
 
         public Double Completion { get; set; }

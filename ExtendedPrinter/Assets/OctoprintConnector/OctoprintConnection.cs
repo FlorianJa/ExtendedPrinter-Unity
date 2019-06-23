@@ -4,8 +4,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Threading;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using UnityEngine;
 
 #if UNITY_EDITOR
 using WebSocketSharp;
@@ -30,7 +30,7 @@ namespace OctoprintClient
         /// The end point URL like https://192.168.1.2/
         /// </summary>
         public string EndPoint { get; set; }
-        
+
         /// <summary>
         /// The end point Api Key like "ABCDE12345"
         /// </summary>
@@ -111,7 +111,7 @@ namespace OctoprintClient
             }
             catch
             {
-                Debug.WriteLine("Couldent parse data. Not enough data?");
+                System.Diagnostics.Debug.WriteLine("Couldent parse data. Not enough data?");
             }
             if (obj != null)
             {
@@ -170,10 +170,52 @@ namespace OctoprintClient
                     }
 
                     JToken temps = current.Value<JToken>("temps");
-                    if (temps != null && temps.HasValues && Printer.TempsListens() )
+                    if (temps != null && temps.HasValues && Printer.TempsListens())
                     {
                         temps = temps.Value<JToken>(0);
                         Printer.CallTemp(new OctoprintHistoricTemperatureState(temps));
+
+                    }
+                }
+                else
+                {
+                    JToken _event = obj.Value<JToken>("event");
+
+                    if (_event != null)
+                    {
+                        string eventtype = string.Empty;
+                        try
+                        {
+                            eventtype = _event.Value<string>("type");
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                        
+
+                        if (eventtype == "PrinterStateChanged")
+                        {
+                            var payload = _event.Value<JToken>("payload");
+                            if (payload != null)
+                            {
+                                var state_string = payload.Value<string>("state_string");
+                                if (state_string != null)
+                                {
+                                    var state = (PrinterState)Enum.Parse(typeof(PrinterState), state_string);
+                                    Printer.State = state;
+                                }
+                            }
+                        }
+                        else if (eventtype == "PrintDone")
+                        {
+                            var payload = _event.Value<JToken>("payload");
+                            if (payload != null)
+                            {
+                                var time = payload.Value<float>("time");
+                                Printer.OnPrintFinished(time);
+                            }
+                        }
 
                     }
                 }
@@ -199,10 +241,12 @@ namespace OctoprintClient
             throw new NotImplementedException();
         }
 
-        internal virtual string PostMultipart(string packagestring, string v)
+        internal virtual string PostMultipart(string packagestring, string v, string path = "")
         {
+           
             throw new NotImplementedException();
         }
+        
     }
 
     /// <summary>

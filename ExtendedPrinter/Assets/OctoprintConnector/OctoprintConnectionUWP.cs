@@ -1,4 +1,4 @@
-#if UNITY_WSA_10_0 && !UNITY_EDITOR
+#if !UNITY_EDITOR
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,6 +10,8 @@ using Newtonsoft.Json.Linq;
 using Windows.Web.Http;
 using System.Net.Http;
 using WebSocketSharp;
+using Windows.Storage.Streams;
+using System.Net.Http.Headers;
 
 namespace OctoprintClient
 
@@ -30,10 +32,10 @@ namespace OctoprintClient
 
         public OctoprintConnectionUWP(string eP, string aK) : base(eP, aK)
         {
-            Position = new OctoprintPosTracker(this);
+            Position = new OctoprintPos(this);
             Files = new OctoprintFileTracker(this);
             Jobs = new OctoprintJobTracker(this);
-            Printers = new OctoprintPrinterTracker(this);
+            Printer = new OctoprintPrinter(this);
 
             WebSocket = new WebSocket(GetWebsocketurl());
             WebSocket.ConnectAsync();
@@ -59,8 +61,9 @@ namespace OctoprintClient
 
             //Create an HTTP client object
             Windows.Web.Http.HttpClient httpClient = new Windows.Web.Http.HttpClient();
-            var headers = httpClient.DefaultRequestHeaders;
-            headers.Add("X-Api-Key", ApiKey);
+            //var headers = 
+                httpClient.DefaultRequestHeaders.Add("X-Api-Key", ApiKey); 
+            //headers.Add("X-Api-Key", ApiKey);
             Uri requestUri = new Uri(EndPoint + location);
             //Send the GET request asynchronously and retrieve the response as a string.
             Windows.Web.Http.HttpResponseMessage httpResponse = new Windows.Web.Http.HttpResponseMessage();
@@ -69,7 +72,7 @@ namespace OctoprintClient
             {
                 //Send the GET request
                 httpResponse = httpClient.GetAsync(requestUri).AsTask().GetAwaiter().GetResult();
-                httpResponse.EnsureSuccessStatusCode();
+                //httpResponse.EnsureSuccessStatusCode();
                 httpResponseBody = httpResponse.Content.ReadAsStringAsync().AsTask().GetAwaiter().GetResult();
                 strResponseValue = httpResponseBody;
             }
@@ -106,7 +109,7 @@ namespace OctoprintClient
                 HttpStringContent arg = new HttpStringContent(arguments);
                 //Send the GET request
                 httpResponse = httpClient.PostAsync(requestUri, arg).AsTask().GetAwaiter().GetResult();
-                httpResponse.EnsureSuccessStatusCode();
+                //httpResponse.EnsureSuccessStatusCode();
                 httpResponseBody = httpResponse.Content.ReadAsStringAsync().AsTask().GetAwaiter().GetResult();
                 strResponseValue = httpResponseBody;
             }
@@ -131,21 +134,25 @@ namespace OctoprintClient
             String argumentString = string.Empty;
             argumentString = JsonConvert.SerializeObject(arguments);
 
+            //var content = new StringContent(arguments.ToString(), Encoding.UTF8, "application/json");
+
+
             //Create an HTTP client object
             Windows.Web.Http.HttpClient httpClient = new Windows.Web.Http.HttpClient();
             var headers = httpClient.DefaultRequestHeaders;
             headers.Add("X-Api-Key", ApiKey);
-            headers.Accept.Add(new Windows.Web.Http.Headers.HttpMediaTypeWithQualityHeaderValue("application/json"));
+            //headers.Accept.Add(new Windows.Web.Http.Headers.HttpMediaTypeWithQualityHeaderValue("application/json"));
             Uri requestUri = new Uri(EndPoint + location);
             //Send the GET request asynchronously and retrieve the response as a string.
             Windows.Web.Http.HttpResponseMessage httpResponse = new Windows.Web.Http.HttpResponseMessage();
             string httpResponseBody = "";
             try
             {
-                HttpStringContent arg = new HttpStringContent(argumentString);
+                HttpStringContent arg = new HttpStringContent(argumentString, UnicodeEncoding.Utf8, "application/json");
+                //arg.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 //Send the GET request
                 httpResponse = httpClient.PostAsync(requestUri, arg).AsTask().GetAwaiter().GetResult();
-                httpResponse.EnsureSuccessStatusCode();
+                //httpResponse.EnsureSuccessStatusCode();
                 httpResponseBody = httpResponse.Content.ReadAsStringAsync().AsTask().GetAwaiter().GetResult();
                 strResponseValue = httpResponseBody;
             }
@@ -179,7 +186,7 @@ namespace OctoprintClient
             {
                 //Send the GET request
                 httpResponse = httpClient.DeleteAsync(requestUri).AsTask().GetAwaiter().GetResult();
-                httpResponse.EnsureSuccessStatusCode();
+                //httpResponse.EnsureSuccessStatusCode();
                 httpResponseBody = httpResponse.Content.ReadAsStringAsync().AsTask().GetAwaiter().GetResult();
                 strResponseValue = httpResponseBody;
             }
@@ -196,13 +203,38 @@ namespace OctoprintClient
         /// <returns>The Result if any.</returns>
         /// <param name="packagestring">A packagestring should be generated elsewhere and input here as a String</param>
         /// <param name="location">The url sub-address like "http://192.168.1.2/<paramref name="location"/>"</param>
-        internal override string PostMultipart(string packagestring, string location)
+        internal override string PostMultipart(string fileData, string location, string path = "")
         {
-            Debug.WriteLine("A Multipart was posted to:");
-            Debug.WriteLine(EndPoint + location + "?apikey=" + ApiKey);
-            string strResponseValue = String.Empty;
 
-            throw new NotImplementedException();
+string strResponseValue = string.Empty;
+            //Create an HTTP client object
+            Windows.Web.Http.HttpClient httpClient = new Windows.Web.Http.HttpClient();
+            var headers = httpClient.DefaultRequestHeaders;
+            headers.Add("X-Api-Key", ApiKey);
+            Uri requestUri = new Uri(EndPoint + location);
+            Windows.Web.Http.HttpResponseMessage httpResponse = new Windows.Web.Http.HttpResponseMessage();
+            string httpResponseBody = "";
+
+            HttpMultipartFormDataContent multipartContent = new HttpMultipartFormDataContent();
+            multipartContent.Add(new HttpStringContent(fileData), "file", "customMove.gcode");
+            multipartContent.Add(new HttpStringContent("true"),"select");
+            multipartContent.Add(new HttpStringContent("true"),"print");
+            if(path != "") multipartContent.Add(new HttpStringContent(path),"path");
+            try
+            {
+                
+                //Send the GET request
+                Windows.Web.Http.HttpResponseMessage response = httpClient.PostAsync(requestUri, multipartContent).AsTask().GetAwaiter().GetResult();
+
+                httpResponseBody = httpResponse.Content.ReadAsStringAsync().AsTask().GetAwaiter().GetResult();
+                strResponseValue = httpResponseBody;
+            }
+            catch (Exception ex)
+            {
+                httpResponseBody = "Error: " + ex.HResult.ToString("X") + " Message: " + ex.Message;
+            }
+            return strResponseValue;
+
         }
     }
 }

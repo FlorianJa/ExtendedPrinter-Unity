@@ -1,20 +1,26 @@
-﻿using HoloToolkit.Examples.InteractiveElements;
-using HoloToolkit.Examples.UX;
-using HoloToolkit.Unity.Buttons;
-using HoloToolkit.Unity.Collections;
+﻿using Microsoft.MixedReality.Toolkit.UI;
+using Microsoft.MixedReality.Toolkit.Utilities;
 using OctoprintClient;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 
-public class ButtonGenerator : MonoBehaviour {
+public class ButtonGenerator : MonoBehaviour
+{
 
     public GameObject ButtonPrefab;
     public GameObject CheckBoxPrefab;
     public OctoPrintConnector connector;
     public MeshCreator MeshCreator;
+    public ToolTip ToolTip;
+    public GameObject Gcode;
+    public Interactable PrintButton;
+
+    public GameObject MovementController;
 
     private bool MenuCreated = false;
     private Task GetFileTaks;
@@ -22,23 +28,28 @@ public class ButtonGenerator : MonoBehaviour {
     private List<OctoprintFile> AllFile;
 
     private bool AllFileNameReceived = false;
+    private List<GameObject> allButtons = new List<GameObject>();
 
     // Use this for initialization
     void Start()
     {
         AllFile = new List<OctoprintFile>();
-       
+        print("start button generator");
     }
 
     // Update is called once per frame
     void Update()
     {
+        //print("0");
         if (connector.Connected && MenuCreated == false)
         {
-            if (GetFileTaks == null || GetFileTaks.Status != TaskStatus.Running)
+            //print("1");
+            if (GetFileTaks == null)
             {
+                //print("2");
                 GetFileTaks = Task.Run(() =>
                 {
+                    //print("3");
                     var rootfolder = connector.GetAllFiles();
                     foreach (var file in rootfolder.octoprintFiles)
                     {
@@ -50,25 +61,82 @@ public class ButtonGenerator : MonoBehaviour {
             }
         }
 
-        if(AllFileNameReceived && MenuCreated == false)
+        if (AllFileNameReceived && MenuCreated == false)
         {
+            //print("4");
             foreach (var file in AllFile)
             {
-                var filenameSplitted = file.Name.Split('.')[0];
-                GameObject button = Instantiate(ButtonPrefab, Vector3.zero, Quaternion.identity);
-                button.name = filenameSplitted;
-                button.GetComponent<CompoundButtonText>().Text = filenameSplitted;
-                button.transform.parent = transform;
-                var progress = button.AddComponent<ProgressLaunchButton>();
-                progress.UrlToFile = file.Refs_download;
-                progress.MeshCreator = MeshCreator;
-
-                GetComponent<ButtonInteractionReceiver>().interactables.Add(button);
-
+                if (file.Name.EndsWith(".gcode"))
+                {
+                    var filenameSplitted = file.Name.Split('.')[0];
+                    GameObject button = Instantiate(ButtonPrefab, Vector3.zero, Quaternion.identity);
+                    button.name = filenameSplitted;
+                    button.GetComponentInChildren<TextMesh>().text = filenameSplitted;
+                    button.transform.parent = transform;
+                    button.GetComponent<Interactable>().OnClick.AddListener(delegate
+                    {
+                        SetLabelTesxt(file.Name);
+                    });
+                    
+                    //button.GetComponent<Interactable>().IsGlobal = true;
+                    allButtons.Add(button);
+                }
             }
 
-            GetComponent<ObjectCollection>().UpdateCollection();
+            GetComponent<GridObjectCollection>().UpdateCollection();
+
+            foreach (var button in allButtons)
+            {
+                button.transform.localRotation = Quaternion.identity;
+            }
             MenuCreated = true;
+        }
+    }
+
+    private void SetLabelTesxt(string name)
+    {
+        print("button clicked");// Debug.Log("clicked");
+        if (!MeshCreator.loading)
+        {
+            string time = string.Empty;
+            OctoprintFile file = null;
+            foreach (var _file in AllFile)
+            {
+                if (_file.Name == name)
+                {
+                    file = _file;
+                    TimeSpan t = TimeSpan.FromSeconds(_file.GcodeAnalysis.EstimatedPrintTime);
+
+                    time = string.Format("{0}h:{1}m",
+                                t.Hours,
+                                t.Minutes);
+                    break;
+                }
+            }
+            //TimeSpan t = TimeSpan.FromSeconds();
+
+            //string time = //string.Format("{0}h:{1}m",
+            //                t.Hours,
+            //                t.Minutes);
+            int minutes = (int)file.GcodeAnalysis.EstimatedPrintTime / 60;
+            int hours = 0;
+            if (minutes >= 60)
+            {
+                hours = minutes / 60;
+                minutes = minutes - (hours * 60);
+            }
+
+            time = hours + "h:" + minutes + "m";
+
+            var filamentLength = file.GcodeAnalysis.FilamentLength / 1000f;
+            ToolTip.ToolTipText = String.Format("{0}\nDruckdauer: {1}\nFilament: {2}m", file.Name, time, filamentLength.ToString("F"));
+            connector.SelectFile(file.Name);
+            PrintButton.Enabled = true;
+            Gcode.SetActive(true);
+
+            MovementController.SetActive(false);
+            
+            StartCoroutine(MeshCreator.LoadObject(file.Refs_download));
         }
     }
 }

@@ -167,7 +167,7 @@ namespace ChartAndGraph.Legened
             {
                 GameObject prefab =  (GameObject)GameObject.Instantiate(legendItemPrefab.gameObject);
                 prefab.transform.SetParent(transform, false);
-                ChartCommon.HideObject(prefab, true);
+                //ChartCommon.HideObject(prefab, true);
                 CanvasLegendItem legendItemData = prefab.GetComponent<CanvasLegendItem>();
                 if (legendItemData.Image != null)
                 {

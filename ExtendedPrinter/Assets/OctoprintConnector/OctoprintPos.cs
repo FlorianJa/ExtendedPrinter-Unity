@@ -12,7 +12,7 @@ namespace OctoprintClient
     /// <summary>
     /// Octoprint position tracker. tracks the Position and guesses the position if needed.
     /// </summary>
-    public class OctoprintPos:OctoprintBase
+    public class OctoprintPos : OctoprintBase
     {
         /// <summary>
         /// The GCode in the form of a String.
@@ -74,13 +74,13 @@ namespace OctoprintClient
         private Stopwatch watch = Stopwatch.StartNew();
 
 
-        
+
 
         /// <summary>
         /// Initializes a Positiontracker, this shouldn't be done directly and is part of the Connection it needs anyway
         /// </summary>
         /// <param name="con">The Octoprint connection it connects to.</param>
-        public OctoprintPos(OctoprintConnection con):base(con)
+        public OctoprintPos(OctoprintConnection con) : base(con)
         {
             BufferPos = new float[] { 0, 0, 0, 0 };
             MaxFeedRateBuffer = new float[] { 200, 200, 12 };
@@ -93,7 +93,8 @@ namespace OctoprintClient
         /// Releases unmanaged resources and performs other cleanup operations before the
         /// <see cref="T:OctoprintClient.OctoprintPosTracker"/> is reclaimed by garbage collection.
         /// </summary>
-        ~OctoprintPos(){
+        ~OctoprintPos()
+        {
 #warning Stop Thread the right way (UWP)!
 
             //            threadstop = true;
@@ -160,26 +161,26 @@ namespace OctoprintClient
                     GetGCode(info.File.Origin + "/" + info.File.Name);
                 }
             }
-                string[] linesLeft = GCodeString.Substring(progress.Filepos).Split(new[] { '\r', '\n' });
-                if (GcodePos != (progress.Filepos))
+            string[] linesLeft = GCodeString.Substring(progress.Filepos).Split(new[] { '\r', '\n' });
+            if (GcodePos != (progress.Filepos))
+            {
+                if (GCodeString.Length > (progress.Filepos))
                 {
-                    if (GCodeString.Length > (progress.Filepos))
-                    {
-                        string currline = linesLeft[0];
-                        ReadLineForwards(currline);
-                    }
-                    GcodePos = progress.Filepos;
+                    string currline = linesLeft[0];
+                    ReadLineForwards(currline);
+                }
+                GcodePos = progress.Filepos;
 
 
-                }
-                if (MovesBuffer.Count == 0)
+            }
+            if (MovesBuffer.Count == 0)
+            {
+                BufferPos = new float[] { Xpos, Ypos, Zpos };
+                for (int i = 0; i < linesLeft.Length; i++)
                 {
-                    BufferPos = new float[] { Xpos, Ypos, Zpos };
-                    for (int i = 0; i < linesLeft.Length; i++)
-                    {
-                        ReadLineToBuffer(linesLeft[i]);
-                    }
+                    ReadLineToBuffer(linesLeft[i]);
                 }
+            }
             //}
 
             coordinateResponseValue[0] = Xpos;
@@ -194,7 +195,7 @@ namespace OctoprintClient
         /// <param name="x">The x coordinate.</param>
         /// <param name="y">The y coordinate.</param>
         /// <param name="z">The z coordinate.</param>
-        public void SetPos(float? x=null, float? y=null, float? z=null)
+        public void SetPos(float? x = null, float? y = null, float? z = null)
         {
             if (x.HasValue)
             {
@@ -216,7 +217,7 @@ namespace OctoprintClient
         /// <param name="x">The x coordinate.</param>
         /// <param name="y">The y coordinate.</param>
         /// <param name="z">The z coordinate.</param>
-        public void Move(float? x=null, float? y=null, float? z=null)
+        public void Move(float? x = null, float? y = null, float? z = null)
         {
 
             if (x.HasValue)
@@ -233,7 +234,7 @@ namespace OctoprintClient
             }
         }
 
-        
+
         /// <summary>
         /// Gets the gcode from the given location
         /// </summary>
@@ -241,7 +242,7 @@ namespace OctoprintClient
         private void GetGCode(string location)
         {
 
-            Debug.WriteLine("get gcode location "+ location );
+            Debug.WriteLine("get gcode location " + location);
 #if UNITY_WSA && !UNITY_EDITOR
             throw new NotImplementedException();
 #else
@@ -250,7 +251,7 @@ namespace OctoprintClient
                 try
                 {
                     Debug.WriteLine("downloading: " + Connection.EndPoint + "downloads/files/" + location + "?apikey=" + Connection.ApiKey);
-                    GCodeString = wc.DownloadString(Connection.EndPoint + "downloads/files/" + location+ "?apikey=" + Connection.ApiKey);
+                    GCodeString = wc.DownloadString(Connection.EndPoint + "downloads/files/" + location + "?apikey=" + Connection.ApiKey);
                 }
                 catch (Exception e)
                 {
@@ -274,7 +275,7 @@ namespace OctoprintClient
             string[] preloadString = new string[0];
             if (GCodeString.Length > 0)
             {
-                preloadString = GCodeString.Substring(0, Math.Max(Math.Min(GCodeString.Length, progress.Filepos) - 1,0)).Split(new[] { '\r', '\n' });
+                preloadString = GCodeString.Substring(0, Math.Max(Math.Min(GCodeString.Length, progress.Filepos) - 1, 0)).Split(new[] { '\r', '\n' });
             }
             for (int i = preloadString.Length - 1; i >= 0 && (Math.Abs(Zpos) < 0.001 || Math.Abs(Ypos) < 0.001 || Math.Abs(Xpos) < 0.001); i -= 1)
             {
@@ -427,7 +428,7 @@ namespace OctoprintClient
             OctoprintJobInfo info = Connection.Jobs.GetInfo();
             if (GCodeString == null)
             {
-                if (info.File.Name != "" &&info.File.Origin=="local")
+                if (info.File.Name != "" && info.File.Origin == "local")
                 {
                     GetGCode(info.File.Origin + "/" + info.File.Name);
 
@@ -493,7 +494,7 @@ namespace OctoprintClient
         }
         public string Home()
         {
-            return Home(new string[]{"x","y","z" });
+            return Home(new string[] { "x", "y", "z" });
         }
 
         /// <summary>
@@ -505,7 +506,7 @@ namespace OctoprintClient
         /// <param name="z">The z coordinate.</param>
         /// <param name="absolute">If set to <c>true</c> The position is set to absolute.</param>
         /// <param name="speed">Speed.</param>
-        public string MoveTo(float? x=null,float? y=null, float? z=null, bool absolute=false, int? speed=null)
+        public string MoveTo(float? x = null, float? y = null, float? z = null, bool absolute = false, int? speed = null)
         {
             return Connection.Printer.MakePrintheadJog(x, y, z, absolute, speed);
         }
@@ -545,7 +546,7 @@ namespace OctoprintClient
             }
             catch (System.Net.WebException e)
             {
-                Debug.WriteLine("something happened with the web connection"+e.Message);
+                Debug.WriteLine("something happened with the web connection" + e.Message);
             }
             watch.Reset();
             watch.Start();
@@ -577,7 +578,7 @@ namespace OctoprintClient
         }
     }
 
-    public class HomedEventArgs:EventArgs
+    public class HomedEventArgs : EventArgs
     {
         /// <summary>
         /// The X Position
