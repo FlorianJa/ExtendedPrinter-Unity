@@ -11,13 +11,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
-public class OctoPrintConnector : MonoBehaviour
-{
 
+public class OctoPrintConnector : Singleton<OctoPrintConnector>
+{
+    protected OctoPrintConnector() { }
     private OctoprintConnection octoprintConnection;
     public string Ip;
     public string ApiKey;
-    public GraphChart Graph;
 
     public ToolTip toolTip;
     public GameObject Legende;
@@ -315,18 +315,22 @@ public class OctoPrintConnector : MonoBehaviour
 
     }
 
+
+    /// <summary>
+    /// Action for Eventhandling the Websocket Temperature info
+    /// </summary>
+    public event Action<OctoprintHistoricTemperatureState> TempHandler;
+
     private void Printers_TempHandlers(OctoprintHistoricTemperatureState obj)
     {
+        TempHandler.Invoke(obj);
+
         if (UnityMainThreadDispatcher.Instance() != null)
         {
             UnityMainThreadDispatcher.Instance().Enqueue(() =>
             {
-                if (Graph != null)
+                if (Legende != null)
                 {
-                    Graph.DataSource.AddPointToCategoryRealtime("ToolTarget", System.DateTime.Now, obj.Tools[0].Target, 1f);
-                    Graph.DataSource.AddPointToCategoryRealtime("BedTarget", System.DateTime.Now, obj.Bed.Target, 1f);
-                    Graph.DataSource.AddPointToCategoryRealtime("Tool", System.DateTime.Now, obj.Tools[0].Actual, 1f);
-                    Graph.DataSource.AddPointToCategoryRealtime("Bed", System.DateTime.Now, obj.Bed.Actual, 1f);
 
                     Legende.transform.GetChild(0).GetComponentInChildren<Text>().text = "ToolTarget: " + obj.Tools[0].Target.ToString("F0") + "°C";
                     Legende.transform.GetChild(1).GetComponentInChildren<Text>().text = "BedTarget: " + obj.Bed.Target.ToString("F0") + "°C";
