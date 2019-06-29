@@ -21,7 +21,6 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
 
     public ToolTip toolTip;
     
-    public GameObject StarFilamentChangeButton;
     
     private bool isPrinting = false;
     private bool isFilamentChanging;
@@ -110,7 +109,6 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
             UnityMainThreadDispatcher.Instance().Enqueue(() =>
             {
                 toolTip.ToolTipText = "Filamentwechsel abgeschlossen";
-                StarFilamentChangeButton.SetActive(true);
             });
         }
         if(isMovedManually)
