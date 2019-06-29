@@ -19,7 +19,7 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
     public string Ip;
     public string ApiKey;
 
-    public ToolTip toolTip;
+    //public ToolTip toolTip;
     
     
     private bool isPrinting = false;
@@ -69,47 +69,20 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
     {
         if (isPrinting)
         {
-            PrintFinished?.Invoke(this,null);
+            PrintFinished?.Invoke(this,e);
             isPrinting = false;
-            TimeSpan timePrinted = TimeSpan.FromSeconds(e.Time);
-            string time1;
-            if (timePrinted.Hours > 0)
-            {
-                time1 = string.Format("{0:D2}h:{1:D2}m:{2:D2}s",
-                                        timePrinted.Hours,
-                                        timePrinted.Minutes,
-                                        timePrinted.Seconds);
-            }
-            else
-            {
-                time1 = string.Format("{0:D2}m:{1:D2}s",
-                                        timePrinted.Minutes,
-                                        timePrinted.Seconds);
-            }
-
-            UnityMainThreadDispatcher.Instance().Enqueue(() =>
-            {
-                toolTip.ToolTipText = "Druck abgeschlossen.\nDauer: " + time1;
-            });
+            
         }
         if (isFilamentChanging && filamentChangeBegin)
         {
-            FilamentChangeBegin?.Invoke(this,null);
+            FilamentChangeBegin?.Invoke(this,e);
             filamentChangeBegin = false;
             videoIsPlaying = true;
-            UnityMainThreadDispatcher.Instance().Enqueue(() =>
-            {
-                toolTip.ToolTipText = "Löse den Hebel und zieh das Filament senkrecht heraus.";
-            });
         }
         if (isFilamentChanging && filamentChangeEnd)
         {
-            FilamentChangeEnd?.Invoke(this,null);
+            FilamentChangeEnd?.Invoke(this,e);
             filamentChangeEnd = false;
-            UnityMainThreadDispatcher.Instance().Enqueue(() =>
-            {
-                toolTip.ToolTipText = "Filamentwechsel abgeschlossen";
-            });
         }
         if(isMovedManually)
         {
@@ -124,52 +97,12 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
 
     }
 
+    public event EventHandler<OctoprintJobProgress> ProgressInfoChanged;
     private void Jobs_Progressinfo(OctoprintJobProgress obj)
     {
         if (isPrinting)
         {
-            UnityMainThreadDispatcher.Instance().Enqueue(() =>
-            {
-                TimeSpan timeLeft = TimeSpan.FromSeconds(obj.PrintTimeLeft);
-                TimeSpan timePrinted = TimeSpan.FromSeconds(obj.PrintTime);
-                string time1;
-                if (timePrinted.Hours > 0)
-                {
-                    time1 = string.Format("{0:D2}h:{1:D2}m:{2:D2}s",
-                                            timePrinted.Hours,
-                                            timePrinted.Minutes,
-                                            timePrinted.Seconds);
-                }
-                else
-                {
-                    time1 = string.Format("{0:D2}m:{1:D2}s",
-                                            timePrinted.Minutes,
-                                            timePrinted.Seconds);
-                }
-
-                string time2;
-                if (timeLeft.Hours > 0)
-                {
-                    time2 = string.Format("{0:D2}h:{1:D2}m:{2:D2}s",
-                                            timeLeft.Hours,
-                                            timeLeft.Minutes,
-                                            timeLeft.Seconds);
-                }
-                else
-                {
-                    time2 = string.Format("{0:D2}m:{1:D2}s",
-                                            timeLeft.Minutes,
-                                            timeLeft.Seconds);
-                }
-
-                toolTip.ToolTipText = String.Format("Dauer: {0}\n Verbleibend: {1}\n Fortschritt: {2}%", time1, time2, obj.Completion.ToString("F0"));
-
-
-                //if (obj.Completion == 100)
-                //{
-                //    isPrinting = false;
-                //}
-            });
+            ProgressInfoChanged?.Invoke(this, obj);
         }
     }
 
