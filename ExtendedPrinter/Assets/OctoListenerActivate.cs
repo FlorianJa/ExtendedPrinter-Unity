@@ -11,16 +11,20 @@ public class OctoListenerActivate : MonoBehaviour
     {
         if (onPrintFinished)
         {
-            OctoPrintConnector.Instance.PrintFinished += activate;
+            OctoPrintConnector.Instance.PrintFinished += ActivateSelf;
         }
         if (onFilamentChangeEnd)
         {
-            OctoPrintConnector.Instance.FilamentChangeEnd += activate;
+            OctoPrintConnector.Instance.FilamentChangeEnd += ActivateSelf;
         }
     }
-    private void activate()
+    private void ActivateSelf(object source, System.EventArgs args)
     {
-        gameObject.SetActive(true);
+
+        UnityMainThreadDispatcher.Instance().Enqueue(() =>
+        {
+            gameObject.SetActive(true);
+        });
     }
     // Update is called once per frame
     void Update()

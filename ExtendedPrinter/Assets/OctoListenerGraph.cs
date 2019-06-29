@@ -7,13 +7,13 @@ using UnityEngine;
 public class OctoListenerGraph : MonoBehaviour
 {
     // Start is called before the first frame update
-    public GraphChart Graph;
+    private GraphChart Graph;
     void Start()
     {
-        OctoPrintConnector.Instance.TempHandler += Printers_TempHandler;
-        Graph=GetComponent<GraphChart>();
+        OctoPrintConnector.Instance.NewTemperatureDataRecieved += OctoPrintConnector_OnNewTemperatureDataRecieved;
+        Graph =GetComponent<GraphChart>();
     }
-    private void Printers_TempHandler(OctoprintHistoricTemperatureState obj)
+    private void OctoPrintConnector_OnNewTemperatureDataRecieved(object source,OctoprintHistoricTemperatureState obj)
     {
 
         if (UnityMainThreadDispatcher.Instance() != null)

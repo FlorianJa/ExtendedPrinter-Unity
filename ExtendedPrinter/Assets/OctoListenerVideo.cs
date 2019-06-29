@@ -11,7 +11,7 @@ public class OctoListenerVideo : MonoBehaviour
         OctoPrintConnector.Instance.FilamentChangeBegin += StartVideo;
     }
 
-    private void StartVideo()
+    private void StartVideo(object s, System.EventArgs args)
     {
 
         UnityMainThreadDispatcher.Instance().Enqueue(() =>

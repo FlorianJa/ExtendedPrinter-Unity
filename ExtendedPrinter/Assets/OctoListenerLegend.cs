@@ -9,9 +9,9 @@ public class OctoListenerLegend : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        OctoPrintConnector.Instance.TempHandler += Printers_TempHandler;
+        OctoPrintConnector.Instance.NewTemperatureDataRecieved += OctoPrintConnector_OnNewTemperatureDataRecieved;
     }
-    private void Printers_TempHandler(OctoprintHistoricTemperatureState obj)
+    private void OctoPrintConnector_OnNewTemperatureDataRecieved(object s,OctoprintHistoricTemperatureState obj)
     {
 
         if (UnityMainThreadDispatcher.Instance() != null)

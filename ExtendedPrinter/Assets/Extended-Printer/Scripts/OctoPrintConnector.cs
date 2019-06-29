@@ -20,8 +20,7 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
     public string ApiKey;
 
     public ToolTip toolTip;
-
-    public GameObject OperatingButtons;
+    
     public GameObject ChangeFilamentNext;
     public GameObject StartPrintButton;
     public GameObject StarFilamentChangeButton;
@@ -65,15 +64,15 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
     }
 
 
-    public event Action PrintFinished;
-    public event Action FilamentChangeBegin;
-    public event Action FilamentChangeEnd;
+    public event EventHandler PrintFinished;
+    public event EventHandler FilamentChangeBegin;
+    public event EventHandler FilamentChangeEnd;
 
     private void Printer_PrintFinished(object sender, PrintFinishedEventArgs e)
     {
         if (isPrinting)
         {
-            PrintFinished.Invoke();
+            PrintFinished?.Invoke(this,null);
             isPrinting = false;
             TimeSpan timePrinted = TimeSpan.FromSeconds(e.Time);
             string time1;
@@ -94,12 +93,11 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
             UnityMainThreadDispatcher.Instance().Enqueue(() =>
             {
                 toolTip.ToolTipText = "Druck abgeschlossen.\nDauer: " + time1;
-                OperatingButtons.SetActive(true);
             });
         }
         if (isFilamentChanging && filamentChangeBegin)
         {
-            FilamentChangeBegin.Invoke();
+            FilamentChangeBegin?.Invoke(this,null);
             filamentChangeBegin = false;
             videoIsPlaying = true;
             UnityMainThreadDispatcher.Instance().Enqueue(() =>
@@ -110,7 +108,7 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
         }
         if (isFilamentChanging && filamentChangeEnd)
         {
-            FilamentChangeEnd.Invoke();
+            FilamentChangeEnd?.Invoke(this,null);
             filamentChangeEnd = false;
             UnityMainThreadDispatcher.Instance().Enqueue(() =>
             {
@@ -320,11 +318,11 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
     /// <summary>
     /// Action for Eventhandling the Websocket Temperature info
     /// </summary>
-    public event Action<OctoprintHistoricTemperatureState> TempHandler;
+    public event EventHandler<OctoprintHistoricTemperatureState> NewTemperatureDataRecieved;
 
     private void Printers_TempHandlers(OctoprintHistoricTemperatureState obj)
     {
-        TempHandler.Invoke(obj);
+        NewTemperatureDataRecieved?.Invoke(this,obj);
     }
 
 
