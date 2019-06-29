@@ -21,7 +21,6 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
 
     public ToolTip toolTip;
     
-    public GameObject ChangeFilamentNext;
     public GameObject StartPrintButton;
     public GameObject StarFilamentChangeButton;
     
@@ -103,7 +102,6 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
             UnityMainThreadDispatcher.Instance().Enqueue(() =>
             {
                 toolTip.ToolTipText = "Löse den Hebel und zieh das Filament senkrecht heraus.";
-                ChangeFilamentNext.SetActive(true);
             });
         }
         if (isFilamentChanging && filamentChangeEnd)
@@ -113,7 +111,6 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
             UnityMainThreadDispatcher.Instance().Enqueue(() =>
             {
                 toolTip.ToolTipText = "Filamentwechsel abgeschlossen";
-                ChangeFilamentNext.SetActive(false);
                 StartPrintButton.SetActive(true);
                 StarFilamentChangeButton.SetActive(true);
             });
