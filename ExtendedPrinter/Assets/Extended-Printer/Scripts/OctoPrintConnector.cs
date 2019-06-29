@@ -20,8 +20,7 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
     public string ApiKey;
 
     public ToolTip toolTip;
-    
-    public GameObject SelectionMenu;
+
     public GameObject OperatingButtons;
     public GameObject ChangeFilamentNext;
     public GameObject StartPrintButton;
@@ -95,7 +94,6 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
             UnityMainThreadDispatcher.Instance().Enqueue(() =>
             {
                 toolTip.ToolTipText = "Druck abgeschlossen.\nDauer: " + time1;
-                SelectionMenu.SetActive(true);
                 OperatingButtons.SetActive(true);
             });
         }
@@ -120,7 +118,6 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
                 ChangeFilamentNext.SetActive(false);
                 StartPrintButton.SetActive(true);
                 StarFilamentChangeButton.SetActive(true);
-                SelectionMenu.SetActive(true);
             });
         }
         if(isMovedManually)
