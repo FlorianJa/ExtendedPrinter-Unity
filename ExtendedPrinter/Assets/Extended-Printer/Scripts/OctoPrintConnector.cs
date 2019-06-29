@@ -20,15 +20,13 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
     public string ApiKey;
 
     public ToolTip toolTip;
-    public GameObject Legende;
-
-    public GameObject Video;
+    
     public GameObject SelectionMenu;
     public GameObject OperatingButtons;
     public GameObject ChangeFilamentNext;
     public GameObject StartPrintButton;
     public GameObject StarFilamentChangeButton;
-
+    
     private bool isPrinting = false;
     private bool isFilamentChanging;
     private bool filamentChangeBegin;
@@ -67,10 +65,16 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
 
     }
 
+
+    public event Action PrintFinished;
+    public event Action FilamentChangeBegin;
+    public event Action FilamentChangeEnd;
+
     private void Printer_PrintFinished(object sender, PrintFinishedEventArgs e)
     {
         if (isPrinting)
         {
+            PrintFinished.Invoke();
             isPrinting = false;
             TimeSpan timePrinted = TimeSpan.FromSeconds(e.Time);
             string time1;
@@ -97,19 +101,18 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
         }
         if (isFilamentChanging && filamentChangeBegin)
         {
+            FilamentChangeBegin.Invoke();
             filamentChangeBegin = false;
+            videoIsPlaying = true;
             UnityMainThreadDispatcher.Instance().Enqueue(() =>
             {
-                videoIsPlaying = true;
                 toolTip.ToolTipText = "Löse den Hebel und zieh das Filament senkrecht heraus.";
-                Video.GetComponent<MeshRenderer>().enabled = true;
-                Video.GetComponentInChildren<VideoPlayer>().clip = Video.GetComponentInChildren<RotateVideoFiles>().Videos[0];
-                Video.GetComponentInChildren<VideoPlayer>().Play();
                 ChangeFilamentNext.SetActive(true);
             });
         }
         if (isFilamentChanging && filamentChangeEnd)
         {
+            FilamentChangeEnd.Invoke();
             filamentChangeEnd = false;
             UnityMainThreadDispatcher.Instance().Enqueue(() =>
             {
@@ -122,6 +125,7 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
         }
         if(isMovedManually)
         {
+
             isMovedManually = false;
             MoveCompleted?.Invoke(this, null);
         }
@@ -324,22 +328,6 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
     private void Printers_TempHandlers(OctoprintHistoricTemperatureState obj)
     {
         TempHandler.Invoke(obj);
-
-        if (UnityMainThreadDispatcher.Instance() != null)
-        {
-            UnityMainThreadDispatcher.Instance().Enqueue(() =>
-            {
-                if (Legende != null)
-                {
-
-                    Legende.transform.GetChild(0).GetComponentInChildren<Text>().text = "ToolTarget: " + obj.Tools[0].Target.ToString("F0") + "°C";
-                    Legende.transform.GetChild(1).GetComponentInChildren<Text>().text = "BedTarget: " + obj.Bed.Target.ToString("F0") + "°C";
-                    Legende.transform.GetChild(2).GetComponentInChildren<Text>().text = "Tool: " + obj.Tools[0].Actual.ToString("F0") + "°C";
-                    Legende.transform.GetChild(3).GetComponentInChildren<Text>().text = "Bed: " + obj.Bed.Actual.ToString("F0") + "°C";
-                }
-
-            });
-        }
     }
 
 
