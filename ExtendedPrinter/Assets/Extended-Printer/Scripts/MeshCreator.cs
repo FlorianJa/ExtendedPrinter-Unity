@@ -774,7 +774,20 @@ public class GCodeMeshGenerator
     internal int createdLayers;
 
     private Queue<MeshcreatorInput> meshCreatorInputQueue = new Queue<MeshcreatorInput>();
-    internal void CreateObjectFromGCode(string[] Lines, meshloader loader, MeshCreator mc)//takes ages and munches on all that juicy cpu, only use if absolutely necessary
+
+    internal void CreateObjectFromGCode(string[] Lines, meshloader loader, MeshCreator mc)
+    {
+        if (Lines[0].Contains("Cura"))
+        {
+            CreateObjectFromGCodeCura(Lines, loader, mc);
+        }
+        else if (Lines[0].Contains("Prusa"))
+        {
+            CreateObjectFromGCodePrusa(Lines, loader, mc);
+        }
+    }
+
+    internal void CreateObjectFromGCodeCura(string[] Lines, meshloader loader, MeshCreator mc)//takes ages and munches on all that juicy cpu, only use if absolutely necessary
     {
 
 
@@ -935,7 +948,209 @@ public class GCodeMeshGenerator
         loader.filesLoadingfinished = true;
         mc.newloaded = true;
     }
+    internal void CreateObjectFromGCodePrusa(string[] Lines, meshloader loader, MeshCreator mc)//takes ages and munches on all that juicy cpu, only use if absolutely necessary
+    {
 
+
+        //Read the text from directly from the test.txt file
+        //StreamReader reader = new StreamReader(new FileStream(filename, FileMode.Open));
+        mc.loading = true;
+        loader.filesLoadingfinished = false;
+        //mc.print("loading " + filename);
+        List<string> meshnames = new List<string>();
+        int currentmesh = -1;
+        Dictionary<string, List<List<Vector3>>> tmpmove = new Dictionary<string, List<List<Vector3>>>();
+        Vector3 currpos = new Vector3(0, 0, 0);
+        float accumulateddist = 0.0f;
+        Vector3 lastpointcache = new Vector3(0, 0, 0);
+        int linesread = 0;
+        int layernum = -1;
+        bool accumulating = false;
+        float lastanglecache = 0.0f;
+        float accumulatedangle = 0.0f;
+        bool ismesh = false;
+        bool islayerheight = false;
+        foreach (string line in Lines)
+        {
+            linesread += 1;
+            if (islayerheight)
+            {
+                currpos.y= float.Parse(line.Substring(1), CultureInfo.InvariantCulture.NumberFormat);
+                islayerheight = false;
+            }
+                //string line = reader.ReadLine();
+                /*if (line.StartsWith(";TYPE:"))
+                {
+                    ismesh = true; 
+                    string namemesh = line.Substring(6) + " " + layernum.ToString("D8");
+                    if (line.Substring(6).Contains("WALL") || line.Substring(6).Contains("SKIN"))
+                    {
+                        namemesh = "WALLS " + layernum.ToString("D8");
+                    }
+                    //here i change the type of 3d printed part i print next, this only works in cura-sliced stuff, slic3r doesnt have those comments
+                    //print("setting type");
+                    if (!meshnames.Contains(namemesh))
+                    {
+                        meshnames.Add(namemesh);
+                        currentmesh = meshnames.Count - 1;
+                        tmpmove[namemesh] = new List<List<Vector3>>();
+                        tmpmove[namemesh].Add(new List<Vector3>());
+                        //print("adding: " + line + " as: " + line.Substring(6) + " Line " + layernum + " with number " + currentmesh);
+                    }
+                    else
+                    {
+                        currentmesh = meshnames.FindIndex((namemesh).EndsWith);
+                        //print("changed mesh to: " + currentmesh + " because of " + line);
+                    }
+                    //print("currentmesh" + currentmesh);
+                }
+                else*/
+                if (line.StartsWith(";AFTER_LAYER_CHANGE"))
+            {
+                layernum = layernum+1;
+                islayerheight = true;
+                foreach (string namepart in tmpmove.Keys)
+                {
+                    createlayer(tmpmove[namepart], namepart, loader);
+                }
+                tmpmove.Clear();
+                //todo create layer
+            }
+            else if ((line.StartsWith("G1") || line.StartsWith("G0")) /*&& currentmesh != -1*/&& layernum!=-1 && ((layernum % layercluster) == 0 || layercluster == 1))
+            {
+                bool isnew = false;
+                if(line.Contains(";")&&!(line.Contains("wipe and retract")|| line.Contains("move to first") || line.Contains("move inwards before travel")||line.Contains("retract") || line.Contains("lift Z") || line.Contains("move to first perimeter point") || line.Contains("restore layer Z") || line.Contains("unretract") || line.Contains("Move") || line.Contains("home")))
+                {
+
+                    ismesh = true;
+                    string namemesh = line.Split(';')[1].Substring(1) +" "+ layernum.ToString("D8");
+                    /*if (line.Substring(6).Contains("WALL") || line.Substring(6).Contains("SKIN"))
+                    {
+                        namemesh = "WALLS " + layernum.ToString("D8");
+                    }*/
+                    //here i change the type of 3d printed part i print next, this only works in cura-sliced stuff, slic3r doesnt have those comments
+                    //print("setting type");
+                    if (!meshnames.Contains(namemesh))
+                    {
+                        isnew = true;
+                        meshnames.Add(namemesh);
+                        currentmesh = meshnames.Count - 1;
+                        tmpmove[namemesh] = new List<List<Vector3>>();
+                        tmpmove[namemesh].Add(new List<Vector3>());
+                        
+                        //print("adding: " + line + " as: " + line.Substring(6) + " Line " + layernum + " with number " + currentmesh);
+                    }
+                    else
+                    {
+                        if (meshnames[currentmesh] != namemesh)
+                        {
+                            isnew = true;
+                        }
+                        currentmesh = meshnames.FindIndex((namemesh).EndsWith);
+                        //print("changed mesh to: " + currentmesh + " because of " + line);
+                    }
+                }
+                //here i add a point to the list of visited points of the current part
+                //print("Adding object");
+                /*if(currentmesh!=-1 && meshnames[currentmesh].Contains("WALLS 60"))
+                {
+                    print(line);
+                    print(currpos);
+                    print("accumulating: " + accumulating);
+                }*/
+                if (line.Contains(";") && !(line.Contains("wipe and retract") || line.Contains("move to first skirt point") || line.Contains("move inwards before travel") || line.Contains("retract") || line.Contains("lift Z") || line.Contains("move to first perimeter point") || line.Contains("restore layer Z") || line.Contains("unretract") || line.Contains("Move") || line.Contains("home")))
+                {
+                    string[] parts = line.Split(' ');
+
+                    if (accumulating)
+                    {
+                        accumulateddist += Vector3.Distance(currpos, lastpointcache);
+                        accumulatedangle += Mathf.Abs(lastanglecache - Vector2.Angle(new Vector2(1, 0), new Vector2((currpos - lastpointcache).x, (currpos - lastpointcache).z)));
+                    }
+                    lastpointcache = currpos;
+                    lastanglecache = Vector2.Angle(new Vector2(1, 0), new Vector2((currpos - lastpointcache).x, (currpos - lastpointcache).z));
+
+                    if (!accumulating &&
+                        (line.Contains("X") || line.Contains("Y") || line.Contains("Z")) &&
+                        line.Contains("E") &&
+                        currpos != new Vector3(0, 0, 0)
+                        && currentmesh != -1)
+                    {
+                        /*if (currentmesh != -1 && meshnames[currentmesh].Contains("WALLS 60"))
+                            print("first");*/
+                        //print(currentmesh);
+                        string meshname = meshnames[currentmesh];
+                        if (tmpmove.ContainsKey(meshname))
+                        {
+
+                            tmpmove[meshname][tmpmove[meshname].Count - 1].Add(currpos);
+                        }
+                        /*else
+                        {
+                            if (currentmesh != -1 && meshnames[currentmesh].Contains("WALLS 60"))
+                                print("nah");
+                        };*/
+                    }
+                    foreach (string part in parts)
+                    {
+                        if (part.StartsWith("X"))
+                        {
+                            currpos.x = float.Parse(part.Substring(1), CultureInfo.InvariantCulture.NumberFormat);
+                        }
+                        else if (part.StartsWith("Y"))
+                        {
+                            currpos.z = float.Parse(part.Substring(1), CultureInfo.InvariantCulture.NumberFormat);
+                        }
+                        else if (part.StartsWith("Z"))
+                        {
+                            currpos.y = float.Parse(part.Substring(1), CultureInfo.InvariantCulture.NumberFormat);
+                        }
+                    }
+                    if (((!accumulating || accumulateddist > distanceclustersize || accumulatedangle > rotationclustersize) && (ismesh || line.Contains("E"))) && (line.Contains("X") || line.Contains("Y") || line.Contains("Z")) && currpos != new Vector3(0, 0, 0))
+                    {
+                        /*if (currentmesh != -1 && meshnames[currentmesh].Contains("WALLS 60"))
+                            print("second");*/
+                        if (currentmesh != -1 && tmpmove.ContainsKey(meshnames[currentmesh]))
+                        {
+                            string meshname = meshnames[currentmesh];
+                            tmpmove[meshname][tmpmove[meshname].Count - 1].Add(currpos);
+                        }
+
+                        accumulateddist = 0.0f;
+                        accumulatedangle = 0.0f;
+                    }
+                    accumulating = true;
+                    /*if (line.Contains("E") &&
+                        (line.Contains("X") || line.Contains("Y") || line.Contains("Z")))
+                    {
+                        ismesh = true;
+                    }*/
+
+                    ismesh = false;
+                    accumulating = false;
+                    if (currentmesh != -1 && tmpmove.ContainsKey(meshnames[currentmesh]) && tmpmove[meshnames[currentmesh]][tmpmove[meshnames[currentmesh]].Count - 1].Count > 1)
+                    {
+                        if (isnew)
+                            tmpmove[meshnames[currentmesh]].Add(new List<Vector3>());
+                        //createlayer(tmpmove, meshnames[currentmesh]);
+                    }
+                    //tmpmove.Clear();
+                }
+            }
+            else if (line.StartsWith(";BEFORE-LAYER-CHANGE"))
+            {
+                ismesh = false;
+            }
+            /*if(meshnames[currentmesh].Contains("WALLS 60"))
+                {
+                print(line);
+            }*/
+        }
+        mc.layersvisible = layernum;
+        //loading = false;
+        loader.filesLoadingfinished = true;
+        mc.newloaded = true;
+    }
     void createlayer(List<List<Vector3>> tmpmoves, string meshname, meshloader loader)
     {
         List<Vector3> newVertices = new List<Vector3>();
