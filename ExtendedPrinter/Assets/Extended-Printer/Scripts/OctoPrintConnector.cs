@@ -11,24 +11,17 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
-public class OctoPrintConnector : MonoBehaviour
-{
 
+public class OctoPrintConnector : Singleton<OctoPrintConnector>
+{
+    protected OctoPrintConnector() { }
     private OctoprintConnection octoprintConnection;
     public string Ip;
     public string ApiKey;
-    public GraphChart Graph;
 
-    public ToolTip toolTip;
-    public GameObject Legende;
-
-    public GameObject Video;
-    public GameObject SelectionMenu;
-    public GameObject OperatingButtons;
-    public GameObject ChangeFilamentNext;
-    public GameObject StartPrintButton;
-    public GameObject StarFilamentChangeButton;
-
+    //public ToolTip toolTip;
+    
+    
     private bool isPrinting = false;
     private bool isFilamentChanging;
     private bool filamentChangeBegin;
@@ -67,61 +60,33 @@ public class OctoPrintConnector : MonoBehaviour
 
     }
 
+
+    public event EventHandler PrintFinished;
+    public event EventHandler FilamentChangeBegin;
+    public event EventHandler FilamentChangeEnd;
+
     private void Printer_PrintFinished(object sender, PrintFinishedEventArgs e)
     {
         if (isPrinting)
         {
+            PrintFinished?.Invoke(this,e);
             isPrinting = false;
-            TimeSpan timePrinted = TimeSpan.FromSeconds(e.Time);
-            string time1;
-            if (timePrinted.Hours > 0)
-            {
-                time1 = string.Format("{0:D2}h:{1:D2}m:{2:D2}s",
-                                        timePrinted.Hours,
-                                        timePrinted.Minutes,
-                                        timePrinted.Seconds);
-            }
-            else
-            {
-                time1 = string.Format("{0:D2}m:{1:D2}s",
-                                        timePrinted.Minutes,
-                                        timePrinted.Seconds);
-            }
-
-            UnityMainThreadDispatcher.Instance().Enqueue(() =>
-            {
-                toolTip.ToolTipText = "Druck abgeschlossen.\nDauer: " + time1;
-                SelectionMenu.SetActive(true);
-                OperatingButtons.SetActive(true);
-            });
+            
         }
         if (isFilamentChanging && filamentChangeBegin)
         {
+            FilamentChangeBegin?.Invoke(this,e);
             filamentChangeBegin = false;
-            UnityMainThreadDispatcher.Instance().Enqueue(() =>
-            {
-                videoIsPlaying = true;
-                toolTip.ToolTipText = "Löse den Hebel und zieh das Filament senkrecht heraus.";
-                Video.GetComponent<MeshRenderer>().enabled = true;
-                Video.GetComponentInChildren<VideoPlayer>().clip = Video.GetComponentInChildren<RotateVideoFiles>().Videos[0];
-                Video.GetComponentInChildren<VideoPlayer>().Play();
-                ChangeFilamentNext.SetActive(true);
-            });
+            videoIsPlaying = true;
         }
         if (isFilamentChanging && filamentChangeEnd)
         {
+            FilamentChangeEnd?.Invoke(this,e);
             filamentChangeEnd = false;
-            UnityMainThreadDispatcher.Instance().Enqueue(() =>
-            {
-                toolTip.ToolTipText = "Filamentwechsel abgeschlossen";
-                ChangeFilamentNext.SetActive(false);
-                StartPrintButton.SetActive(true);
-                StarFilamentChangeButton.SetActive(true);
-                SelectionMenu.SetActive(true);
-            });
         }
         if(isMovedManually)
         {
+
             isMovedManually = false;
             MoveCompleted?.Invoke(this, null);
         }
@@ -132,52 +97,12 @@ public class OctoPrintConnector : MonoBehaviour
 
     }
 
+    public event EventHandler<OctoprintJobProgress> ProgressInfoChanged;
     private void Jobs_Progressinfo(OctoprintJobProgress obj)
     {
         if (isPrinting)
         {
-            UnityMainThreadDispatcher.Instance().Enqueue(() =>
-            {
-                TimeSpan timeLeft = TimeSpan.FromSeconds(obj.PrintTimeLeft);
-                TimeSpan timePrinted = TimeSpan.FromSeconds(obj.PrintTime);
-                string time1;
-                if (timePrinted.Hours > 0)
-                {
-                    time1 = string.Format("{0:D2}h:{1:D2}m:{2:D2}s",
-                                            timePrinted.Hours,
-                                            timePrinted.Minutes,
-                                            timePrinted.Seconds);
-                }
-                else
-                {
-                    time1 = string.Format("{0:D2}m:{1:D2}s",
-                                            timePrinted.Minutes,
-                                            timePrinted.Seconds);
-                }
-
-                string time2;
-                if (timeLeft.Hours > 0)
-                {
-                    time2 = string.Format("{0:D2}h:{1:D2}m:{2:D2}s",
-                                            timeLeft.Hours,
-                                            timeLeft.Minutes,
-                                            timeLeft.Seconds);
-                }
-                else
-                {
-                    time2 = string.Format("{0:D2}m:{1:D2}s",
-                                            timeLeft.Minutes,
-                                            timeLeft.Seconds);
-                }
-
-                toolTip.ToolTipText = String.Format("Dauer: {0}\n Verbleibend: {1}\n Fortschritt: {2}%", time1, time2, obj.Completion.ToString("F0"));
-
-
-                //if (obj.Completion == 100)
-                //{
-                //    isPrinting = false;
-                //}
-            });
+            ProgressInfoChanged?.Invoke(this, obj);
         }
     }
 
@@ -315,27 +240,15 @@ public class OctoPrintConnector : MonoBehaviour
 
     }
 
+
+    /// <summary>
+    /// Action for Eventhandling the Websocket Temperature info
+    /// </summary>
+    public event EventHandler<OctoprintHistoricTemperatureState> NewTemperatureDataRecieved;
+
     private void Printers_TempHandlers(OctoprintHistoricTemperatureState obj)
     {
-        if (UnityMainThreadDispatcher.Instance() != null)
-        {
-            UnityMainThreadDispatcher.Instance().Enqueue(() =>
-            {
-                if (Graph != null)
-                {
-                    Graph.DataSource.AddPointToCategoryRealtime("ToolTarget", System.DateTime.Now, obj.Tools[0].Target, 1f);
-                    Graph.DataSource.AddPointToCategoryRealtime("BedTarget", System.DateTime.Now, obj.Bed.Target, 1f);
-                    Graph.DataSource.AddPointToCategoryRealtime("Tool", System.DateTime.Now, obj.Tools[0].Actual, 1f);
-                    Graph.DataSource.AddPointToCategoryRealtime("Bed", System.DateTime.Now, obj.Bed.Actual, 1f);
-
-                    Legende.transform.GetChild(0).GetComponentInChildren<Text>().text = "ToolTarget: " + obj.Tools[0].Target.ToString("F0") + "°C";
-                    Legende.transform.GetChild(1).GetComponentInChildren<Text>().text = "BedTarget: " + obj.Bed.Target.ToString("F0") + "°C";
-                    Legende.transform.GetChild(2).GetComponentInChildren<Text>().text = "Tool: " + obj.Tools[0].Actual.ToString("F0") + "°C";
-                    Legende.transform.GetChild(3).GetComponentInChildren<Text>().text = "Bed: " + obj.Bed.Actual.ToString("F0") + "°C";
-                }
-
-            });
-        }
+        NewTemperatureDataRecieved?.Invoke(this,obj);
     }
 
 
