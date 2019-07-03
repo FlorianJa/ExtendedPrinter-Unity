@@ -7,11 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class meshloader
+public class MeshLoader
     {
 
-        public meshloaderDisk disk = new meshloaderDisk();
-        public meshloaderNet net = new meshloaderNet();
+        public MeshLoaderDisk disk = new MeshLoaderDisk();
+        public MeshLoaderNet net = new MeshLoaderNet();
         public GCodeMeshGenerator mc = new GCodeMeshGenerator();
 
 

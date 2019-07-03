@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class meshloaderNet
+public class MeshLoaderNet
 {
 
     private const string FolderToRawGCodes = "/RawGCodes/";
-    internal IEnumerator LoadObject(string urlToFile, MeshCreator source, meshloader loader)
+    internal IEnumerator LoadObject(string urlToFile, MeshCreator source, MeshLoader loader)
     {
         if (!source.loading)
         {

@@ -15,8 +15,8 @@ public class GCodeMeshGenerator
     public int layercluster = 1;
     internal int createdLayers;
 
-    private Queue<MeshcreatorInput> meshCreatorInputQueue = new Queue<MeshcreatorInput>();
-    internal void CreateObjectFromGCode(string[] Lines, meshloader loader, MeshCreator mc)//takes ages and munches on all that juicy cpu, only use if absolutely necessary
+    private Queue<MeshCreatorInput> meshCreatorInputQueue = new Queue<MeshCreatorInput>();
+    internal void CreateObjectFromGCode(string[] Lines, MeshLoader loader, MeshCreator mc)//takes ages and munches on all that juicy cpu, only use if absolutely necessary
     {
 
 
@@ -178,7 +178,7 @@ public class GCodeMeshGenerator
         mc.newloaded = true;
     }
 
-    void createlayer(List<List<Vector3>> tmpmoves, string meshname, meshloader loader)
+    void createlayer(List<List<Vector3>> tmpmoves, string meshname, MeshLoader loader)
     {
         List<Vector3> newVertices = new List<Vector3>();
         List<Vector3> newNormals = new List<Vector3>();
@@ -485,7 +485,7 @@ public class GCodeMeshGenerator
 
             }
         }
-        MeshcreatorInput mci = new MeshcreatorInput
+        MeshCreatorInput mci = new MeshCreatorInput
         {
             meshname = meshname,
             newUV = newUV.ToArray(),
@@ -519,12 +519,12 @@ public class GCodeMeshGenerator
         //sqrt((xi1+zv1-yj1)²+(xi2+zv2-yj2)²)
     }
 
-    internal void Update(MeshCreator source, meshloader loader)
+    internal void Update(MeshCreator source, MeshLoader loader)
     {
 
         if (meshCreatorInputQueue.Count > 0)
         {
-            MeshcreatorInput mci = meshCreatorInputQueue.Dequeue();
+            MeshCreatorInput mci = meshCreatorInputQueue.Dequeue();
             source.createmesh(mci.meshname, mci.newVertices, mci.newNormals, mci.newUV, mci.newTriangles, source.RootForObject.transform);
         }
 

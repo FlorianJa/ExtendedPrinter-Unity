@@ -8,9 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class meshloaderDisk
+public class MeshLoaderDisk
 {
-    public IEnumerator LoadObjectFromDiskCR(string path, meshloader loader, MeshCreator mc)
+    public IEnumerator LoadObjectFromDiskCR(string path, MeshLoader loader, MeshCreator mc)
     {
         int layernum = 0;
 

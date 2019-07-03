@@ -16,7 +16,7 @@ using UnityEngine.Networking;
 
 public class MeshCreator : MonoBehaviour
 {
-    meshloader loader = new meshloader();
+    MeshLoader loader = new MeshLoader();
 
     public string[] names;
     [Serializable]
