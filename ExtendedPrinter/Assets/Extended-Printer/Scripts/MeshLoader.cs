@@ -41,17 +41,12 @@ public class MeshLoader
 
                 if (meshSimplifierQueue.Count > 0)
                 {
-                    //for (int i = 0; i < meshSimplifierQueue.Count; i++)
-                    //{
                     if (meshSimplifierQueue.Peek().simplified == false)
                     {
                         meshSimplifierQueue.Peek().MeshSimplifier.SimplifyMesh(meshsimplifyquality);
                         meshSimplifierQueue.Peek().simplified = true;
                         simplifiedLayers++;
                     }
-                    //}
-                    //if (!meshSimplifierQueue[meshSimplifierQueue.Count - 1].simplified)
-                    //    simplifypossible = false;
                 }
                 issimplifying = false;
             }
@@ -74,7 +69,7 @@ public class MeshLoader
 
         }
 
-        internal void Start()
+        internal void Initialize()
         {
             dataPath = Application.persistentDataPath;
             string mainpath = Application.streamingAssetsPath;
@@ -183,22 +178,6 @@ public class MeshLoader
 
         internal IEnumerator closeProgress()
         {
-            //if (ProgressIndicator.Instance.IsLoading)
-            //{
-            //    // Give the user a final notification that loading has finished (optional)
-            //    ProgressIndicator.Instance.SetMessage("Object geladen.");
-            //    ProgressIndicator.Instance.SetProgress(1f);
-
-            //    // Close the loading dialog
-            //    // ProgressIndicator.Instance.IsLoading will report true until its 'Closing' animation has ended
-            //    // This typically takes about 1 second
-            //    ProgressIndicator.Instance.Close();
-
-            //    while (ProgressIndicator.Instance.IsLoading)
-            //    {
-            //        yield return null;
-            //    }
-            //}
             yield return null;
         }
 

@@ -47,7 +47,7 @@ public class MeshCreator : MonoBehaviour
         {
             slider.OnValueUpdated.AddListener(Updateslider);
         }
-        loader.Start();
+        loader.Initialize();
     }
 
     
@@ -74,41 +74,7 @@ public class MeshCreator : MonoBehaviour
     {
         layersvisible = (int)eventData.NewValue;
     }
-
-    //public void load(string path)
-    //{
-    //    Debug.Log("in meshcreator");
-    //    slider.enabled = false;
-    //    ShowHideCheckBoxes.enabled = false;
-    //    clearchildren();
-    //    string mainpath = Application.streamingAssetsPath;
-
-    //    names = Directory.GetFiles(mainpath, "*.gcode");
-        
-    //    for (int i = 0; i < names.Length; i++)
-    //    {
-    //        if (names[i].Contains(name) && names[i].EndsWith(".gcode"))
-    //        {
-    //            if (CheckForExsitingObject(names[i]) && !_regenerateModel)
-    //            {
-    //                //create a parent for the objects we create now
-    //                RootForObject = new GameObject(GetObjectNameFromPath(names[i]));
-    //                RootForObject.transform.SetParent(transform);
-    //                LoadObjectFromDisk(names[i]);
-    //            }
-    //            else
-    //            {
-    //                //create a parent for the objects we create now
-    //                RootForObject = new GameObject(GetObjectNameFromPath(names[i]));
-    //                RootForObject.transform.SetParent(transform);
-    //                Task.Run(() => CreateObjectFromGCode(names[i]));
-    //                break;
-    //            }
-    //        }
-    //    }
-    //    ShowHideCheckBoxes.enabled = true;
-    //    slider.enabled = true;
-    //}
+    
     /// <summary>
     /// call this before you recreate to regenerate with new clustersizes
     /// </summary>

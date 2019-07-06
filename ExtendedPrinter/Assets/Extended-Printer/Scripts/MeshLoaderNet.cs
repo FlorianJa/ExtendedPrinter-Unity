@@ -47,12 +47,9 @@ public class MeshLoaderNet
 
 
                 }
-
-                //if (loading == false)
-                //{
+                
                 string[] Lines = File.ReadAllLines(savePath);
                 Task.Run(() => loader.mc.CreateObjectFromGCode(Lines, loader, source));
-                //}
 
             }
             else
