@@ -10,9 +10,9 @@ using UnityEngine;
 public class MeshLoader
     {
 
-        public MeshLoaderDisk disk = new MeshLoaderDisk();
-        public MeshLoaderNet net = new MeshLoaderNet();
-        public GCodeMeshGenerator mc = new GCodeMeshGenerator();
+        public MeshLoaderDisk meshLoaderDisk = new MeshLoaderDisk();
+        public MeshLoaderNet meshLoaderNet = new MeshLoaderNet();
+        public GCodeMeshGenerator gcodeMeshGenerator = new GCodeMeshGenerator();
 
 
         public float meshsimplifyquality = 0.5f;
@@ -59,13 +59,13 @@ public class MeshLoader
             _regenerateModel = !_regenerateModel;
         }
 
-        public IEnumerator LoadObjectFromDiskCR(string path, MeshCreator mc)
+        public IEnumerator LoadObjectFromDiskCR(string path, GCodeHandler mc)
         {
-            return disk.LoadObjectFromDiskCR(path, this, mc);
+            return meshLoaderDisk.LoadObjectFromDiskCR(path, this, mc);
         }
-        public IEnumerator LoadObjectFromNet(string urlToFile, MeshCreator source)
+        public IEnumerator LoadObjectFromNet(string urlToFile, GCodeHandler source)
         {
-            return net.LoadObject(urlToFile, source, this);
+            return meshLoaderNet.LoadObject(urlToFile, source, this);
 
         }
 
@@ -80,7 +80,7 @@ public class MeshLoader
             meshSimplifierQueue.Clear();
         }
 
-        internal void Update(MeshCreator source)
+        internal void Update(GCodeHandler source)
         {
 
             if (loadingFromDisk == true)
@@ -112,6 +112,7 @@ public class MeshLoader
 
                     source.StartCoroutine(closeProgress());
                     loadingFromDisk = false;
+                    source.doneLoading.Invoke();
                     source.loading = false;
                 }
 
@@ -131,7 +132,7 @@ public class MeshLoader
                         layer.MeshFilter.gameObject.GetComponent<MeshRenderer>().enabled = true;
                         string folder = dataPath + "/" + source.RootForObject.gameObject.name + "/" + layer.MeshFilter.gameObject.transform.parent.gameObject.name + "/";
                         string fileName = layer.MeshFilter.gameObject.name + ".mesh";
-                        disk.SaveLayerAsAsset(destMesh, folder, fileName);
+                        meshLoaderDisk.SaveLayerAsAsset(destMesh, folder, fileName);
                         lock (meshSimplifierQueueLock)
                         {
                             meshSimplifierQueue.Dequeue();
@@ -162,15 +163,15 @@ public class MeshLoader
                 }
             }
 
-            mc.Update(source, this);
+            gcodeMeshGenerator.Update(source, this);
 
 
-            if (mc.createdLayers == simplifiedLayers && source.loading && filesLoadingfinished)
+            if (gcodeMeshGenerator.createdLayers == simplifiedLayers && source.loading && filesLoadingfinished)
             {
                 source.StartCoroutine(closeProgress());
                 filesLoadingfinished = false;
                 simplifiedLayers = 0;
-                mc.createdLayers = 0;
+                gcodeMeshGenerator.createdLayers = 0;
                 source.endloading(layernum);
             }
 

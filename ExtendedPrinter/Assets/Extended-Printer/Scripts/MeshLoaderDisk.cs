@@ -10,7 +10,7 @@ using UnityEngine;
 
 public class MeshLoaderDisk
 {
-    public IEnumerator LoadObjectFromDiskCR(string path, MeshLoader loader, MeshCreator mc)
+    public IEnumerator LoadObjectFromDiskCR(string path, MeshLoader loader, GCodeHandler mc)
     {
         int layernum = 0;
 

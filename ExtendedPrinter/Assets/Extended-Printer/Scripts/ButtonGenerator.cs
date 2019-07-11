@@ -15,12 +15,13 @@ public class ButtonGenerator : MonoBehaviour
     public GameObject ButtonPrefab;
     public GameObject CheckBoxPrefab;
     public OctoPrintConnector connector;
-    public MeshCreator MeshCreator;
+    public GCodeHandler MeshCreator;
     public ToolTip ToolTip;
     public GameObject Gcode;
     public Interactable PrintButton;
 
     public GameObject MovementController;
+    public Interactable SteuerungButton;
 
     private bool MenuCreated = false;
     private Task GetFileTaks;
@@ -131,11 +132,16 @@ public class ButtonGenerator : MonoBehaviour
             var filamentLength = file.GcodeAnalysis.FilamentLength / 1000f;
             ToolTip.ToolTipText = String.Format("{0}\nDruckdauer: {1}\nFilament: {2}m", file.Name, time, filamentLength.ToString("F"));
             connector.SelectFile(file.Name);
-            PrintButton.Enabled = true;
+            if (name.Contains("UniLogo"))
+                PrintButton.Enabled = true;
+            else
+                PrintButton.Enabled = false;
             Gcode.SetActive(true);
 
             MovementController.SetActive(false);
-            
+            PrintButton.Enabled=false;
+            SteuerungButton.Enabled=false;
+
             StartCoroutine(MeshCreator.LoadObject(file.Refs_download));
         }
     }

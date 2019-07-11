@@ -11,12 +11,12 @@ using B83.MeshTools;
 using System.Threading.Tasks;
 //using HoloToolkit.UX.Progress;
 using UnityEngine.Networking;
+using UnityEngine.Events;
 
 //using UnityMeshSimplifier.Scripts.UnityMeshSimplifier;
 
-public class MeshCreator : MonoBehaviour
+public class GCodeHandler : MonoBehaviour
 {
-    MeshLoader loader = new MeshLoader();
 
     public string[] names;
     [Serializable]
@@ -29,9 +29,13 @@ public class MeshCreator : MonoBehaviour
 
     public MaterialPreference[] materialDictionary;
     public int layersvisible = 0;
+    public float rotationclustersize = 0.0f;
+    public float distanceclustersize = 0.0f;
     public ButtonGeneratorShowHideMenu ShowHideCheckBoxes;
     public PinchSlider slider;
     public bool loading = false;
+    public UnityEvent doneLoading;
+
     private int _layersvisible = 0;
     internal Dictionary<string, Dictionary<int, GameObject>> allLayerObjects = new Dictionary<string, Dictionary<int, GameObject>>();
     internal Dictionary<string, GameObject> parentObjects = new Dictionary<string, GameObject>();
@@ -39,6 +43,7 @@ public class MeshCreator : MonoBehaviour
 
     internal GameObject RootForObject;
 
+    MeshLoader loader = new MeshLoader();
     internal bool newloaded;
 
     void Start()
@@ -47,6 +52,7 @@ public class MeshCreator : MonoBehaviour
         {
             slider.OnValueUpdated.AddListener(Updateslider);
         }
+        
         loader.Initialize();
     }
 
@@ -193,11 +199,13 @@ public class MeshCreator : MonoBehaviour
         print("min :" + minx + "/" + miny + "/" + minz);
         print("max :" + maxx + "/" + maxy + "/" + maxz);
     }
-    public void TogglePartActive(string name)
+    public void TogglePartActive(string name, bool isToggled)
     {
         bool newvisiblestate = !parentvisible[name];
-        parentObjects[name].SetActive(newvisiblestate);
-        parentvisible[name] = newvisiblestate;
+        //        parentObjects[name].SetActive(newvisiblestate);
+        //        parentvisible[name] = newvisiblestate;
+        parentObjects[name].SetActive(isToggled);
+        parentvisible[name] = isToggled;
     }
 
     public void Update()
@@ -279,6 +287,7 @@ public class MeshCreator : MonoBehaviour
         ShowHideCheckBoxes.Rebuild();
         ShowHideCheckBoxes.gameObject.SetActive(true);
         StartCoroutine(loader.closeProgress());
+        doneLoading.Invoke();
         loading = false;
     }
 

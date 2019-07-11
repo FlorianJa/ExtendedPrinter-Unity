@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class ButtonInteractionReceiver : InteractionReceiver
 {
-    public MeshCreator MeshCreator;
+    public GCodeHandler MeshCreator;
     public string URL;
 
     protected override void InputDown(GameObject targetObject, InputEventData eventData)

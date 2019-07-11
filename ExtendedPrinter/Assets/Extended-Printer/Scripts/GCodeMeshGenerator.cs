@@ -10,18 +10,16 @@ public class GCodeMeshGenerator
 {
 
     private float plasticwidth = 0.6f;
-    public float rotationclustersize = 180.0f;
-    public float distanceclustersize = 3.5f;
     public int layercluster = 1;
     internal int createdLayers;
 
     private Queue<MeshCreatorInput> meshCreatorInputQueue = new Queue<MeshCreatorInput>();
-    internal void CreateObjectFromGCode(string[] Lines, MeshLoader loader, MeshCreator mc)//takes ages and munches on all that juicy cpu, only use if absolutely necessary
+    internal void CreateObjectFromGCode(string[] Lines, MeshLoader loader, GCodeHandler gcodeHandler)//takes ages and munches on all that juicy cpu, only use if absolutely necessary
     {
 
 
         //Read the text from directly from the test.txt file
-        mc.loading = true;
+        gcodeHandler.loading = true;
         loader.filesLoadingfinished = false;
         List<string> meshnames = new List<string>();
         int currentmesh = -1;
@@ -73,18 +71,18 @@ public class GCodeMeshGenerator
             else if ((line.StartsWith("G1") || line.StartsWith("G0")) && ((layernum % layercluster) == 0 || layercluster == 1))
             {
                 //here i add a point to the list of visited points of the current part
-                readG1Cura(line, ref accumulating, ref accumulateddist, ref accumulatedangle, ref meshnames, ref currentmesh, ref currpos, ref lastpointcache, ref lastanglecache, ref tmpmove, ref ismesh);
+                readG1Cura(gcodeHandler.distanceclustersize,gcodeHandler.rotationclustersize,line, ref accumulating, ref accumulateddist, ref accumulatedangle, ref meshnames, ref currentmesh, ref currpos, ref lastpointcache, ref lastanglecache, ref tmpmove, ref ismesh);
             }
             else if (line.StartsWith(";MESH:"))
             {
                 ismesh = false;
             }
         }
-        mc.layersvisible = layernum;
+        gcodeHandler.layersvisible = layernum;
         loader.filesLoadingfinished = true;
-        mc.newloaded = true;
+        gcodeHandler.newloaded = true;
     }
-    void readG1Cura(string line, ref bool accumulating, ref float accumulateddist, ref float accumulatedangle, ref List<string> meshnames, ref int currentmesh, ref Vector3 currpos, ref Vector3 lastpointcache, ref float lastanglecache, ref Dictionary<string, List<List<Vector3>>> tmpmove, ref bool ismesh)
+    void readG1Cura(float distanceclustersize,float rotationclustersize,string line, ref bool accumulating, ref float accumulateddist, ref float accumulatedangle, ref List<string> meshnames, ref int currentmesh, ref Vector3 currpos, ref Vector3 lastpointcache, ref float lastanglecache, ref Dictionary<string, List<List<Vector3>>> tmpmove, ref bool ismesh)
     {
         string[] parts = line.Split(' ');
 
@@ -313,7 +311,7 @@ public class GCodeMeshGenerator
         newTriangles.Add(vstart + 6 + 4 * maxi);
 
     }
-    internal void Update(MeshCreator source, MeshLoader loader)
+    internal void Update(GCodeHandler source, MeshLoader loader)
     {
 
         if (meshCreatorInputQueue.Count > 0)

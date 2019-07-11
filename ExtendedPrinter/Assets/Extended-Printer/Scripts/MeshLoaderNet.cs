@@ -12,7 +12,7 @@ public class MeshLoaderNet
 {
 
     private const string FolderToRawGCodes = "/RawGCodes/";
-    internal IEnumerator LoadObject(string urlToFile, MeshCreator source, MeshLoader loader)
+    internal IEnumerator LoadObject(string urlToFile, GCodeHandler source, MeshLoader loader)
     {
         if (!source.loading)
         {
@@ -49,7 +49,7 @@ public class MeshLoaderNet
                 }
                 
                 string[] Lines = File.ReadAllLines(savePath);
-                Task.Run(() => loader.mc.CreateObjectFromGCode(Lines, loader, source));
+                Task.Run(() => loader.gcodeMeshGenerator.CreateObjectFromGCode(Lines, loader, source));
 
             }
             else

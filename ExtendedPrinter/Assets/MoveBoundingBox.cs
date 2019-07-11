@@ -89,39 +89,57 @@ public class MoveBoundingBox : MonoBehaviour
 
     public void MoveUp()
     {
-        MoveZAxis(distance);
-        OctoPrintConnector.MovePrintHeadUp();
-        DisableArrows();
+        if (!manuallyDisabled)
+        {
+            DisableArrows();
+            MoveZAxis(distance);
+            OctoPrintConnector.MovePrintHeadUp();
+        }
     }
     public void MoveDown()
     {
-        MoveZAxis(-distance);
-        OctoPrintConnector.MovePrintHeadDown();
-        DisableArrows();
+        if (!manuallyDisabled)
+        {
+            DisableArrows();
+            MoveZAxis(-distance);
+            OctoPrintConnector.MovePrintHeadDown();
+        }
     }
     public void MoveRight()
     {
-        MoveXAxis(distance);
-        OctoPrintConnector.MovePrintHeadRight();
-        DisableArrows();
+        if (!manuallyDisabled)
+        {
+            DisableArrows();
+            MoveXAxis(distance);
+            OctoPrintConnector.MovePrintHeadRight();
+        }
     }
     public void MoveLeft()
     {
-        MoveXAxis(-distance);
-        OctoPrintConnector.MovePrintHeadLeft();
-        DisableArrows();
+        if (!manuallyDisabled)
+        {
+            DisableArrows();
+            MoveXAxis(-distance);
+            OctoPrintConnector.MovePrintHeadLeft();
+        }
     }
     public void MoveFront()
     {
-        MoveYAxis(distance);
-        OctoPrintConnector.MoveBuildplateFront();
-        DisableArrows();
+        if (!manuallyDisabled)
+        {
+            DisableArrows();
+            MoveYAxis(distance);
+            OctoPrintConnector.MoveBuildplateFront();
+        }
     }
     public void MoveBack()
+{
+    if (!manuallyDisabled)
     {
-        MoveYAxis(-distance);
-        OctoPrintConnector.MoveBuildplateBack();
         DisableArrows();
+            MoveYAxis(-distance);
+            OctoPrintConnector.MoveBuildplateBack();
+        }
     }
 
     public void DisableArrows()
