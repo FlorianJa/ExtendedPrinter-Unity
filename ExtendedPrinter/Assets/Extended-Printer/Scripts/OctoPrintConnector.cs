@@ -185,6 +185,7 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
     {
         
         isMovedManually = true;
+        
         octoprintConnection.Files.Select("moveUp.gcode", "local/helper", true);
     }
     public void MovePrintHeadDown()
@@ -264,8 +265,11 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
 
     public void StartPrint()
     {
-        octoprintConnection.Jobs.StartJob();
-        isPrinting = true;
+        if (!isMovedManually)
+        {
+            octoprintConnection.Jobs.StartJob();
+            isPrinting = true;
+        }
     }
 
     public void StartFilamentChange()

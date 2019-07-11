@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: CubeOpaqueBorder
+  m_Name: CubeBuildplate
   m_Shader: {fileID: 4800000, guid: 5bdea20278144b11916d77503ba1467a, type: 3}
   m_ShaderKeywords: _ALPHATEST_ON _BORDER_LIGHT _BORDER_LIGHT_OPAQUE _BORDER_LIGHT_USES_HOVER_COLOR
     _DIRECTIONAL_LIGHT _HOVER_COLOR_OVERRIDE _HOVER_LIGHT _SPECULAR_HIGHLIGHTS
@@ -84,7 +84,7 @@ Material:
     - _BorderLightReplacesAlbedo: 0
     - _BorderLightUsesHoverColor: 1
     - _BorderMinValue: 0.1
-    - _BorderWidth: 0.1
+    - _BorderWidth: 0.741
     - _BorderWidthHorizontal: 0.1
     - _BorderWidthVertical: 0.1
     - _BumpScale: 1
