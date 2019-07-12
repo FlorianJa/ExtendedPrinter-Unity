@@ -183,28 +183,36 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
     }
     public void MovePrintHeadUp()
     {
-        
-        isMovedManually = true;
-        
-        octoprintConnection.Files.Select("moveUp.gcode", "local/helper", true);
+        if (isMovedManually == false)
+        {
+            isMovedManually = true;
+
+            octoprintConnection.Files.Select("moveUp.gcode", "local/helper", true);
+        }
     }
     public void MovePrintHeadDown()
     {
-
-        isMovedManually = true;
-        octoprintConnection.Files.Select("moveDown.gcode", "local/helper", true);
+        if (isMovedManually == false)
+        {
+            isMovedManually = true;
+            octoprintConnection.Files.Select("moveDown.gcode", "local/helper", true);
+        }
     }
     public void MovePrintHeadRight()
     {
-
-        isMovedManually = true;
-        octoprintConnection.Files.Select("moveRight.gcode", "local/helper", true);
+        if (isMovedManually == false)
+        {
+            isMovedManually = true;
+            octoprintConnection.Files.Select("moveRight.gcode", "local/helper", true);
+        }
     }
     public void MovePrintHeadLeft()
     {
-
-        isMovedManually = true;
-        octoprintConnection.Files.Select("moveLeft.gcode", "local/helper", true);
+        if (isMovedManually == false)
+        {
+            isMovedManually = true;
+            octoprintConnection.Files.Select("moveLeft.gcode", "local/helper", true);
+        }
     }
     public void MoveBuildplateFront()
     {
@@ -214,9 +222,11 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
     }
     public void MoveBuildplateBack()
     {
-
-        isMovedManually = true;
-        octoprintConnection.Files.Select("moveBack.gcode", "local/helper", true);
+        if (isMovedManually == false)
+        {
+            isMovedManually = true;
+            octoprintConnection.Files.Select("moveBack.gcode", "local/helper", true);
+        }
     }
 
     public void HomeFile()

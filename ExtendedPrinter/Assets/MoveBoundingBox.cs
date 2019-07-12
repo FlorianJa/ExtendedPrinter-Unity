@@ -133,10 +133,10 @@ public class MoveBoundingBox : MonoBehaviour
         }
     }
     public void MoveBack()
-{
-    if (!manuallyDisabled)
     {
-        DisableArrows();
+        if (!manuallyDisabled)
+        {
+            DisableArrows();
             MoveYAxis(-distance);
             OctoPrintConnector.MoveBuildplateBack();
         }

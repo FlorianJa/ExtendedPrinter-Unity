@@ -18,10 +18,10 @@ public class OctoListenerLegend : MonoBehaviour
         {
             UnityMainThreadDispatcher.Instance().Enqueue(() =>
             {
-                transform.GetChild(0).GetComponentInChildren<Text>().text = "ToolTarget: " + obj.Tools[0].Target.ToString("F0") + "°C";
-                transform.GetChild(1).GetComponentInChildren<Text>().text = "BedTarget: " + obj.Bed.Target.ToString("F0") + "°C";
-                transform.GetChild(2).GetComponentInChildren<Text>().text = "Tool: " + obj.Tools[0].Actual.ToString("F0") + "°C";
-                transform.GetChild(3).GetComponentInChildren<Text>().text = "Bed: " + obj.Bed.Actual.ToString("F0") + "°C";
+                transform.GetChild(0).GetComponentInChildren<Text>().text = "Tool: " + obj.Tools[0].Actual.ToString("F0") + "°C";
+                transform.GetChild(1).GetComponentInChildren<Text>().text = "ToolTarget: " + obj.Tools[0].Target.ToString("F0") + "°C";
+                transform.GetChild(2).GetComponentInChildren<Text>().text = "Bed: " + obj.Bed.Actual.ToString("F0") + "°C";
+                transform.GetChild(3).GetComponentInChildren<Text>().text = "BedTarget: " + obj.Bed.Target.ToString("F0") + "°C";
                 
 
             });
