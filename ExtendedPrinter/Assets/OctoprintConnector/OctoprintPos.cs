@@ -483,19 +483,20 @@ namespace OctoprintClient
             else return false;
         }
 
-        /// <summary>
-        /// Home the specified axes.
-        /// </summary>
-        /// <returns>The Http response.</returns>
-        /// <param name="axes">Axes. in string "x", "y" or "z"</param>
-        public string Home(string[] axes)
-        {
-            return Connection.Printer.MakePrintheadHome(axes);
-        }
-        public string Home()
-        {
-            return Home(new string[] { "x", "y", "z" });
-        }
+        ///// <summary>
+        ///// Home the specified axes.
+        ///// </summary>
+        ///// <returns>The Http response.</returns>
+        ///// <param name="axes">Axes. in string "x", "y" or "z"</param>
+        //public string Home(string[] axes)
+        //{
+        //    return Connection.Printer.MakePrintheadHome(axes);
+        //}
+
+        //public string Home()
+        //{
+        //    return Home(new string[] { "x", "y", "z" });
+        //}
 
         /// <summary>
         /// Moves the actual printhead to a position.
