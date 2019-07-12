@@ -9,7 +9,7 @@ public class ButtonGeneratorShowHideMenu : MonoBehaviour
 {
     public GameObject CheckboxPrefab;
     public GameObject GCodeRoot;
-    public MeshCreator MeshCreator;
+    public GCodeHandler MeshCreator;
     public List<GameObject> checkBoxes = new List<GameObject>();
     // Use this for initialization
     void Start()
@@ -58,7 +58,7 @@ public class ButtonGeneratorShowHideMenu : MonoBehaviour
             checkBox.GetComponent<Interactable>().OnClick.AddListener(() =>
             {
                 Debug.Log("click in checkbox");
-                MeshCreator.TogglePartActive(name);
+                MeshCreator.TogglePartActive(name,!checkBox.transform.GetChild(0).GetChild(5).gameObject.active);
             });
 
 

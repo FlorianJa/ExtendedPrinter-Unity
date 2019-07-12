@@ -8,6 +8,7 @@ public class OctoListenerActivate : MonoBehaviour
     public bool onFilamentChangeEnd = false;
     public bool onFilamentChangeEndDeactivate = false;
     public bool onFilamentChangeBegin = false;
+    public bool onStartDeactivate = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,6 +27,10 @@ public class OctoListenerActivate : MonoBehaviour
         if (onFilamentChangeEndDeactivate)
         {
             OctoPrintConnector.Instance.FilamentChangeEnd += DeActivateSelf;
+        }
+        if (onStartDeactivate)
+        {
+            gameObject.SetActive(false);
         }
     }
     private void ActivateSelf(object source, System.EventArgs args)
