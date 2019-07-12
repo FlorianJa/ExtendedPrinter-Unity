@@ -50,6 +50,11 @@ public class MoveBoundingBox : MonoBehaviour
 
     }
 
+    private void DisableArrows()
+    {
+        manuallyDisabled = true;
+    }
+
     private void MoveBuildplateToPosition(ManipulationEventData med)
     {
         var tmp = new Vector3(med.ManipulationSource.transform.localPosition.x * 1000f,
@@ -91,8 +96,9 @@ public class MoveBoundingBox : MonoBehaviour
     {
         if (!manuallyDisabled)
         {
-            DisableArrows();
-            MoveZAxis(distance);
+            manuallyDisabled = true;
+            ArrowTop.Enabled = false;
+            MoveBpundingBoxZAxis(distance);
             OctoPrintConnector.MovePrintHeadUp();
         }
     }
@@ -100,8 +106,9 @@ public class MoveBoundingBox : MonoBehaviour
     {
         if (!manuallyDisabled)
         {
-            DisableArrows();
-            MoveZAxis(-distance);
+            manuallyDisabled = true;
+            ArrowBottom.Enabled = false;
+            MoveBpundingBoxZAxis(-distance);
             OctoPrintConnector.MovePrintHeadDown();
         }
     }
@@ -109,8 +116,9 @@ public class MoveBoundingBox : MonoBehaviour
     {
         if (!manuallyDisabled)
         {
-            DisableArrows();
-            MoveXAxis(distance);
+            manuallyDisabled = true;
+            ArrowRight.Enabled = false;
+            MoveBoundingBoxXAxis(distance);
             OctoPrintConnector.MovePrintHeadRight();
         }
     }
@@ -118,8 +126,9 @@ public class MoveBoundingBox : MonoBehaviour
     {
         if (!manuallyDisabled)
         {
-            DisableArrows();
-            MoveXAxis(-distance);
+            manuallyDisabled = true;
+            ArrowLeft.Enabled = false;
+            MoveBoundingBoxXAxis(-distance);
             OctoPrintConnector.MovePrintHeadLeft();
         }
     }
@@ -127,8 +136,9 @@ public class MoveBoundingBox : MonoBehaviour
     {
         if (!manuallyDisabled)
         {
-            DisableArrows();
-            MoveYAxis(distance);
+            manuallyDisabled = true;
+            ArrowFront.Enabled = false;
+            MoveBoundingBoxYAxis(distance);
             OctoPrintConnector.MoveBuildplateFront();
         }
     }
@@ -136,31 +146,16 @@ public class MoveBoundingBox : MonoBehaviour
     {
         if (!manuallyDisabled)
         {
-            DisableArrows();
-            MoveYAxis(-distance);
+            manuallyDisabled = true;
+            ArrowBack.Enabled = false;
+            MoveBoundingBoxYAxis(-distance);
             OctoPrintConnector.MoveBuildplateBack();
         }
     }
 
-    public void DisableArrows()
-    {
-        manuallyDisabled = true;
-        ArrowTop.Enabled = false;
-        ArrowRight.Enabled = false;
-        ArrowBottom.Enabled = false;
-        ArrowLeft.Enabled = false;
-        ArrowFront.Enabled = false;
-        ArrowBack.Enabled = false;
-    }
     public void EnableArrows()
     {
         manuallyDisabled = false;
-        ArrowTop.Enabled = true;
-        ArrowRight.Enabled = true;
-        ArrowBottom.Enabled = true;
-        ArrowLeft.Enabled = true;
-        ArrowFront.Enabled = true;
-        ArrowBack.Enabled = true;
     }
 
 
@@ -169,7 +164,7 @@ public class MoveBoundingBox : MonoBehaviour
     /// </summary>
     /// <param name="axis"></param>
     /// <param name="distance">in Meter</param>
-    public void MoveXAxis(float distance)
+    public void MoveBoundingBoxXAxis(float distance)
     {
         var tmp = PrinterHead.transform.localPosition;
         if (X + distance > MinX && X + distance < MaxX)
@@ -180,7 +175,7 @@ public class MoveBoundingBox : MonoBehaviour
         ShowPosition();
     }
 
-    public void MoveZAxis(float distance)
+    public void MoveBpundingBoxZAxis(float distance)
     {
         var tmp = PrinterHead.transform.localPosition;
         if (Z + distance > MinZ && Z + distance < MaxZ)
@@ -191,7 +186,7 @@ public class MoveBoundingBox : MonoBehaviour
         ShowPosition();
     }
 
-    public void MoveYAxis(float distance)
+    public void MoveBoundingBoxYAxis(float distance)
     {
         var tmp = BuildPlate.transform.localPosition;
         if (Y + distance > MinY && Z + distance < MaxY)
@@ -202,7 +197,7 @@ public class MoveBoundingBox : MonoBehaviour
         ShowPosition();
     }
 
-    public void Home()
+    public void BoundingBoxHome()
     {
         PrinterHead.transform.localPosition = printheadHomePosition;
         BuildPlate.transform.localPosition = buildePlateHomePosition;
@@ -269,6 +264,15 @@ public class MoveBoundingBox : MonoBehaviour
             {
                 ArrowFront.Enabled = true;
             }
+        }
+        else
+        {
+            ArrowTop.Enabled = false;
+            ArrowRight.Enabled = false;
+            ArrowBottom.Enabled = false;
+            ArrowLeft.Enabled = false;
+            ArrowFront.Enabled = false;
+            ArrowBack.Enabled = false;
         }
     }
 }
