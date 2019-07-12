@@ -231,9 +231,11 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
 
     public void HomeFile()
     {
-
-        isMovedManually = true;
-        octoprintConnection.Files.Select("Home.gcode", "local/helper", true);
+        if (isMovedManually == false)
+        {
+            isMovedManually = true;
+            octoprintConnection.Files.Select("Home.gcode", "local/helper", true);
+        }
     }
 
     public void SetExtruderTemp(int to)
@@ -260,12 +262,6 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
     private void Printers_TempHandlers(OctoprintHistoricTemperatureState obj)
     {
         NewTemperatureDataRecieved?.Invoke(this,obj);
-    }
-
-
-    public void HomePrinter()
-    {
-        octoprintConnection.Printer.HomePrinter();
     }
 
     public void SelectFile(string path)

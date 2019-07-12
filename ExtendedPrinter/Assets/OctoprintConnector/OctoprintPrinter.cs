@@ -248,68 +248,79 @@ namespace OctoprintClient
             PrintFinished?.Invoke(this, new PrintFinishedEventArgs(time));
         }
 
-        public string HomePrinter()
-        {
-            return MakePrintheadHome(new string[] { "x", "y", "z" });
-        }
+        //
+        //
+        // DONT HOME LIKE THIS!!!
+        //
+        //
 
-        public string HomePrinter(Axis axes)
-        {
-            var tmp = new List<string>();
-            if (axes.HasFlag(Axis.X)) tmp.Add("X");
-            if (axes.HasFlag(Axis.X)) tmp.Add("Y");
-            if (axes.HasFlag(Axis.X)) tmp.Add("Z");
+        //public string HomePrinter(Axis axes)
+        //{
+        //    var tmp = new List<string>();
+        //    if (axes.HasFlag(Axis.X)) tmp.Add("X");
+        //    if (axes.HasFlag(Axis.X)) tmp.Add("Y");
+        //    if (axes.HasFlag(Axis.X)) tmp.Add("Z");
 
-            return MakePrintheadHome(tmp.ToArray());
-        }
+        //    return MakePrintheadHome(tmp.ToArray());
+        //}
+
+
+
+        //
+        //
+        // DONT HOME LIKE THIS!!!
+        //
+        //
+
+
         /// <summary>
         /// Homes the Printhead to the given axes
         /// </summary>
         /// <returns>The Http Result</returns>
         /// <param name="axes">Axes.</param>
-        internal string MakePrintheadHome(string[] axes)
-        {
-            float? x = null, y = null, z = null;
-            JArray jaxes = new JArray();
-            foreach (string axis in axes)
-            {
-                jaxes.Add(axis);
-                if (axis == "x")
-                    x = 0;
-                if (axis == "y")
-                    y = 0;
-                if (axis == "z")
-                    z = 0;
-            }
-            string returnValue = string.Empty;
-            JObject data = new JObject
-            {
-                { "command", "home" },
-                { "axes", jaxes}
-            };
-            try
-            {
-                returnValue = Connection.PostJson("api/printer/printhead", data);
-            }
-            catch (WebException e)
-            {
-                switch (((HttpWebResponse)e.Response).StatusCode)
-                {
-                    case HttpStatusCode.Conflict:
-                        return "409 The Printer is not operational";
-                    case HttpStatusCode.BadRequest:
-                        return "wrong axis defined, choose only x and/or y and/or z";
-                    default:
-                        return "unknown webexception occured";
-                }
+        //internal string MakePrintheadHome(string[] axes)
+        //{
+        //    float? x = null, y = null, z = null;
+        //    JArray jaxes = new JArray();
+        //    foreach (string axis in axes)
+        //    {
+        //        jaxes.Add(axis);
+        //        if (axis == "x")
+        //            x = 0;
+        //        if (axis == "y")
+        //            y = 0;
+        //        if (axis == "z")
+        //            z = 0;
+        //    }
+        //    string returnValue = string.Empty;
+        //    JObject data = new JObject
+        //    {
+        //        { "command", "home" },
+        //        { "axes", jaxes}
+        //    };
+        //    try
+        //    {
+        //        returnValue = Connection.PostJson("api/printer/printhead", data);
+        //    }
+        //    catch (WebException e)
+        //    {
+        //        switch (((HttpWebResponse)e.Response).StatusCode)
+        //        {
+        //            case HttpStatusCode.Conflict:
+        //                return "409 The Printer is not operational";
+        //            case HttpStatusCode.BadRequest:
+        //                return "wrong axis defined, choose only x and/or y and/or z";
+        //            default:
+        //                return "unknown webexception occured";
+        //        }
 
-            }
-            Connection.Position.SetPos(x, y, z);
+        //    }
+        //    Connection.Position.SetPos(x, y, z);
 
-            OnHomed();
+        //    OnHomed();
 
-            return returnValue;
-        }
+        //    return returnValue;
+        //}
 
         private void OnHomed()
         {
