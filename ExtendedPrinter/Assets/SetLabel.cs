@@ -21,7 +21,7 @@ public class SetLabel : MonoBehaviour
             label.text = Texts[index];
         }
 
-        if(index == StepForextrusion)
+        if(index >= StepForextrusion)
         {
             OctoPrintConnector.FilamentExtrusion();
         }

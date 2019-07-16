@@ -1,5 +1,6 @@
 ﻿using ChartAndGraph;
 using Microsoft.MixedReality.Toolkit.UI;
+using Microsoft.MixedReality.Toolkit.Utilities;
 using OctoprintClient;
 using System;
 using System.Collections;
@@ -117,6 +118,10 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
 
     private void Printer_Homed(object sender, HomedEventArgs e)
     {
+        
+        //AwaiterExtensions.GetAwaiter(PositionChanged(this, e));
+        /*AsyncCoroutineRunner.Post(() => AsyncCoroutineRunner.Instance.StartCoroutine(
+            InstructionWrappers.ResourceRequest(awaiter, instruction));*/
         UnityMainThreadDispatcher.Instance().Enqueue(() =>
         {
             PositionChanged?.Invoke(this, e);

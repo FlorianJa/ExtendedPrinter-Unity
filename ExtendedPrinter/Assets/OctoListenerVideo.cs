@@ -9,6 +9,7 @@ public class OctoListenerVideo : MonoBehaviour
     void Start()
     {
         OctoPrintConnector.Instance.FilamentChangeBegin += StartVideo;
+        OctoPrintConnector.Instance.FilamentChangeEnd += StopVideo;
     }
 
     private void StartVideo(object s, System.EventArgs args)
@@ -18,6 +19,15 @@ public class OctoListenerVideo : MonoBehaviour
         {
             GetComponent<MeshRenderer>().enabled = true;
             GetComponentInChildren<VideoPlayer>().clip = GetComponentInChildren<RotateVideoFiles>().Videos[0];
+            GetComponentInChildren<VideoPlayer>().Play();
+        });
+    }
+    private void StopVideo(object s, System.EventArgs args)
+    {
+
+        UnityMainThreadDispatcher.Instance().Enqueue(() =>
+        {
+            GetComponent<MeshRenderer>().enabled = false;
             GetComponentInChildren<VideoPlayer>().Play();
         });
     }

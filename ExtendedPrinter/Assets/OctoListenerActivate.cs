@@ -18,7 +18,7 @@ public class OctoListenerActivate : MonoBehaviour
         }
         if (onFilamentChangeBegin)
         {
-            OctoPrintConnector.Instance.FilamentChangeEnd += ActivateSelf;
+            OctoPrintConnector.Instance.FilamentChangeBegin += ActivateSelf;
         }
         if (onFilamentChangeEnd)
         {
