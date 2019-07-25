@@ -35,3 +35,4 @@ sysinfo.txt
 *.apk
 *.unitypackage
 ExtendedPrinter/Assets/Resources/VuforiaConfiguration.asset
+ExtendedPrinter/Assets/Resources/VuforiaConfiguration.asset.meta
