@@ -192,39 +192,18 @@ public class GCodeMeshGenerator
         bool islayerheight = false;
         foreach (string line in Lines)
         {
+            //Layerheigt is defined in Prusa by writing ";AFTER_LAYER_CHANGE" and in the next line writing the height, therefore this happens:
             linesread += 1;
             if (islayerheight)
             {
                 currpos.y = float.Parse(line.Substring(1), CultureInfo.InvariantCulture.NumberFormat);
                 islayerheight = false;
             }
-            //string line = reader.ReadLine();
-            /*if (line.StartsWith(";TYPE:"))
+            if (line.Contains("support"))
             {
-                ismesh = true; 
-                string namemesh = line.Substring(6) + " " + layernum.ToString("D8");
-                if (line.Substring(6).Contains("WALL") || line.Substring(6).Contains("SKIN"))
-                {
-                    namemesh = "WALLS " + layernum.ToString("D8");
-                }
-                //here i change the type of 3d printed part i print next, this only works in cura-sliced stuff, slic3r doesnt have those comments
-                //print("setting type");
-                if (!meshnames.Contains(namemesh))
-                {
-                    meshnames.Add(namemesh);
-                    currentmesh = meshnames.Count - 1;
-                    tmpmove[namemesh] = new List<List<Vector3>>();
-                    tmpmove[namemesh].Add(new List<Vector3>());
-                    //print("adding: " + line + " as: " + line.Substring(6) + " Line " + layernum + " with number " + currentmesh);
-                }
-                else
-                {
-                    currentmesh = meshnames.FindIndex((namemesh).EndsWith);
-                    //print("changed mesh to: " + currentmesh + " because of " + line);
-                }
-                //print("currentmesh" + currentmesh);
+                bool ishere = true;
             }
-            else*/
+            bool isnotmeshmove = line.Contains("wipe and retract") || line.Contains("move to first") || line.Contains("move inwards before travel") || line.Contains("retract") || line.Contains("lift Z") || line.Contains("move to first perimeter point") || line.Contains("restore layer Z") || line.Contains("unretract") || line.Contains("Move") || line.Contains("home");
             if (line.StartsWith(";AFTER_LAYER_CHANGE"))
             {
                 layernum = layernum + 1;
@@ -236,51 +215,38 @@ public class GCodeMeshGenerator
                 tmpmove.Clear();
                 //todo create layer
             }
-            else if ((line.StartsWith("G1") || line.StartsWith("G0")) /*&& currentmesh != -1*/&& layernum != -1 && ((layernum % layercluster) == 0 || layercluster == 1))
+            //movement commands are all G0 or G1 in Prusa Gcode
+                
+            else if ((line.StartsWith("G1") || line.StartsWith("G0")) && layernum != -1 && ((layernum % layercluster) == 0 || layercluster == 1))
             {
-                bool isnew = false;
-                if (line.Contains(";") && !(line.Contains("wipe and retract") || line.Contains("move to first") || line.Contains("move inwards before travel") || line.Contains("retract") || line.Contains("lift Z") || line.Contains("move to first perimeter point") || line.Contains("restore layer Z") || line.Contains("unretract") || line.Contains("Move") || line.Contains("home")))
+                //bool isnew = false;
+                if (line.Contains(";")&&!isnotmeshmove)
                 {
 
-                    ismesh = true;
-                    string namemesh = line.Split(';')[1].Substring(1) + " " + layernum.ToString("D8");
-                    /*if (line.Substring(6).Contains("WALL") || line.Substring(6).Contains("SKIN"))
-                    {
-                        namemesh = "WALLS " + layernum.ToString("D8");
-                    }*/
-                    //here i change the type of 3d printed part i print next, this only works in cura-sliced stuff, slic3r doesnt have those comments
-                    //print("setting type");
+                    string namemesh = line.Split(';')[1].Split(' ')[1]+ " " + layernum.ToString("D8");//In Prusaslicer the comments about what the Line Means are right next to the line
+
                     if (!meshnames.Contains(namemesh))
                     {
-                        isnew = true;
+                        //isnew = true;
                         meshnames.Add(namemesh);
                         currentmesh = meshnames.Count - 1;
                         tmpmove[namemesh] = new List<List<Vector3>>();
                         tmpmove[namemesh].Add(new List<Vector3>());
-
-                        //print("adding: " + line + " as: " + line.Substring(6) + " Line " + layernum + " with number " + currentmesh);
                     }
                     else
                     {
-                        if (meshnames[currentmesh] != namemesh)
+                        if (meshnames[currentmesh] != namemesh||!ismesh)//Sometimes a type like infill happens more often inside one layer
                         {
-                            isnew = true;
+                            tmpmove[namemesh].Add(new List<Vector3>());
+                            //isnew = true;
                         }
                         currentmesh = meshnames.FindIndex((namemesh).EndsWith);
-                        //print("changed mesh to: " + currentmesh + " because of " + line);
                     }
+                    ismesh = true;
                 }
-                //here i add a point to the list of visited points of the current part
-                //print("Adding object");
-                /*if(currentmesh!=-1 && meshnames[currentmesh].Contains("WALLS 60"))
+                string[] parts = line.Split(' ');
+                if (line.Contains(";") && !isnotmeshmove)
                 {
-                    print(line);
-                    print(currpos);
-                    print("accumulating: " + accumulating);
-                }*/
-                if (line.Contains(";") && !(line.Contains("wipe and retract") || line.Contains("move to first skirt point") || line.Contains("move inwards before travel") || line.Contains("retract") || line.Contains("lift Z") || line.Contains("move to first perimeter point") || line.Contains("restore layer Z") || line.Contains("unretract") || line.Contains("Move") || line.Contains("home")))
-                {
-                    string[] parts = line.Split(' ');
 
                     if (accumulating)
                     {
@@ -290,27 +256,23 @@ public class GCodeMeshGenerator
                     lastpointcache = currpos;
                     lastanglecache = Vector2.Angle(new Vector2(1, 0), new Vector2((currpos - lastpointcache).x, (currpos - lastpointcache).z));
 
+                    //Since The G1 or G0 Commands are just "go to" commands, we need to store the Previous position as well, so before we touch currpos, we add it to the mesh, but only once per mesh
                     if (!accumulating &&
                         (line.Contains("X") || line.Contains("Y") || line.Contains("Z")) &&
                         line.Contains("E") &&
-                        currpos != new Vector3(0, 0, 0)
+                        currpos.x != 0 && currpos.z != 0
                         && currentmesh != -1)
                     {
-                        /*if (currentmesh != -1 && meshnames[currentmesh].Contains("WALLS 60"))
-                            print("first");*/
-                        //print(currentmesh);
                         string meshname = meshnames[currentmesh];
                         if (tmpmove.ContainsKey(meshname))
                         {
 
                             tmpmove[meshname][tmpmove[meshname].Count - 1].Add(currpos);
                         }
-                        /*else
-                        {
-                            if (currentmesh != -1 && meshnames[currentmesh].Contains("WALLS 60"))
-                                print("nah");
-                        };*/
+
                     }
+
+                    //now we can update currpos
                     foreach (string part in parts)
                     {
                         if (part.StartsWith("X"))
@@ -319,13 +281,20 @@ public class GCodeMeshGenerator
                         }
                         else if (part.StartsWith("Y"))
                         {
-                            currpos.z = float.Parse(part.Substring(1), CultureInfo.InvariantCulture.NumberFormat);
+                            currpos.z = float.Parse(part.Substring(1), CultureInfo.InvariantCulture.NumberFormat); //Unity has a Lefthanded Coordinate System (Y up), Gcode a Righthanded (Z up)
                         }
                         else if (part.StartsWith("Z"))
                         {
                             currpos.y = float.Parse(part.Substring(1), CultureInfo.InvariantCulture.NumberFormat);
                         }
-                    }
+                    }/*
+                    if (currentmesh != -1 && tmpmove.ContainsKey(meshnames[currentmesh]) && tmpmove[meshnames[currentmesh]][tmpmove[meshnames[currentmesh]].Count - 1].Count > 1)
+                    {
+                        if (isnew)
+                            tmpmove[meshnames[currentmesh]].Add(new List<Vector3>());
+                        //createlayer(tmpmove, meshnames[currentmesh]);
+                    }*/
+                    // if it is needed 
                     if (((!accumulating || accumulateddist > gcodeHandler.distanceclustersize || accumulatedangle > gcodeHandler.rotationclustersize) && (ismesh || line.Contains("E"))) && (line.Contains("X") || line.Contains("Y") || line.Contains("Z")) && currpos != new Vector3(0, 0, 0))
                     {
                         /*if (currentmesh != -1 && meshnames[currentmesh].Contains("WALLS 60"))
@@ -338,26 +307,38 @@ public class GCodeMeshGenerator
 
                         accumulateddist = 0.0f;
                         accumulatedangle = 0.0f;
+                        accumulating = true;
                     }
-                    accumulating = true;
                     /*if (line.Contains("E") &&
                         (line.Contains("X") || line.Contains("Y") || line.Contains("Z")))
                     {
                         ismesh = true;
                     }*/
 
-                    ismesh = false;
-                    accumulating = false;
-                    if (currentmesh != -1 && tmpmove.ContainsKey(meshnames[currentmesh]) && tmpmove[meshnames[currentmesh]][tmpmove[meshnames[currentmesh]].Count - 1].Count > 1)
-                    {
-                        if (isnew)
-                            tmpmove[meshnames[currentmesh]].Add(new List<Vector3>());
-                        //createlayer(tmpmove, meshnames[currentmesh]);
-                    }
+                    //ismesh = false;
                     //tmpmove.Clear();
                 }
+                else
+                {
+                    foreach (string part in parts)
+                    {
+                        if (part.StartsWith("X"))
+                        {
+                            currpos.x = float.Parse(part.Substring(1), CultureInfo.InvariantCulture.NumberFormat);
+                        }
+                        else if (part.StartsWith("Y"))
+                        {
+                            currpos.z = float.Parse(part.Substring(1), CultureInfo.InvariantCulture.NumberFormat); //Unity has a Lefthanded Coordinate System (Y up), Gcode a Righthanded (Z up)
+                        }
+                        else if (part.StartsWith("Z"))
+                        {
+                            if(part.Length>1)
+                                currpos.y = float.Parse(part.Substring(1), CultureInfo.InvariantCulture.NumberFormat);
+                        }
+                    }
+                }
             }
-            else if (line.StartsWith(";BEFORE-LAYER-CHANGE"))
+            if (line.StartsWith(";BEFORE-LAYER-CHANGE")||line.Contains("retract"))
             {
                 ismesh = false;
             }
