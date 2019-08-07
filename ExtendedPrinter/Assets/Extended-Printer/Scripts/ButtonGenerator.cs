@@ -132,10 +132,10 @@ public class ButtonGenerator : MonoBehaviour
             var filamentLength = file.GcodeAnalysis.FilamentLength / 1000f;
             ToolTip.ToolTipText = String.Format("{0}\nDruckdauer: {1}\nFilament: {2}m", file.Name, time, filamentLength.ToString("F"));
             connector.SelectFile(file.Name);
-            if (name.Contains("UniLogo"))
-                PrintButton.Enabled = true;
-            else
-                PrintButton.Enabled = false;
+            //if (name.Contains("UniLogo"))
+            //    PrintButton.Enabled = true;
+            //else
+            //    PrintButton.Enabled = false;
             Gcode.SetActive(true);
 
             MovementController.SetActive(false);
