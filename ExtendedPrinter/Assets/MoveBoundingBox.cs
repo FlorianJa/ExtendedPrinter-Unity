@@ -13,9 +13,9 @@ public class MoveBoundingBox : MonoBehaviour
     public float Z = 0.010f;
 
     //absoult min:    X:-20.00 Y:-18.5 Z:0.00
-    private float MinX = -0.02f;
+    private float MinX = 0f;
     private float MinY = -0.0185f;
-    private float MinZ = 0.0f;
+    private float MinZ = 0.01f;
 
     //max: X:293.90 Y:303.00 Z:256.01
     private float MaxX = 0.2939f;
