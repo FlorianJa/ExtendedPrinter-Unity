@@ -21,12 +21,22 @@ public class SetLabel : MonoBehaviour
     public VideoClip videoClipUnload;
     public VideoClip videoClipLoad;
 
+    public GameObject endbutton;
+
     public OctoPrintConnector OctoPrintConnector;
     public void Start()
     {
-        //clips.Add()
+        clips.Add(0, videoClipUnload);
+        clips.Add(5, videoClipLoad);
     }
 
+    public void playVideo(int index)
+    {
+
+        videoMeshRenderer.enabled = true;
+        videoPlayer.clip = clips[index];
+        videoPlayer.Play();
+    }
 
     public void SetLabelText(int index)
     {
@@ -35,18 +45,21 @@ public class SetLabel : MonoBehaviour
             label.text = Texts[index];
             if (clips.ContainsKey(index))
             {
-                /*videoMeshRenderer.enabled = true;
-                videoPlayer.clip = clips[index];
-                videoPlayer.Play();*/
+                playVideo(index);
 
             }
             else
             {
-                //videoMeshRenderer.enabled = false;
+                videoMeshRenderer.enabled = false;
             }
         }
+        else
+        {
+            endbutton.active = true;
+            gameobject.active = false;
+        }
 
-        if(index >= StepForextrusion)
+        if(index == StepForextrusion)
         {
             OctoPrintConnector.FilamentExtrusion();
         }
