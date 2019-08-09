@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
 
+
 public class SetLabel : MonoBehaviour
 {
     public string[] Texts;
@@ -17,7 +18,14 @@ public class SetLabel : MonoBehaviour
     public VideoPlayer videoPlayer;
     public MeshRenderer videoMeshRenderer;
 
+    public VideoClip videoClipUnload;
+    public VideoClip videoClipLoad;
+
     public OctoPrintConnector OctoPrintConnector;
+    public void Start()
+    {
+        //clips.Add()
+    }
 
 
     public void SetLabelText(int index)
