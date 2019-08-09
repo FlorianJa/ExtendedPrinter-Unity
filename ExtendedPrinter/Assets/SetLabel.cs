@@ -26,6 +26,7 @@ public class SetLabel : MonoBehaviour
     public OctoPrintConnector OctoPrintConnector;
     public void Start()
     {
+        clips = new Dictionary<int, VideoClip>();
         clips.Add(0, videoClipUnload);
         clips.Add(5, videoClipLoad);
     }
