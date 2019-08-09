@@ -97,6 +97,7 @@ public class ButtonGenerator : MonoBehaviour
     private void SetLabelText(string name)
     {
         print("button clicked");// Debug.Log("clicked");
+        OctoPrintConnector.Instance.HomeIfNotHomed();
         if (!MeshCreator.loading)
         {
             string time = string.Empty;

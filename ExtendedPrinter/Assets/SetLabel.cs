@@ -56,7 +56,7 @@ public class SetLabel : MonoBehaviour
         else
         {
             endbutton.active = true;
-            gameobject.active = false;
+            gameObject.active = false;
         }
 
         if(index == StepForextrusion)
