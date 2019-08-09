@@ -42,20 +42,20 @@ public class MoveBoundingBox : MonoBehaviour
     public void Start()
     {
         OctoPrintConnector.MoveCompleted += OctoPrintConnector_MoveCompleted;
-        PrinterHead.GetComponent<ManipulationHandler>().OnManipulationStarted.AddListener((med) => DisableArrows());
+/*      PrinterHead.GetComponent<ManipulationHandler>().OnManipulationStarted.AddListener((med) => DisableArrows());
         PrinterHead.GetComponent<ManipulationHandler>().OnManipulationEnded.AddListener((med) => MovePrinterHeadToPosition(med));
 
         BuildPlate.GetComponent<ManipulationHandler>().OnManipulationStarted.AddListener((med) => DisableArrows());
-        BuildPlate.GetComponent<ManipulationHandler>().OnManipulationEnded.AddListener((med) => MoveBuildplateToPosition(med));
+        BuildPlate.GetComponent<ManipulationHandler>().OnManipulationEnded.AddListener((med) => MoveBuildplateToPosition(med));*/
 
     }
 
-    private void DisableArrows()
+    public void DisableArrows()
     {
         manuallyDisabled = true;
     }
 
-    private void MoveBuildplateToPosition(ManipulationEventData med)
+    public void MoveBuildplateToPosition(ManipulationEventData med)
     {
         var tmp = new Vector3(med.ManipulationSource.transform.localPosition.x * 1000f,
                                 (med.ManipulationSource.transform.localPosition.z) * 1000f,
@@ -75,7 +75,7 @@ public class MoveBoundingBox : MonoBehaviour
         //                                );
     }
 
-    private void MovePrinterHeadToPosition(ManipulationEventData med)
+    public void MovePrinterHeadToPosition(ManipulationEventData med)
     {
         var tmp = new Vector3(med.ManipulationSource.transform.localPosition.x * 1000f,
                                 med.ManipulationSource.transform.localPosition.z * 1000f, 
