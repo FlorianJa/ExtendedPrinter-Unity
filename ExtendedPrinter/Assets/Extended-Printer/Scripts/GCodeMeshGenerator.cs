@@ -14,8 +14,27 @@ public class GCodeMeshGenerator
     internal int createdLayers;
 
     private Queue<MeshCreatorInput> meshCreatorInputQueue = new Queue<MeshCreatorInput>();
-    internal void CreateObjectFromGCode(string[] Lines, MeshLoader loader, GCodeHandler gcodeHandler)//takes ages and munches on all that juicy cpu, only use if absolutely necessary
+
+/*    internal void CreateObjectFromGCode(string[] Lines, MeshLoader loader, GCodeHandler gcodeHandler)//takes ages and munches on all that juicy cpu, only use if absolutely necessary
     {
+    }*/
+
+    internal void CreateObjectFromGCode(string[] Lines, MeshLoader loader, GCodeHandler gcodeHandler)
+    {
+        if (Lines[0].Contains("Cura"))
+        {
+            CreateObjectFromGCodeCura(Lines, loader, gcodeHandler);
+        }
+        else if (Lines[0].Contains("Prusa"))
+        {
+            CreateObjectFromGCodePrusa(Lines, loader, gcodeHandler);
+        }
+    }
+
+    internal void CreateObjectFromGCodeCura(string[] Lines, MeshLoader loader, GCodeHandler gcodeHandler)//takes ages and munches on all that juicy cpu, only use if absolutely necessary
+    {
+
+
 
 
         //Read the text from directly from the test.txt file
@@ -71,7 +90,7 @@ public class GCodeMeshGenerator
             else if ((line.StartsWith("G1") || line.StartsWith("G0")) && ((layernum % layercluster) == 0 || layercluster == 1))
             {
                 //here i add a point to the list of visited points of the current part
-                readG1Cura(gcodeHandler.distanceclustersize,gcodeHandler.rotationclustersize,line, ref accumulating, ref accumulateddist, ref accumulatedangle, ref meshnames, ref currentmesh, ref currpos, ref lastpointcache, ref lastanglecache, ref tmpmove, ref ismesh);
+                readG1Cura(gcodeHandler.distanceclustersize, gcodeHandler.rotationclustersize, line, ref accumulating, ref accumulateddist, ref accumulatedangle, ref meshnames, ref currentmesh, ref currpos, ref lastpointcache, ref lastanglecache, ref tmpmove, ref ismesh);
             }
             else if (line.StartsWith(";MESH:"))
             {
@@ -82,7 +101,7 @@ public class GCodeMeshGenerator
         loader.filesLoadingfinished = true;
         gcodeHandler.newloaded = true;
     }
-    void readG1Cura(float distanceclustersize,float rotationclustersize,string line, ref bool accumulating, ref float accumulateddist, ref float accumulatedangle, ref List<string> meshnames, ref int currentmesh, ref Vector3 currpos, ref Vector3 lastpointcache, ref float lastanglecache, ref Dictionary<string, List<List<Vector3>>> tmpmove, ref bool ismesh)
+    void readG1Cura(float distanceclustersize, float rotationclustersize, string line, ref bool accumulating, ref float accumulateddist, ref float accumulatedangle, ref List<string> meshnames, ref int currentmesh, ref Vector3 currpos, ref Vector3 lastpointcache, ref float lastanglecache, ref Dictionary<string, List<List<Vector3>>> tmpmove, ref bool ismesh)
     {
         string[] parts = line.Split(' ');
 
@@ -148,6 +167,190 @@ public class GCodeMeshGenerator
                 tmpmove[meshnames[currentmesh]].Add(new List<Vector3>());
             }
         }
+    }
+    internal void CreateObjectFromGCodePrusa(string[] Lines, MeshLoader loader, GCodeHandler gcodeHandler)//takes ages and munches on all that juicy cpu, only use if absolutely necessary
+    {
+
+
+        //Read the text from directly from the test.txt file
+        //StreamReader reader = new StreamReader(new FileStream(filename, FileMode.Open));
+        gcodeHandler.loading = true;
+        loader.filesLoadingfinished = false;
+        //mc.print("loading " + filename);
+        List<string> meshnames = new List<string>();
+        int currentmesh = -1;
+        Dictionary<string, List<List<Vector3>>> tmpmove = new Dictionary<string, List<List<Vector3>>>();
+        Vector3 currpos = new Vector3(0, 0, 0);
+        float accumulateddist = 0.0f;
+        Vector3 lastpointcache = new Vector3(0, 0, 0);
+        int linesread = 0;
+        int layernum = -1;
+        bool accumulating = false;
+        float lastanglecache = 0.0f;
+        float accumulatedangle = 0.0f;
+        bool ismesh = false;
+        bool islayerheight = false;
+        foreach (string line in Lines)
+        {
+            //Layerheigt is defined in Prusa by writing ";AFTER_LAYER_CHANGE" and in the next line writing the height, therefore this happens:
+            linesread += 1;
+            if (islayerheight)
+            {
+                currpos.y = float.Parse(line.Substring(1), CultureInfo.InvariantCulture.NumberFormat);
+                islayerheight = false;
+            }
+            if (line.Contains("support"))
+            {
+                bool ishere = true;
+            }
+            bool isnotmeshmove = line.Contains("wipe and retract") || line.Contains("move to first") || line.Contains("move inwards before travel") || line.Contains("retract") || line.Contains("lift Z") || line.Contains("move to first perimeter point") || line.Contains("restore layer Z") || line.Contains("unretract") || line.Contains("Move") || line.Contains("home");
+            if (line.StartsWith(";AFTER_LAYER_CHANGE"))
+            {
+                layernum = layernum + 1;
+                islayerheight = true;
+                foreach (string namepart in tmpmove.Keys)
+                {
+                    createlayer(tmpmove[namepart], namepart, loader);
+                }
+                tmpmove.Clear();
+                //todo create layer
+            }
+            //movement commands are all G0 or G1 in Prusa Gcode
+                
+            else if ((line.StartsWith("G1") || line.StartsWith("G0")) && layernum != -1 && ((layernum % layercluster) == 0 || layercluster == 1))
+            {
+                //bool isnew = false;
+                if (line.Contains(";")&&!isnotmeshmove)
+                {
+
+                    string namemesh = line.Split(';')[1].Split(' ')[1]+ " " + layernum.ToString("D8");//In Prusaslicer the comments about what the Line Means are right next to the line
+
+                    if (!meshnames.Contains(namemesh))
+                    {
+                        //isnew = true;
+                        meshnames.Add(namemesh);
+                        currentmesh = meshnames.Count - 1;
+                        tmpmove[namemesh] = new List<List<Vector3>>();
+                        tmpmove[namemesh].Add(new List<Vector3>());
+                    }
+                    else
+                    {
+                        if (meshnames[currentmesh] != namemesh||!ismesh)//Sometimes a type like infill happens more often inside one layer
+                        {
+                            tmpmove[namemesh].Add(new List<Vector3>());
+                            //isnew = true;
+                        }
+                        currentmesh = meshnames.FindIndex((namemesh).EndsWith);
+                    }
+                    ismesh = true;
+                }
+                string[] parts = line.Split(' ');
+                if (line.Contains(";") && !isnotmeshmove)
+                {
+
+                    if (accumulating)
+                    {
+                        accumulateddist += Vector3.Distance(currpos, lastpointcache);
+                        accumulatedangle += Mathf.Abs(lastanglecache - Vector2.Angle(new Vector2(1, 0), new Vector2((currpos - lastpointcache).x, (currpos - lastpointcache).z)));
+                    }
+                    lastpointcache = currpos;
+                    lastanglecache = Vector2.Angle(new Vector2(1, 0), new Vector2((currpos - lastpointcache).x, (currpos - lastpointcache).z));
+
+                    //Since The G1 or G0 Commands are just "go to" commands, we need to store the Previous position as well, so before we touch currpos, we add it to the mesh, but only once per mesh
+                    if (!accumulating &&
+                        (line.Contains("X") || line.Contains("Y") || line.Contains("Z")) &&
+                        line.Contains("E") &&
+                        currpos.x != 0 && currpos.z != 0
+                        && currentmesh != -1)
+                    {
+                        string meshname = meshnames[currentmesh];
+                        if (tmpmove.ContainsKey(meshname))
+                        {
+
+                            tmpmove[meshname][tmpmove[meshname].Count - 1].Add(currpos);
+                        }
+
+                    }
+
+                    //now we can update currpos
+                    foreach (string part in parts)
+                    {
+                        if (part.StartsWith("X"))
+                        {
+                            currpos.x = float.Parse(part.Substring(1), CultureInfo.InvariantCulture.NumberFormat);
+                        }
+                        else if (part.StartsWith("Y"))
+                        {
+                            currpos.z = float.Parse(part.Substring(1), CultureInfo.InvariantCulture.NumberFormat); //Unity has a Lefthanded Coordinate System (Y up), Gcode a Righthanded (Z up)
+                        }
+                        else if (part.StartsWith("Z"))
+                        {
+                            currpos.y = float.Parse(part.Substring(1), CultureInfo.InvariantCulture.NumberFormat);
+                        }
+                    }/*
+                    if (currentmesh != -1 && tmpmove.ContainsKey(meshnames[currentmesh]) && tmpmove[meshnames[currentmesh]][tmpmove[meshnames[currentmesh]].Count - 1].Count > 1)
+                    {
+                        if (isnew)
+                            tmpmove[meshnames[currentmesh]].Add(new List<Vector3>());
+                        //createlayer(tmpmove, meshnames[currentmesh]);
+                    }*/
+                    // if it is needed 
+                    if (((!accumulating || accumulateddist > gcodeHandler.distanceclustersize || accumulatedangle > gcodeHandler.rotationclustersize) && (ismesh || line.Contains("E"))) && (line.Contains("X") || line.Contains("Y") || line.Contains("Z")) && currpos != new Vector3(0, 0, 0))
+                    {
+                        /*if (currentmesh != -1 && meshnames[currentmesh].Contains("WALLS 60"))
+                            print("second");*/
+                        if (currentmesh != -1 && tmpmove.ContainsKey(meshnames[currentmesh]))
+                        {
+                            string meshname = meshnames[currentmesh];
+                            tmpmove[meshname][tmpmove[meshname].Count - 1].Add(currpos);
+                        }
+
+                        accumulateddist = 0.0f;
+                        accumulatedangle = 0.0f;
+                        accumulating = true;
+                    }
+                    /*if (line.Contains("E") &&
+                        (line.Contains("X") || line.Contains("Y") || line.Contains("Z")))
+                    {
+                        ismesh = true;
+                    }*/
+
+                    //ismesh = false;
+                    //tmpmove.Clear();
+                }
+                else
+                {
+                    foreach (string part in parts)
+                    {
+                        if (part.StartsWith("X"))
+                        {
+                            currpos.x = float.Parse(part.Substring(1), CultureInfo.InvariantCulture.NumberFormat);
+                        }
+                        else if (part.StartsWith("Y"))
+                        {
+                            currpos.z = float.Parse(part.Substring(1), CultureInfo.InvariantCulture.NumberFormat); //Unity has a Lefthanded Coordinate System (Y up), Gcode a Righthanded (Z up)
+                        }
+                        else if (part.StartsWith("Z"))
+                        {
+                            if(part.Length>1)
+                                currpos.y = float.Parse(part.Substring(1), CultureInfo.InvariantCulture.NumberFormat);
+                        }
+                    }
+                }
+            }
+            if (line.StartsWith(";BEFORE-LAYER-CHANGE")||line.Contains("retract"))
+            {
+                ismesh = false;
+            }
+            /*if(meshnames[currentmesh].Contains("WALLS 60"))
+                {
+                print(line);
+            }*/
+        }
+        gcodeHandler.layersvisible = layernum;
+        //loading = false;
+        loader.filesLoadingfinished = true;
+        gcodeHandler.newloaded = true;
     }
     void createlayer(List<List<Vector3>> tmpmoves, string meshname, MeshLoader loader)
     {

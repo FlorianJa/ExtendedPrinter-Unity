@@ -110,6 +110,10 @@ public class SetToolTipText : MonoBehaviour
         {
             toolTip.ToolTipText = Texts[index];
         }
+        else
+        {
+            index = 0;
+        }
     }
 
     public void Next()

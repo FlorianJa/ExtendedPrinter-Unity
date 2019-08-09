@@ -13,9 +13,9 @@ public class MoveBoundingBox : MonoBehaviour
     public float Z = 0.010f;
 
     //absoult min:    X:-20.00 Y:-18.5 Z:0.00
-    private float MinX = -0.02f;
+    private float MinX = 0f;
     private float MinY = -0.0185f;
-    private float MinZ = 0.0f;
+    private float MinZ = 0.01f;
 
     //max: X:293.90 Y:303.00 Z:256.01
     private float MaxX = 0.2939f;
@@ -42,20 +42,20 @@ public class MoveBoundingBox : MonoBehaviour
     public void Start()
     {
         OctoPrintConnector.MoveCompleted += OctoPrintConnector_MoveCompleted;
-        PrinterHead.GetComponent<ManipulationHandler>().OnManipulationStarted.AddListener((med) => DisableArrows());
+/*      PrinterHead.GetComponent<ManipulationHandler>().OnManipulationStarted.AddListener((med) => DisableArrows());
         PrinterHead.GetComponent<ManipulationHandler>().OnManipulationEnded.AddListener((med) => MovePrinterHeadToPosition(med));
 
         BuildPlate.GetComponent<ManipulationHandler>().OnManipulationStarted.AddListener((med) => DisableArrows());
-        BuildPlate.GetComponent<ManipulationHandler>().OnManipulationEnded.AddListener((med) => MoveBuildplateToPosition(med));
+        BuildPlate.GetComponent<ManipulationHandler>().OnManipulationEnded.AddListener((med) => MoveBuildplateToPosition(med));*/
 
     }
 
-    private void DisableArrows()
+    public void DisableArrows()
     {
         manuallyDisabled = true;
     }
 
-    private void MoveBuildplateToPosition(ManipulationEventData med)
+    public void MoveBuildplateToPosition(ManipulationEventData med)
     {
         var tmp = new Vector3(med.ManipulationSource.transform.localPosition.x * 1000f,
                                 (med.ManipulationSource.transform.localPosition.z) * 1000f,
@@ -75,7 +75,7 @@ public class MoveBoundingBox : MonoBehaviour
         //                                );
     }
 
-    private void MovePrinterHeadToPosition(ManipulationEventData med)
+    public void MovePrinterHeadToPosition(ManipulationEventData med)
     {
         var tmp = new Vector3(med.ManipulationSource.transform.localPosition.x * 1000f,
                                 med.ManipulationSource.transform.localPosition.z * 1000f, 

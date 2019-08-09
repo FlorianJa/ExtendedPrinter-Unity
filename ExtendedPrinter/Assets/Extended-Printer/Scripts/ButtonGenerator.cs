@@ -76,7 +76,7 @@ public class ButtonGenerator : MonoBehaviour
                     button.transform.parent = transform;
                     button.GetComponent<Interactable>().OnClick.AddListener(delegate
                     {
-                        SetLabelTesxt(file.Name);
+                        SetLabelText(file.Name);
                     });
                     
                     //button.GetComponent<Interactable>().IsGlobal = true;
@@ -94,9 +94,10 @@ public class ButtonGenerator : MonoBehaviour
         }
     }
 
-    private void SetLabelTesxt(string name)
+    private void SetLabelText(string name)
     {
         print("button clicked");// Debug.Log("clicked");
+        OctoPrintConnector.Instance.HomeIfNotHomed();
         if (!MeshCreator.loading)
         {
             string time = string.Empty;
@@ -132,10 +133,10 @@ public class ButtonGenerator : MonoBehaviour
             var filamentLength = file.GcodeAnalysis.FilamentLength / 1000f;
             ToolTip.ToolTipText = String.Format("{0}\nDruckdauer: {1}\nFilament: {2}m", file.Name, time, filamentLength.ToString("F"));
             connector.SelectFile(file.Name);
-            if (name.Contains("UniLogo"))
-                PrintButton.Enabled = true;
-            else
-                PrintButton.Enabled = false;
+            //if (name.Contains("UniLogo"))
+            //    PrintButton.Enabled = true;
+            //else
+            //    PrintButton.Enabled = false;
             Gcode.SetActive(true);
 
             MovementController.SetActive(false);
