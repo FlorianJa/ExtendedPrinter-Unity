@@ -29,6 +29,7 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
     private bool videoIsPlaying;
     private bool filamentChangeEnd;
     private bool isMovedManually;
+    private bool isHomed;
 
     public event EventHandler MoveCompleted;
 
@@ -72,22 +73,23 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
         {
             PrintFinished?.Invoke(this,e);
             isPrinting = false;
-            
+            isHomed = false;
         }
         if (isFilamentChanging && filamentChangeBegin)
         {
             FilamentChangeBegin?.Invoke(this,e);
             filamentChangeBegin = false;
             videoIsPlaying = true;
+            isHomed = false;
         }
         if (isFilamentChanging && filamentChangeEnd)
         {
             FilamentChangeEnd?.Invoke(this,e);
             filamentChangeEnd = false;
+            isHomed = false;
         }
         if(isMovedManually)
         {
-
             isMovedManually = false;
             MoveCompleted?.Invoke(this, null);
         }
@@ -126,6 +128,7 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
         {
             PositionChanged?.Invoke(this, e);
         });
+        isHomed = true;
     }
 
     public void MoveAxis(Axis Axis, float position, bool absolute, int? speed)
@@ -142,6 +145,7 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
         {
             octoprintConnection.Printer.MakePrintheadJog(null, null, position, absolute, speed);
         }
+        isHomed = false;
     }
 
     public void MovePrinter(Vector3 position, bool absolute, bool moveX = true, bool moveY = true, bool moveZ = true)
@@ -184,6 +188,7 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
 
         octoprintConnection.Files.UploadFile(filename, "customMove.gcode", "helper", "local", false, false);
         octoprintConnection.Files.Select("customMove.gcode", "local/helper", true);
+        isHomed = false;
 
     }
     public void MovePrintHeadUp()
@@ -193,6 +198,7 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
             isMovedManually = true;
 
             octoprintConnection.Files.Select("moveUp.gcode", "local/helper", true);
+            isHomed = false;
         }
     }
     public void MovePrintHeadDown()
@@ -201,6 +207,7 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
         {
             isMovedManually = true;
             octoprintConnection.Files.Select("moveDown.gcode", "local/helper", true);
+            isHomed = false;
         }
     }
     public void MovePrintHeadRight()
@@ -209,6 +216,7 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
         {
             isMovedManually = true;
             octoprintConnection.Files.Select("moveRight.gcode", "local/helper", true);
+            isHomed = false;
         }
     }
     public void MovePrintHeadLeft()
@@ -217,13 +225,17 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
         {
             isMovedManually = true;
             octoprintConnection.Files.Select("moveLeft.gcode", "local/helper", true);
+            isHomed = false;
         }
     }
     public void MoveBuildplateFront()
     {
-
-        isMovedManually = true;
-        octoprintConnection.Files.Select("moveFront.gcode", "local/helper", true);
+        if (isMovedManually == false)
+        {
+            isMovedManually = true;
+            octoprintConnection.Files.Select("moveFront.gcode", "local/helper", true);
+            isHomed = false;
+        }
     }
     public void MoveBuildplateBack()
     {
@@ -231,6 +243,7 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
         {
             isMovedManually = true;
             octoprintConnection.Files.Select("moveBack.gcode", "local/helper", true);
+            isHomed = false;
         }
     }
 
@@ -240,9 +253,16 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
         {
             isMovedManually = true;
             octoprintConnection.Files.Select("Home.gcode", "local/helper", true);
+            isHomed = true;
         }
     }
-
+    public void HomeIfNotHomed()
+    {
+        if (!isHomed)
+        {
+            HomeFile();
+        }
+    }
     public void SetExtruderTemp(int to)
     {
         octoprintConnection.Printer.SetTemperatureTarget(to);

@@ -76,7 +76,7 @@ public class ButtonGenerator : MonoBehaviour
                     button.transform.parent = transform;
                     button.GetComponent<Interactable>().OnClick.AddListener(delegate
                     {
-                        SetLabelTesxt(file.Name);
+                        SetLabelText(file.Name);
                     });
                     
                     //button.GetComponent<Interactable>().IsGlobal = true;
@@ -94,7 +94,7 @@ public class ButtonGenerator : MonoBehaviour
         }
     }
 
-    private void SetLabelTesxt(string name)
+    private void SetLabelText(string name)
     {
         print("button clicked");// Debug.Log("clicked");
         if (!MeshCreator.loading)
