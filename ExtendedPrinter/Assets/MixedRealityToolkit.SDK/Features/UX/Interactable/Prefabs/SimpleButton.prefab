@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 1170112908696466}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.2, y: 0.05, z: 0.01}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.01}
   m_Children: []
   m_Father: {fileID: 4951315836615182}
   m_RootOrder: 0
@@ -101,6 +101,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4951315836615182}
   - component: {fileID: 114557943694380720}
+  - component: {fileID: 6846967367856749618}
   m_Layer: 0
   m_Name: SimpleButton
   m_TagString: Untagged
@@ -145,6 +146,7 @@ MonoBehaviour:
   InputActionId: 0
   IsGlobal: 0
   Dimensions: 1
+  StartDimensionIndex: 0
   CanSelect: 1
   CanDeselect: 1
   VoiceCommand: 
@@ -152,7 +154,7 @@ MonoBehaviour:
   Profiles:
   - Target: {fileID: 1170112908696466}
     Themes:
-    - {fileID: 11400000, guid: d37afabc007bf774d9431b9a7cbe6fba, type: 2}
+    - {fileID: 11400000, guid: 34927bf1a1259e141a45f1dedff98d7f, type: 2}
     HadDefaultTheme: 1
   OnClick:
     m_PersistentCalls:
@@ -160,6 +162,56 @@ MonoBehaviour:
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Events: []
+  dimensionIndex: 0
+--- !u!114 &6846967367856749618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1284212102718890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 093b74c6a1bc6234b92de4381632b9e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnTouchStarted:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114557943694380720}
+        m_MethodName: SetInputDown
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: Microsoft.MixedReality.Toolkit.UI.TouchEvent, Microsoft.MixedReality.Toolkit.SDK,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnTouchCompleted:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114557943694380720}
+        m_MethodName: SetInputUp
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: Microsoft.MixedReality.Toolkit.UI.TouchEvent, Microsoft.MixedReality.Toolkit.SDK,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnTouchUpdated:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Microsoft.MixedReality.Toolkit.UI.TouchEvent, Microsoft.MixedReality.Toolkit.SDK,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1 &1790360590789510
 GameObject:
   m_ObjectHideFlags: 0
@@ -244,7 +296,7 @@ TextMesh:
   m_Anchor: 4
   m_Alignment: 1
   m_TabSize: 4
-  m_FontSize: 30
+  m_FontSize: 38
   m_FontStyle: 0
   m_RichText: 1
   m_Font: {fileID: 12800000, guid: e48b920555144c6da3ee2ab03f0fda88, type: 3}

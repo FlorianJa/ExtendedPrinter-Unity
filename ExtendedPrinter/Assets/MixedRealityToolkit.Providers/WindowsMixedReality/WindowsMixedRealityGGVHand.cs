@@ -11,8 +11,8 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.Input
     /// </summary>
     [MixedRealityController(
         SupportedControllerType.GGVHand,
-        new[] { Handedness.Left, Handedness.Right })]
-    public class WindowsMixedRealityGGVHand : WindowsMixedRealityController
+        new[] { Handedness.Left, Handedness.Right, Handedness.None })]
+    public class WindowsMixedRealityGGVHand : BaseWindowsMixedRealitySource
     {
         public WindowsMixedRealityGGVHand(TrackingState trackingState, Handedness controllerHandedness, IMixedRealityInputSource inputSource = null, MixedRealityInteractionMapping[] interactions = null)
         : base(trackingState, controllerHandedness, inputSource, interactions)
