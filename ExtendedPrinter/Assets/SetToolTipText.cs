@@ -48,7 +48,7 @@ public class SetToolTipText : MonoBehaviour
 
         UnityMainThreadDispatcher.Instance().Enqueue(() =>
         {
-            toolTip.ToolTipText = "Löse den Hebel und zieh das Filament senkrecht heraus.";
+            toolTip.ToolTipText = "Release the lever and pull out the filament vertically.";
         });
     }
     private void setFilamentChangeEndText(object source, System.EventArgs args)
@@ -56,7 +56,7 @@ public class SetToolTipText : MonoBehaviour
 
         UnityMainThreadDispatcher.Instance().Enqueue(() =>
         {
-            toolTip.ToolTipText = "Filamentwechsel abgeschlossen";
+            //toolTip.ToolTipText = "Filamentwechsel abgeschlossen";
         });
     }
     private void updateProgressText(object source, OctoprintJobProgress obj)
@@ -112,7 +112,7 @@ public class SetToolTipText : MonoBehaviour
         }
         else
         {
-            index = 0;
+            StepCounter = 1;
         }
     }
 

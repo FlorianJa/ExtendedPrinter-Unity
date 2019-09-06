@@ -620,8 +620,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.22, y: 0.05, z: 0.025}
-  m_Center: {x: 0.08, y: 0, z: 0}
+  m_Size: {x: 0.1908212, y: 0.05, z: 0.025}
+  m_Center: {x: 0.0654106, y: 0, z: 0}
 --- !u!114 &114359879210576386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -694,8 +694,8 @@ MonoBehaviour:
   touchableCollider: {fileID: 65394494458541452}
   localForward: {x: 0, y: 0, z: -1}
   localUp: {x: 0, y: 1, z: 0}
-  localCenter: {x: 0.08, y: 0, z: -0.0125}
-  bounds: {x: 0.22, y: 0.05}
+  localCenter: {x: 0.0654106, y: 0, z: -0.0125}
+  bounds: {x: 0.1908212, y: 0.05}
 --- !u!114 &4780671800561484771
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -231,7 +231,7 @@ public class GCodeHandler : MonoBehaviour
         if (newloaded)
         {
             newloaded = false;
-            //slider.MaxValue= layersvisible;
+            slider.MaxValue= layersvisible;
             slider.SliderValue=layersvisible;
             ShowHideCheckBoxes.Rebuild();
         }
@@ -281,7 +281,7 @@ public class GCodeHandler : MonoBehaviour
         slider.gameObject.SetActive(true);
         if (layernum > 0)
         {
-            //slider.MaxValue = layernum;
+            slider.MaxValue = layernum;
             slider.SliderValue = layernum;
         }
         ShowHideCheckBoxes.Rebuild();

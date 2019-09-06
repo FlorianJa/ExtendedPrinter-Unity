@@ -13,18 +13,18 @@ namespace Microsoft.MixedReality.Toolkit.Examples.Demos
     public class ShowSliderValue : MonoBehaviour
     {
         [SerializeField]
-        private TextMeshPro textMesh = null;
+        private TextMesh textMesh = null;
 
         public void OnSliderUpdated(SliderEventData eventData)
         {
             if (textMesh == null)
             {
-                textMesh = GetComponent<TextMeshPro>();
+                textMesh = GetComponent<TextMesh>();
             }
 
             if (textMesh != null)
             {
-                textMesh.text = $"{eventData.NewValue:F2}";
+                textMesh.text = $"{eventData.NewValue:F0}";
             }
         }
     }

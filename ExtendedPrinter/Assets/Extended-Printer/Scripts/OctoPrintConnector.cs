@@ -314,6 +314,7 @@ public class OctoPrintConnector : Singleton<OctoPrintConnector>
             ////octoprintConnection.Printer.SelectTool("tool0");
             //octoprintConnection.Printer.SetTemperatureTarget(200);
             filamentChangeBegin = true;
+            filamentChangeEnd = false;
             octoprintConnection.Files.Select("changeFilament.gcode", "local/helper", true);
         }
     }
