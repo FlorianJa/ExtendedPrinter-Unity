@@ -166,7 +166,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
 
         private void UpdateUI()
         {
-            var newSliderPos = SliderStartPosition + sliderThumbOffset + SliderTrackDirection * (sliderValue/MaxValue);
+            var newSliderPos = SliderStartPosition + sliderThumbOffset + SliderTrackDirection * (sliderValue / MaxValue);
             thumbRoot.transform.position = newSliderPos;
         }
 
@@ -228,7 +228,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
         {
             if (eventData.Pointer == activePointer && !eventData.used)
             {
-                var delta = (activePointer.Position - startPointerPosition)*MaxValue;
+                var delta = (activePointer.Position - startPointerPosition) * MaxValue;
                 var handDelta = Vector3.Dot(SliderTrackDirection.normalized, delta);
 
                 SliderValue = (int)Mathf.Clamp(startSliderValue + handDelta / SliderTrackDirection.magnitude, 0, MaxValue);
