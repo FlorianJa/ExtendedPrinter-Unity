@@ -10,12 +10,12 @@ using UnityEngine.XR.WSA.Input;
 #endif
 
 #if WINDOWS_UWP
+using Microsoft.MixedReality.Toolkit.Windows.Utilities;
 using System;
 using System.Collections.Generic;
 using Windows.Perception;
 using Windows.Perception.People;
 using Windows.UI.Input.Spatial;
-using Microsoft.MixedReality.Toolkit.Windows.Utilities;
 #endif
 
 namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.Input
@@ -26,7 +26,7 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.Input
     [MixedRealityController(
         SupportedControllerType.ArticulatedHand,
         new[] { Handedness.Left, Handedness.Right })]
-    public class WindowsMixedRealityArticulatedHand : WindowsMixedRealityController, IMixedRealityHand
+    public class WindowsMixedRealityArticulatedHand : BaseWindowsMixedRealitySource, IMixedRealityHand
     {
     /// <summary>
         /// Constructor.
@@ -127,41 +127,19 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.Input
         {
             if (!Enabled) { return; }
 
-            UpdateControllerData(interactionSourceState);
+            base.UpdateController(interactionSourceState);
 
-            if (Interactions == null)
-            {
-                Debug.LogError($"No interaction configuration for Windows Mixed Reality Articulated Hand {ControllerHandedness}");
-                Enabled = false;
-            }
+            UpdateHandData(interactionSourceState);
 
             for (int i = 0; i < Interactions?.Length; i++)
             {
                 switch (Interactions[i].InputType)
                 {
-                    case DeviceInputType.None:
-                        break;
-                    case DeviceInputType.SpatialPointer:
-                        UpdatePointerData(interactionSourceState, Interactions[i]);
-                        break;
-                    case DeviceInputType.Select:
-                    case DeviceInputType.TriggerPress:
-                        UpdateTriggerData(interactionSourceState, Interactions[i]);
-                        break;
-                    case DeviceInputType.SpatialGrip:
-                        UpdateGripData(interactionSourceState, Interactions[i]);
-                        break;
                     case DeviceInputType.IndexFinger:
                         UpdateIndexFingerData(interactionSourceState, Interactions[i]);
                         break;
-                    default:
-                        Debug.LogError($"Input [{Interactions[i].InputType}] is not handled for this controller [WindowsMixedRealityArticulatedHand]");
-                        Enabled = false;
-                        break;
                 }
             }
-
-            LastSourceStateReading = interactionSourceState;
         }
 
 #if WINDOWS_UWP
@@ -213,15 +191,13 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.Input
 #endif
 
         /// <summary>
-        /// Update the "Controller" input from the device
+        /// Update the hand data from the device.
         /// </summary>
-        /// <param name="interactionSourceState">The InteractionSourceState retrieved from the platform</param>
-        protected override void UpdateControllerData(InteractionSourceState interactionSourceState)
+        /// <param name="interactionSourceState">The InteractionSourceState retrieved from the platform.</param>
+        private void UpdateHandData(InteractionSourceState interactionSourceState)
         {
-            base.UpdateControllerData(interactionSourceState);
-
 #if WINDOWS_UWP
-            // The articulated hand support is only present in the 18361 version and beyond Windows
+            // Articulated hand support is only present in the 18362 version and beyond Windows
             // SDK (which contains the V8 drop of the Universal API Contract). In particular,
             // the HandPose related APIs are only present on this version and above.
             if (!WindowsApiChecker.UniversalApiContractV8_IsAvailable)
@@ -454,42 +430,6 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.Input
 
         #region Protected InputSource Helpers
 
-        // Velocity internal states
-        private float deltaTimeStart;
-        private Vector3 lastPosition;
-        private Vector3 lastPalmNormal;
-        private readonly int velocityUpdateInterval = 9;
-        private int frameOn = 0;
-
-        #region Gesture Definitions
-
-        protected void UpdateVelocity()
-        {
-            if (frameOn == 0)
-            {
-                deltaTimeStart = Time.unscaledTime;
-
-                lastPosition = unityJointPositions[(int)HandJointKind.Palm];
-                lastPalmNormal = unityJointOrientations[(int)HandJointKind.Palm] * Vector3.up;
-            }
-            else if (frameOn == velocityUpdateInterval)
-            {
-                //update linear velocity
-                float deltaTime = Time.unscaledTime - deltaTimeStart;
-                Vector3 newVelocity = (unityJointPositions[(int)HandJointKind.Palm] - lastPosition) / deltaTime;
-                Velocity = (Velocity * 0.8f) + (newVelocity * 0.2f);
-
-                //update angular velocity
-                Vector3 currentPalmNormal = unityJointOrientations[(int)HandJointKind.Palm] * Vector3.up;
-                Quaternion rotation = Quaternion.FromToRotation(lastPalmNormal, currentPalmNormal);
-                Vector3 rotationRate = rotation.eulerAngles * Mathf.Deg2Rad;
-                AngularVelocity = rotationRate / deltaTime;
-            }
-
-            frameOn++;
-            frameOn = frameOn > velocityUpdateInterval ? 0 : frameOn;
-        }
-
         protected void UpdateCurrentIndexPose()
         {
             currentIndexPose.Rotation = unityJointOrientations[(int)HandJointKind.IndexTip];
@@ -497,8 +437,6 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.Input
             var skinOffsetFromBone = (currentIndexPose.Rotation * Vector3.forward * lastIndexTipRadius);
             currentIndexPose.Position = (unityJointPositions[(int)HandJointKind.IndexTip] + skinOffsetFromBone);
         }
-
-        #endregion Gesture Definitions
 
         #endregion Private InputSource Helpers
 

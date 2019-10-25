@@ -55,7 +55,7 @@ MonoBehaviour:
         String: 
         Bool: 0
         Int: 0
-        Float: 0
+        Float: 0.45
         Texture: {fileID: 0}
         Material: {fileID: 0}
         GameObject: {fileID: 0}

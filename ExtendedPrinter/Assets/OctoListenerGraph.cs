@@ -22,11 +22,10 @@ public class OctoListenerGraph : MonoBehaviour
             {
                 if (Graph != null)
                 {
-                    Graph.DataSource.AddPointToCategoryRealtime("Düse IST", System.DateTime.Now, obj.Tools[0].Actual, 1f);
-                    Graph.DataSource.AddPointToCategoryRealtime("Buildplate IST", System.DateTime.Now, obj.Bed.Actual, 1f);
-                    Graph.DataSource.AddPointToCategoryRealtime("Düse SOLL", System.DateTime.Now, obj.Tools[0].Target, 1f);
-                    Graph.DataSource.AddPointToCategoryRealtime("Buildplate SOLL", System.DateTime.Now, obj.Bed.Target, 1f);
-                   
+                    Graph.DataSource.AddPointToCategoryRealtime("Nozzle actual", System.DateTime.Now, obj.Tools[0].Actual, 1f);
+                    Graph.DataSource.AddPointToCategoryRealtime("Buildplate actual", System.DateTime.Now, obj.Bed.Actual, 1f);
+                    Graph.DataSource.AddPointToCategoryRealtime("Nozzle target", System.DateTime.Now, obj.Tools[0].Target, 1f);
+                    Graph.DataSource.AddPointToCategoryRealtime("Buildplate target", System.DateTime.Now, obj.Bed.Target, 1f);
                 }
 
             });
