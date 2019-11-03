@@ -7,10 +7,15 @@ using UnityEngine;
 
 public class MoveBoundingBox : MonoBehaviour
 {
+    
+    public float X = 0;
+    public float Y = 0;
+    public float Z = 0;
+
     //after home: X:-19.00 Y:258.00 Z:10.00
-    public float X = -0.019f;
-    public float Y = 0.258f;
-    public float Z = 0.010f;
+    public float HomeX = 0;
+    public float HomeY = 0;
+    public float HomeZ = 0;
 
     //absoult min:    X:-20.00 Y:-18.5 Z:0.00
     private float MinX = 0f;
@@ -61,7 +66,8 @@ public class MoveBoundingBox : MonoBehaviour
                                 (med.ManipulationSource.transform.localPosition.z) * 1000f,
                                 (med.ManipulationSource.transform.localPosition.y) * 1000f);
 
-        Y = tmp.y / 1000f;
+        //Y = tmp.y / 1000f;
+        Z = tmp.z / 1000f;
         OctoPrintConnector.MovePrinter(tmp, true, false, true, false);
         ShowPosition();
     }
@@ -82,7 +88,8 @@ public class MoveBoundingBox : MonoBehaviour
                                 med.ManipulationSource.transform.localPosition.y * 1000f);
 
         X = tmp.x / 1000f;
-        Z = tmp.z / 1000f;
+        Y = tmp.y / 1000f;
+        //Z = tmp.z / 1000f;
         OctoPrintConnector.MovePrinter(tmp, true,true,false,true);
         ShowPosition();
     }
