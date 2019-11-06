@@ -5,7 +5,10 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
-    path: Assets/main.unity
+  - enabled: 0
+    path: Assets/Extended-Printer/Scenes/main.unity
     guid: b23a1db4269f22a4bb3fb0101c14ee16
+  - enabled: 1
+    path: Assets/Extended-Printer/Scenes/KPZ-Ilmenau.unity
+    guid: 08137148ac47ea0419924e18e75dc80b
   m_configObjects: {}

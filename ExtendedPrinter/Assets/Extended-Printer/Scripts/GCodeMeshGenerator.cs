@@ -21,7 +21,7 @@ public class GCodeMeshGenerator
 
     internal void CreateObjectFromGCode(string[] Lines, MeshLoader loader, GCodeHandler gcodeHandler)
     {
-        if (Lines[0].Contains("Cura"))
+        if (Lines[0].Contains("Cura") || Lines[6].Contains("Cura"))
         {
             CreateObjectFromGCodeCura(Lines, loader, gcodeHandler);
         }
@@ -128,6 +128,10 @@ public class GCodeMeshGenerator
         }
         foreach (string part in parts)
         {
+            if(part.StartsWith(";"))
+            {
+                break;
+            }
             if (part.StartsWith("X"))
             {
                 currpos.x = float.Parse(part.Substring(1), CultureInfo.InvariantCulture.NumberFormat);

@@ -19,13 +19,13 @@ public class MoveBoundingBox : MonoBehaviour
 
     //absoult min:    X:-20.00 Y:-18.5 Z:0.00
     private float MinX = 0f;
-    private float MinY = -0.0185f;
-    private float MinZ = 0.01f;
+    private float MinY = 0;
+    private float MinZ = 0.05f;
 
     //max: X:293.90 Y:303.00 Z:256.01
-    private float MaxX = 0.2939f;
-    private float MaxY = 0.303f;
-    private float MaxZ = 0.256f;
+    private float MaxX = 0.21f;
+    private float MaxY = 0.21f;
+    private float MaxZ = 0.21f;
 
     public Interactable ArrowTop;
     public Interactable ArrowRight;
@@ -40,8 +40,8 @@ public class MoveBoundingBox : MonoBehaviour
     public OctoPrintConnector OctoPrintConnector;
     public float distance = 0.01f;
     private bool manuallyDisabled;
-    private Vector3 printheadHomePosition = new Vector3(-0.019f, 0.01f, 0f);
-    private Vector3 buildePlateHomePosition = new Vector3(0, 0, 0.258f);
+    private Vector3 printheadHomePosition = new Vector3(0f, 0f, 0.295f);
+    private Vector3 buildePlateHomePosition = new Vector3(0, 0, 0f);
     public ToolTip toolTip;
 
     public void Start()
@@ -68,7 +68,7 @@ public class MoveBoundingBox : MonoBehaviour
 
         //Y = tmp.y / 1000f;
         Z = tmp.z / 1000f;
-        OctoPrintConnector.MovePrinter(tmp, true, false, true, false);
+        OctoPrintConnector.MovePrinter(tmp, true, false, false, true);
         ShowPosition();
     }
 
@@ -90,7 +90,7 @@ public class MoveBoundingBox : MonoBehaviour
         X = tmp.x / 1000f;
         Y = tmp.y / 1000f;
         //Z = tmp.z / 1000f;
-        OctoPrintConnector.MovePrinter(tmp, true,true,false,true);
+        OctoPrintConnector.MovePrinter(tmp, true,true,true,false);
         ShowPosition();
     }
 
@@ -209,9 +209,9 @@ public class MoveBoundingBox : MonoBehaviour
         PrinterHead.transform.localPosition = printheadHomePosition;
         BuildPlate.transform.localPosition = buildePlateHomePosition;
 
-        X = -0.019f;
-        Y= 0.258f;
-        Z= 0.010f;
+        X = 0f;
+        Y= 0.295f;
+        Z= 0f;
         ShowPosition();
     }
 
