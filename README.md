@@ -12,4 +12,5 @@ https://vimeo.com/343709587
 
 ## Publications  
 Research is still ongoing.  
-https://dl.acm.org/doi/10.1145/3340764.3345377
+https://dl.acm.org/doi/10.1145/3419249.3420162 (October 2020)  
+https://dl.acm.org/doi/10.1145/3340764.3345377 (September 2019)
