@@ -1,5 +1,6 @@
 ﻿using Assets._ExtendedPrinter.Scripts.Helper;
 using Assets._ExtendedPrinter.Scripts.ModelLoader;
+using Newtonsoft.Json;
 using System;
 using System.Net.WebSockets;
 using System.Text;
@@ -65,9 +66,7 @@ namespace Assets._ExtendedPrinter.Scripts.SlicingService
         /// <param name="prusaSlicerCLICommands"></param>
         public async void WebSocketSend(PrusaSlicerCLICommands prusaSlicerCLICommands)//TODO: rename method
         {
-            
-
-            var json = JsonUtility.ToJson(prusaSlicerCLICommands);
+            var json = JsonConvert.SerializeObject(prusaSlicerCLICommands, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             var tmp = Encoding.ASCII.GetBytes(json);
             await webSocket.SendAsync(new ArraySegment<byte>(tmp, 0, json.Length), WebSocketMessageType.Text, true, CancellationToken.None);
         }
