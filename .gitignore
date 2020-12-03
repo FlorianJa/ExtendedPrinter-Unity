@@ -36,3 +36,5 @@ sysinfo.txt
 *.unitypackage
 ExtendedPrinter/Assets/Resources/VuforiaConfiguration.asset
 ExtendedPrinter/Assets/Resources/VuforiaConfiguration.asset.meta
+
+ExtendedPrinter/Logs/
