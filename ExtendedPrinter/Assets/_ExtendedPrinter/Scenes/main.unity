@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -97,7 +97,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 75be552ae13b7af45b5aa958a306efbb,
+    type: 2}
   m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
@@ -502,6 +503,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1891034345}
+  - component: {fileID: 1891034346}
+  - component: {fileID: 1891034347}
+  - component: {fileID: 1891034348}
   m_Layer: 0
   m_Name: Controllers
   m_TagString: Untagged
@@ -523,6 +527,55 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1891034346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1891034344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b53994045cb74444f9951e09893e608e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1891034347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1891034344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee66ad75e79b15d4f9d25639a712dc19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DomainNmaeOrIp: localhost:5003
+  objLoader: {fileID: 1891034348}
+--- !u!114 &1891034348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1891034344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4104720d39d6ac74b8c559db2825c3b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FileDownloadCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  DownloadProgres:
+    m_PersistentCalls:
+      m_Calls: []
+  parent: {fileID: 1931367431}
+  material: {fileID: 2100000, guid: 92ab6cc3aab492d41a92a21beb2068e4, type: 2}
+  useFilter: 1
+  FilterList:
+  - external perimeter
 --- !u!1 &1931367430
 GameObject:
   m_ObjectHideFlags: 0

@@ -156,6 +156,7 @@ namespace Assets._ExtendedPrinter.Scripts.ModelLoader
             loader.defaultMaterial = material;
             var tmp = await loader.LoadAsync(objFullPath);
             tmp.transform.SetParent(parent, WorldPositionStays);
+            tmp.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
         }
     }
 }

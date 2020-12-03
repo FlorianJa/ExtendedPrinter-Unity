@@ -46,16 +46,26 @@ namespace Assets._ExtendedPrinter.Scripts.SlicingService
             return new Uri("ws://" + DomainNmaeOrIp + "/ws");
         }
 
+        [ContextMenu("test")]
+        public void ManualTrigger()
+        {
+            if (Application.isPlaying)
+            {
+                var cliCommand = new PrusaSlicerCLICommands();
+                cliCommand.File = "3DBenchy.stl";
+                cliCommand.ExportGCode = true;
+                cliCommand.GcodeComments = true;
+
+                WebSocketSend(cliCommand);
+            }
+        }
         /// <summary>
         /// Starts a slicing process with the given commands
         /// </summary>
         /// <param name="prusaSlicerCLICommands"></param>
         public async void WebSocketSend(PrusaSlicerCLICommands prusaSlicerCLICommands)//TODO: rename method
         {
-            //var cliCommand = new PrusaSlicerCLICommands();
-            //cliCommand.File = "3DBenchy.stl";
-            //cliCommand.ExportGCode = true;
-            //cliCommand.GcodeComments = true;
+            
 
             var json = JsonUtility.ToJson(prusaSlicerCLICommands);
             var tmp = Encoding.ASCII.GetBytes(json);
