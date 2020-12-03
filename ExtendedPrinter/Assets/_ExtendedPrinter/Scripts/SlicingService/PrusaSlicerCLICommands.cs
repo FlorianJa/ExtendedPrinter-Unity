@@ -113,7 +113,7 @@ namespace Assets._ExtendedPrinter.Scripts.SlicingService
             StringBuilder commandBuilder = new StringBuilder();
 
             //get all properties
-            var props = typeof(PrusaSlicerCLICommands).GetProperties();
+            var props = typeof(PrusaSlicerCLICommands).GetFields();
 
             foreach (var prop in props)
             {
@@ -128,7 +128,7 @@ namespace Assets._ExtendedPrinter.Scripts.SlicingService
                 //there could be the rare case that GetProperties gets an property that has no CLICommand attribute -> ignore all of these properties
                 if (CLICommand == null) continue;
 
-                if (prop.PropertyType == typeof(bool?))
+                if (prop.FieldType == typeof(bool?))
                 {
                     // Add command only if value is true
                     if ((bool?)prop.GetValue(this) == true)
@@ -143,22 +143,22 @@ namespace Assets._ExtendedPrinter.Scripts.SlicingService
                     commandBuilder.Append(CLICommand.GetCommand());
                     commandBuilder.Append(" ");
 
-                    if (prop.PropertyType == typeof(float?))
+                    if (prop.FieldType == typeof(float?))
                     {
                         commandBuilder.Append(((float)prop.GetValue(this)).ToString("F", CultureInfo.InvariantCulture));
                         commandBuilder.Append(" ");
                     }
-                    else if (prop.PropertyType == typeof(string))
+                    else if (prop.FieldType == typeof(string))
                     {
                         commandBuilder.Append((string)prop.GetValue(this));
                         commandBuilder.Append(" ");
                     }
-                    else if (prop.PropertyType == typeof(int?))
+                    else if (prop.FieldType == typeof(int?))
                     {
                         commandBuilder.Append(((int)prop.GetValue(this)).ToString());
                         commandBuilder.Append(" ");
                     }
-                    else if (prop.PropertyType == typeof(SerializableVector2))
+                    else if (prop.FieldType == typeof(SerializableVector2))
                     {
                         float x, y;
                         var tmp = (SerializableVector2)prop.GetValue(this);
@@ -170,7 +170,7 @@ namespace Assets._ExtendedPrinter.Scripts.SlicingService
                         commandBuilder.Append(" ");
 
                     }
-                    else if (prop.PropertyType == typeof(SerializableVector3))
+                    else if (prop.FieldType == typeof(SerializableVector3))
                     {
                         float x, y, z;
                         var tmp = (SerializableVector3)prop.GetValue(this);
