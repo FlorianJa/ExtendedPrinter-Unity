@@ -1,5 +1,32 @@
 {
   "dependencies": {
+    "com.microsoft.mixedreality.toolkit.foundation": {
+      "version": "2.5.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.microsoft.mixedreality.toolkit.standardassets": "2.5.1"
+      },
+      "url": "https://pkgs.dev.azure.com/aipmr/MixedReality-Unity-Packages/_packaging/Unity-packages/npm/registry"
+    },
+    "com.microsoft.mixedreality.toolkit.standardassets": {
+      "version": "2.5.1",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.textmeshpro": "2.1.1"
+      },
+      "url": "https://pkgs.dev.azure.com/aipmr/MixedReality-Unity-Packages/_packaging/Unity-packages/npm/registry"
+    },
+    "com.microsoft.mixedreality.toolkit.tools": {
+      "version": "2.5.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.microsoft.mixedreality.toolkit.foundation": "2.5.1"
+      },
+      "url": "https://pkgs.dev.azure.com/aipmr/MixedReality-Unity-Packages/_packaging/Unity-packages/npm/registry"
+    },
     "com.unity.collab-proxy": {
       "version": "1.2.16",
       "depth": 0,
@@ -65,6 +92,15 @@
         "com.unity.modules.ui": "1.0.0",
         "com.unity.modules.imgui": "1.0.0"
       }
+    },
+    "com.unity.xr.windowsmr.metro": {
+      "version": "4.2.3",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.ugui": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",
