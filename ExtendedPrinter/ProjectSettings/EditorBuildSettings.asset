@@ -8,4 +8,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_ExtendedPrinter/Scenes/main.unity
     guid: 7a2e8f6acd6fc2e4b85be2341ee437c3
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 91d454f1224707343a693eabeb9fe98e,
+      type: 2}
+    com.unity.localization.settings: {fileID: 11400000, guid: 1156fb0d3a1754f42b565a8865e30343,
+      type: 2}
