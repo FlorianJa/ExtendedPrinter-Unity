@@ -392,7 +392,7 @@ GameObject:
   - component: {fileID: 5290921561969860705}
   - component: {fileID: 4567265048329687792}
   m_Layer: 0
-  m_Name: ScrollViewItem 1
+  m_Name: ScrollViewItem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1057,7 +1057,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 1
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: -0.0022691963, z: -0.031214677, w: 0}
+  m_margin: {x: -0.0062692408, y: -0.0022691963, z: -0.06470723, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0

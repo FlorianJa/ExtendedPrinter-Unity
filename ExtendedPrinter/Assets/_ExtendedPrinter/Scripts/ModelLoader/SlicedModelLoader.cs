@@ -40,6 +40,8 @@ namespace Assets._ExtendedPrinter.Scripts.ModelLoader
         /// <param name="Uri">URL of the model to download.</param>
         public async void LoadObjTest(Uri Uri)
         {
+            ClearParent();
+
             var fileName = Uri.Segments[Uri.Segments.Length - 1];
             await DownloadFileAsync(Uri, Path.Combine(Application.persistentDataPath, fileName + ".zip"));
             var files = await Unzip(Path.Combine(Application.persistentDataPath, fileName + ".zip"));
@@ -68,6 +70,14 @@ namespace Assets._ExtendedPrinter.Scripts.ModelLoader
             foreach (var renderer in renderers)
             {
                 renderer.material = material;
+            }
+        }
+
+        private void ClearParent()
+        {
+            while (parent.childCount > 0)
+            {
+                DestroyImmediate(parent.GetChild(0).gameObject);
             }
         }
 

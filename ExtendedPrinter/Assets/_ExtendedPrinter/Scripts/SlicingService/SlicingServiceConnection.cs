@@ -60,6 +60,17 @@ namespace Assets._ExtendedPrinter.Scripts.SlicingService
                 WebSocketSend(cliCommand);
             }
         }
+
+        public void SliceModelWithDefaultParameters(string modelName)
+        {   
+            var cliCommand = PrusaSlicerCLICommands.Default;
+            cliCommand.File = modelName;
+            cliCommand.ExportGCode = true;
+            cliCommand.GcodeComments = true;
+
+            WebSocketSend(cliCommand);
+        }
+
         /// <summary>
         /// Starts a slicing process with the given commands
         /// </summary>
