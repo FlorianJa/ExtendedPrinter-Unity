@@ -23,6 +23,18 @@ MonoBehaviour:
     m_Key: LOAD_BUTTON_LABEL
     m_Metadata:
       m_Items: []
+  - m_Id: 286810585112576
+    m_Key: MODEL_SELECTION
+    m_Metadata:
+      m_Items: []
+  - m_Id: 287295933194240
+    m_Key: FOLLOW_ME
+    m_Metadata:
+      m_Items: []
+  - m_Id: 287531711799296
+    m_Key: CLOSE
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
