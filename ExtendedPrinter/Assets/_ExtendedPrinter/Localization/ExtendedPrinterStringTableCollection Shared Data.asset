@@ -14,7 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_TableCollectionName: ExtendedPrinterStringTableCollection
   m_TableCollectionNameGuidString: f65eb5c43f5180348aae246ad93e551f
-  m_Entries: []
+  m_Entries:
+  - m_Id: 7401227624448
+    m_Key: LOAD_BUTTON
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7610456285184
+    m_Key: LOAD_BUTTON_LABEL
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
