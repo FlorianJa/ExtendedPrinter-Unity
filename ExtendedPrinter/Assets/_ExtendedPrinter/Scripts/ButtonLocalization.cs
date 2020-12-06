@@ -18,31 +18,28 @@ public class ButtonLocalization : MonoBehaviour
 
     void OnEnable()
     {
-        if(stringRefButton == null)
+        if(stringRefButton != null && textMeshButton != null)
         {
-            throw new ArgumentNullException(nameof(stringRefButton));
-        }
-        if (textMeshButton == null)
-        {
-            throw new ArgumentNullException(nameof(textMeshButton));
-        }
-        if (stringRefLabel == null)
-        {
-            throw new ArgumentNullException(nameof(stringRefLabel));
-        }
-        if (textMeshLabel == null)
-        {
-            throw new ArgumentNullException(nameof(textMeshLabel));
+            stringRefButton.StringChanged += UpdateString(textMeshButton);
         }
 
-        stringRefButton.StringChanged += UpdateString(textMeshButton);
-        stringRefLabel.StringChanged += UpdateString(textMeshLabel);
+        if (stringRefLabel != null && textMeshLabel != null)
+        {
+            stringRefLabel.StringChanged += UpdateString(textMeshLabel);
+        }
+
     }
 
     void OnDisable()
     {
-        stringRefButton.StringChanged -= UpdateString(textMeshButton);
-        stringRefLabel.StringChanged -= UpdateString(textMeshLabel);
+        if (stringRefButton != null && textMeshButton != null)
+        {
+            stringRefButton.StringChanged -= UpdateString(textMeshButton);
+        }
+        if (stringRefLabel != null && textMeshLabel != null)
+        {
+            stringRefLabel.StringChanged -= UpdateString(textMeshLabel);
+        }
     }
 
     LocalizedString.ChangeHandler UpdateString(TextMeshPro textMesh)
