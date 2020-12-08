@@ -39,7 +39,7 @@ namespace OctoPrintLib.Operations
 
                 try
                 {
-                    var str = "http://" + server.DomainNmaeOrIp + "/downloads/files/" + remoteLocation;
+                    var str = "http://" + server.DomainNmaeOrIp + "/downloads/files/local/" + remoteLocation;
                     await webclient.DownloadFileTaskAsync(new Uri(str), localDownloadPath);
                     //SetDownloadedFileLocalInformation(downloadPath);
                 }
@@ -95,21 +95,21 @@ namespace OctoPrintLib.Operations
         /// <summary>
         /// Retrieve a specific file’s information
         /// </summary>
-        /// <param name="path"> the path of the file including its name and extension</param>
+        /// <param name="fileName"> the path of the file including its name and extension</param>
         /// <returns></returns>
-        public async Task<OctoprintFile> GetFileInfoAsync(string location, string path)
+        public async Task<OctoprintFile> GetFileInfoAsync(string fileName, string location = "local")
         {
             string jobInfo = "";
             try
             {
-                jobInfo = await GetAsync("api/files/" + location + "/" + path);
+                jobInfo = await GetAsync("api/files/" + location + "/" + fileName);
             }
             catch (WebException e)
             {
                 switch (((HttpWebResponse)e.Response).StatusCode)
                 {
                     case HttpStatusCode.NotFound:
-                        Debug.WriteLine("searched for a file that wasn't there at " + path);
+                        Debug.WriteLine("searched for a file that wasn't there at " + fileName);
                         return null;
                 }
             }

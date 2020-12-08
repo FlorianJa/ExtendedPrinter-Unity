@@ -447,6 +447,49 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1251404691
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1251404693}
+  - component: {fileID: 1251404692}
+  m_Layer: 0
+  m_Name: UnityThreadController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1251404692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1251404691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b53994045cb74444f9951e09893e608e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1251404693
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1251404691}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1652210931
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -473,10 +516,10 @@ PrefabInstance:
     - target: {fileID: 1024970117, guid: 19a9149d9674dc6438e7b8c88d570a3b, type: 3}
       propertyPath: ModelSelected.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1891034347}
+      objectReference: {fileID: 1766071992}
     - target: {fileID: 1024970117, guid: 19a9149d9674dc6438e7b8c88d570a3b, type: 3}
       propertyPath: ModelSelected.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SliceModelWithDefaultParameters
+      value: LoadSTLAsync
       objectReference: {fileID: 0}
     - target: {fileID: 1024970117, guid: 19a9149d9674dc6438e7b8c88d570a3b, type: 3}
       propertyPath: ModelSelected.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -595,6 +638,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1766071990}
+  - component: {fileID: 1766071991}
+  - component: {fileID: 1766071992}
   m_Layer: 0
   m_Name: STLpreview
   m_TagString: Untagged
@@ -616,6 +661,32 @@ Transform:
   m_Father: {fileID: 1164063717}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1766071991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1766071989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6b1468d2d7209943aa407ec14cbaae2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1766071992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1766071989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52451972d7d50a749b21351b7c22cf80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  octoprinController: {fileID: 1891034349}
+  importer: {fileID: 1766071991}
 --- !u!1 &1891034344
 GameObject:
   m_ObjectHideFlags: 0
@@ -625,7 +696,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1891034345}
-  - component: {fileID: 1891034346}
   - component: {fileID: 1891034347}
   - component: {fileID: 1891034348}
   - component: {fileID: 1891034349}
@@ -650,18 +720,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1891034346
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1891034344}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b53994045cb74444f9951e09893e608e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1891034347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -712,7 +770,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DomainNameOrIP: localhost
-  APIKey: 0C91C68A5F814FFC977730DDC4424427
+  APIKey: 01788837B3A84EF78D7E034C7ABE8725
   FileAdded:
     m_PersistentCalls:
       m_Calls: []

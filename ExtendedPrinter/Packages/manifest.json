@@ -10,6 +10,7 @@
     }
   ],
   "dependencies": {
+	"co.parabox.stl":"https://github.com/karl-/pb_Stl.git",
     "com.microsoft.mixedreality.toolkit.foundation": "2.5.1",
     "com.microsoft.mixedreality.toolkit.tools": "2.5.1",
 	"com.microsoft.mixedreality.toolkit.examples": "2.5.1",

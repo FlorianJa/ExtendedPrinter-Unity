@@ -1,6 +1,7 @@
 ﻿using OctoPrintLib;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
@@ -55,5 +56,21 @@ public class OctoprinController : MonoBehaviour
     public async Task<FolderInformation> FetchAllFilesAsync()
     {
         return await octoprintServer.FileOperations.GetFileInfosInFolderAsync("local", "");
+    }
+    
+    public async Task<bool> DownloadFileAsync(string fileName)
+    {
+        var fileinfo = await octoprintServer.FileOperations.GetFileInfoAsync(fileName);
+
+        if(fileinfo != null)
+        {
+            if(!Directory.Exists(Path.Combine(Application.persistentDataPath, "Downloads")))
+            {
+                Directory.CreateDirectory(Path.Combine(Application.persistentDataPath, "Downloads"));
+            }
+
+            return await octoprintServer.FileOperations.DownloadFileAsync(fileName, Path.Combine(Application.persistentDataPath, "Downloads",fileName));
+        }
+        return false;
     }
 }

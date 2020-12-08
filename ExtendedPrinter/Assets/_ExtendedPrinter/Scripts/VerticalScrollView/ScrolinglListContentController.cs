@@ -67,19 +67,21 @@ public class ScrolinglListContentController : MonoBehaviour
 
     private async void Refresh()
     {
-
         var tmp = await octoprintConnector.FetchAllFilesAsync();
-        var files = tmp.files.OrderBy(x => x.name);
 
-        ClearContent();
-        foreach (var file in files)
+        if (tmp.files.Count > 0)
         {
-            var listItem = Instantiate(ListItemPrefab);
-            var bch = listItem.GetComponent<ButtonConfigHelper>();
-            bch.MainLabelText = file.name;
-            AddContent(listItem.GetComponent<Interactable>());
-        }
+            var files = tmp.files.OrderBy(x => x.name);
 
+            ClearContent();
+            foreach (var file in files)
+            {
+                var listItem = Instantiate(ListItemPrefab);
+                var bch = listItem.GetComponent<ButtonConfigHelper>();
+                bch.MainLabelText = file.name;
+                AddContent(listItem.GetComponent<Interactable>());
+            }
+        }
     }
 
 
