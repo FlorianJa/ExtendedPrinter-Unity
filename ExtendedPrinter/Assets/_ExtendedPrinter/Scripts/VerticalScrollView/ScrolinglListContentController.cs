@@ -27,14 +27,17 @@ public class ScrolinglListContentController : MonoBehaviour
 
     private void OnEnable()
     {
-        octoprintConnector.FileAdded.AddListener(Refresh);
-        if(octoprintConnector.WebsocketConnected)
+        if (octoprintConnector != null)
         {
-            Refresh();
-        }
-        else
-        {
-            octoprintConnector.WebsocketConnectedEvent.AddListener(Refresh);
+            octoprintConnector.FileAdded.AddListener(Refresh);
+            if (octoprintConnector.WebsocketConnected)
+            {
+                Refresh();
+            }
+            else
+            {
+                octoprintConnector.WebsocketConnectedEvent.AddListener(Refresh);
+            }
         }
     }
 
@@ -76,10 +79,13 @@ public class ScrolinglListContentController : MonoBehaviour
             ClearContent();
             foreach (var file in files)
             {
-                var listItem = Instantiate(ListItemPrefab);
-                var bch = listItem.GetComponent<ButtonConfigHelper>();
-                bch.MainLabelText = file.name;
-                AddContent(listItem.GetComponent<Interactable>());
+                if (file.display.EndsWith(".stl"))
+                {
+                    var listItem = Instantiate(ListItemPrefab);
+                    var bch = listItem.GetComponent<ButtonConfigHelper>();
+                    bch.MainLabelText = file.name;
+                    AddContent(listItem.GetComponent<Interactable>());
+                }
             }
         }
     }
