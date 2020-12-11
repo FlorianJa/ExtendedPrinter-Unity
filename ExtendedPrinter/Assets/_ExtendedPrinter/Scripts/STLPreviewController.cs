@@ -28,7 +28,7 @@ public class STLPreviewController : MonoBehaviour
 
         if (importer != null)
         {
-            importer.Import(_fileName, this.transform);
+            await importer.ImportAsync(_fileName, this.transform);
         }
     }
 }

@@ -72,11 +72,12 @@ namespace OctoPrintLib.Operations
             string jobInfo = "";
             try
             {
-                var url = "api/files/" + location;
-                if(path != string.Empty)
-                {
-                    url += "/" + path;
-                }
+                //var url = "api/files/" + location;
+                //if(path != string.Empty)
+                //{
+                //    url += "/" + path;
+                //}
+                var url = "api/files?force=true";
 
                 jobInfo = await GetAsync(url);
             }
