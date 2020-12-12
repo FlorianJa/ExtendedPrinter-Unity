@@ -7,4 +7,13 @@ namespace Assets._ExtendedPrinter.Scripts.Helper
 
     [System.Serializable]
     public class IntEvent : UnityEvent<int> { }
+
+    [System.Serializable]
+    public class DialogClosed : UnityEvent<DialogResult> { }
+
+    public enum DialogResult
+    {
+        OK,
+        Canceled
+    }
 }

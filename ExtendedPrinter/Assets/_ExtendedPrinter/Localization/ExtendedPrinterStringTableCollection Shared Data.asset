@@ -35,6 +35,26 @@ MonoBehaviour:
     m_Key: CLOSE
     m_Metadata:
       m_Items: []
+  - m_Id: 2226972546244608
+    m_Key: SETTINGS_BUTTON
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2227139622150144
+    m_Key: SETTINGS_LABEL
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2496978030895104
+    m_Key: CANCEL
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2497505204576256
+    m_Key: SAVE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2510576828489728
+    m_Key: SETTINGS
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

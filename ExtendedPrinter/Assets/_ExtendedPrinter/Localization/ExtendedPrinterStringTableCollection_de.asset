@@ -38,5 +38,27 @@ MonoBehaviour:
     m_Localized: "Schlie\xDFen"
     m_Metadata:
       m_Items: []
+  - m_Id: 2226972546244608
+    m_Localized: Einstellungen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2227139622150144
+    m_Localized: Sag "Einstellungen"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2496978030895104
+    m_Localized: Abbruch
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2497505204576256
+    m_Localized: 'Speichern
+
+'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2510576828489728
+    m_Localized: Einstellungen
+    m_Metadata:
+      m_Items: []
   references:
     version: 1
