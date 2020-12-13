@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 using Assets._ExtendedPrinter.Scripts.Helper;
+using UnityEngine.Events;
 
 namespace Assets._ExtendedPrinter.Scripts.ModelLoader
 {
@@ -33,6 +34,9 @@ namespace Assets._ExtendedPrinter.Scripts.ModelLoader
         [SerializeField]
         [Tooltip("List the names of componets which should be displayed. useFilter need to be true.")]
         public List<string> FilterList;
+
+
+        public UnityEvent ModelLoaded;
 
         /// <summary>
         /// Downloads the model as zip from the slicing servive server.
@@ -73,6 +77,8 @@ namespace Assets._ExtendedPrinter.Scripts.ModelLoader
                 renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
                 renderer.receiveShadows = false;
             }
+
+            ModelLoaded?.Invoke();
         }
 
         private void ClearParent()

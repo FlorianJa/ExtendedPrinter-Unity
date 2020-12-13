@@ -36,4 +36,9 @@ public class STLPreviewController : MonoBehaviour
             await importer.ImportAsync(_fileName, this.transform);
         }
     }
+
+    public void RemoveSTLPreview()
+    {
+        Destroy(transform.GetChild(0).gameObject);
+    }
 }
