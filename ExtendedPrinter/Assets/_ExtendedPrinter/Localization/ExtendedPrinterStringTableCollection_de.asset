@@ -60,5 +60,13 @@ MonoBehaviour:
     m_Localized: Einstellungen
     m_Metadata:
       m_Items: []
+  - m_Id: 2827750503817216
+    m_Localized: Slicen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2827909518270464
+    m_Localized: Sag "Slicen"
+    m_Metadata:
+      m_Items: []
   references:
     version: 1

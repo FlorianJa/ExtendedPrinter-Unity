@@ -70,6 +70,8 @@ namespace Assets._ExtendedPrinter.Scripts.ModelLoader
             foreach (var renderer in renderers)
             {
                 renderer.material = material;
+                renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                renderer.receiveShadows = false;
             }
         }
 

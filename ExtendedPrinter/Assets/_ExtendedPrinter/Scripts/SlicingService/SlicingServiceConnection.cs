@@ -71,6 +71,17 @@ namespace Assets._ExtendedPrinter.Scripts.SlicingService
             WebSocketSend(cliCommand);
         }
 
+        public void SliceModel(string modelName, Vector2 center)
+        {
+            var cliCommand = PrusaSlicerCLICommands.Default;
+            cliCommand.File = modelName;
+            cliCommand.ExportGCode = true;
+            cliCommand.GcodeComments = true;
+            cliCommand.Center = center;
+
+            WebSocketSend(cliCommand);
+        }
+
         /// <summary>
         /// Starts a slicing process with the given commands
         /// </summary>

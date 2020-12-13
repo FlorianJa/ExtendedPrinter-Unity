@@ -297,178 +297,179 @@ namespace Dummiesman
             Dictionary<string, OBJObjectBuilder> builderDict = new Dictionary<string, OBJObjectBuilder>();
             await Task.Run(() =>
             {
-                var reader = new StreamReader(input);
-                //var reader = new StringReader(inputReader.ReadToEnd());
-
-                OBJObjectBuilder currentBuilder = null;
-                string currentMaterial = "default";
-
-                //lists for face data
-                //prevents excess GC
-                List<int> vertexIndices = new List<int>();
-                List<int> normalIndices = new List<int>();
-                List<int> uvIndices = new List<int>();
-
-                //helper func
-                Action<string> setCurrentObjectFunc = (string objectName) =>
+                using (var reader = new StreamReader(input))
                 {
-                    if (!builderDict.TryGetValue(objectName, out currentBuilder))
+                    //var reader = new StringReader(inputReader.ReadToEnd());
+
+                    OBJObjectBuilder currentBuilder = null;
+                    string currentMaterial = "default";
+
+                    //lists for face data
+                    //prevents excess GC
+                    List<int> vertexIndices = new List<int>();
+                    List<int> normalIndices = new List<int>();
+                    List<int> uvIndices = new List<int>();
+
+                    //helper func
+                    Action<string> setCurrentObjectFunc = (string objectName) =>
                     {
-                        currentBuilder = new OBJObjectBuilder(objectName, this);
-                        builderDict[objectName] = currentBuilder;
-                    }
-                };
-
-                //create default object
-                setCurrentObjectFunc.Invoke("default");
-
-                //var buffer = new DoubleBuffer(reader, 256 * 1024);
-                var buffer = new CharWordReader(reader, 4 * 1024);
-
-                //do the reading
-                while (true)
-                {
-                    buffer.SkipWhitespaces();
-
-                    if (buffer.endReached == true)
-                    {
-                        break;
-                    }
-
-                    buffer.ReadUntilWhiteSpace();
-
-                    //comment or blank
-                    if (buffer.Is("#"))
-                    {
-                        buffer.SkipUntilNewLine();
-                        continue;
-                    }
-
-                    if (Materials == null && buffer.Is("mtllib"))
-                    {
-                        buffer.SkipWhitespaces();
-                        buffer.ReadUntilNewLine();
-                        string mtlLibPath = buffer.GetString();
-                        LoadMaterialLibrary(mtlLibPath);
-                        continue;
-                    }
-
-                    if (buffer.Is("v"))
-                    {
-                        Vertices.Add(buffer.ReadVector());
-                        continue;
-                    }
-
-                    //normal
-                    if (buffer.Is("vn"))
-                    {
-                        Normals.Add(buffer.ReadVector());
-                        continue;
-                    }
-
-                    //uv
-                    if (buffer.Is("vt"))
-                    {
-                        UVs.Add(buffer.ReadVector());
-                        continue;
-                    }
-
-                    //new material
-                    if (buffer.Is("usemtl"))
-                    {
-                        buffer.SkipWhitespaces();
-                        buffer.ReadUntilNewLine();
-                        string materialName = buffer.GetString();
-                        currentMaterial = materialName;
-
-                        if (SplitMode == SplitMode.Material)
+                        if (!builderDict.TryGetValue(objectName, out currentBuilder))
                         {
-                            setCurrentObjectFunc.Invoke(materialName);
+                            currentBuilder = new OBJObjectBuilder(objectName, this);
+                            builderDict[objectName] = currentBuilder;
                         }
-                        continue;
-                    }
+                    };
 
-                    //new object
-                    if ((buffer.Is("o") || buffer.Is("g")) && SplitMode == SplitMode.Object)
-                    {
-                        buffer.ReadUntilNewLine();
-                        string objectName = buffer.GetString(1);
-                        setCurrentObjectFunc.Invoke(objectName);
-                        continue;
-                    }
+                    //create default object
+                    setCurrentObjectFunc.Invoke("default");
 
-                    //face data (the fun part)
-                    if (buffer.Is("f"))
+                    //var buffer = new DoubleBuffer(reader, 256 * 1024);
+                    var buffer = new CharWordReader(reader, 4 * 1024);
+
+                    //do the reading
+                    while (true)
                     {
-                        //loop through indices
-                        while (true)
+                        buffer.SkipWhitespaces();
+
+                        if (buffer.endReached == true)
                         {
-                            bool newLinePassed;
-                            buffer.SkipWhitespaces(out newLinePassed);
-                            if (newLinePassed == true)
+                            break;
+                        }
+
+                        buffer.ReadUntilWhiteSpace();
+
+                        //comment or blank
+                        if (buffer.Is("#"))
+                        {
+                            buffer.SkipUntilNewLine();
+                            continue;
+                        }
+
+                        if (Materials == null && buffer.Is("mtllib"))
+                        {
+                            buffer.SkipWhitespaces();
+                            buffer.ReadUntilNewLine();
+                            string mtlLibPath = buffer.GetString();
+                            LoadMaterialLibrary(mtlLibPath);
+                            continue;
+                        }
+
+                        if (buffer.Is("v"))
+                        {
+                            Vertices.Add(buffer.ReadVector());
+                            continue;
+                        }
+
+                        //normal
+                        if (buffer.Is("vn"))
+                        {
+                            Normals.Add(buffer.ReadVector());
+                            continue;
+                        }
+
+                        //uv
+                        if (buffer.Is("vt"))
+                        {
+                            UVs.Add(buffer.ReadVector());
+                            continue;
+                        }
+
+                        //new material
+                        if (buffer.Is("usemtl"))
+                        {
+                            buffer.SkipWhitespaces();
+                            buffer.ReadUntilNewLine();
+                            string materialName = buffer.GetString();
+                            currentMaterial = materialName;
+
+                            if (SplitMode == SplitMode.Material)
                             {
-                                break;
+                                setCurrentObjectFunc.Invoke(materialName);
                             }
+                            continue;
+                        }
 
-                            int vertexIndex = int.MinValue;
-                            int normalIndex = int.MinValue;
-                            int uvIndex = int.MinValue;
+                        //new object
+                        if ((buffer.Is("o") || buffer.Is("g")) && SplitMode == SplitMode.Object)
+                        {
+                            buffer.ReadUntilNewLine();
+                            string objectName = buffer.GetString(1);
+                            setCurrentObjectFunc.Invoke(objectName);
+                            continue;
+                        }
 
-                            vertexIndex = buffer.ReadInt();
-                            if (buffer.currentChar == '/')
+                        //face data (the fun part)
+                        if (buffer.Is("f"))
+                        {
+                            //loop through indices
+                            while (true)
                             {
-                                buffer.MoveNext();
-                                if (buffer.currentChar != '/')
+                                bool newLinePassed;
+                                buffer.SkipWhitespaces(out newLinePassed);
+                                if (newLinePassed == true)
                                 {
-                                    uvIndex = buffer.ReadInt();
+                                    break;
                                 }
+
+                                int vertexIndex = int.MinValue;
+                                int normalIndex = int.MinValue;
+                                int uvIndex = int.MinValue;
+
+                                vertexIndex = buffer.ReadInt();
                                 if (buffer.currentChar == '/')
                                 {
                                     buffer.MoveNext();
-                                    normalIndex = buffer.ReadInt();
+                                    if (buffer.currentChar != '/')
+                                    {
+                                        uvIndex = buffer.ReadInt();
+                                    }
+                                    if (buffer.currentChar == '/')
+                                    {
+                                        buffer.MoveNext();
+                                        normalIndex = buffer.ReadInt();
+                                    }
                                 }
+
+                                //"postprocess" indices
+                                if (vertexIndex > int.MinValue)
+                                {
+                                    if (vertexIndex < 0)
+                                        vertexIndex = Vertices.Count - vertexIndex;
+                                    vertexIndex--;
+                                }
+                                if (normalIndex > int.MinValue)
+                                {
+                                    if (normalIndex < 0)
+                                        normalIndex = Normals.Count - normalIndex;
+                                    normalIndex--;
+                                }
+                                if (uvIndex > int.MinValue)
+                                {
+                                    if (uvIndex < 0)
+                                        uvIndex = UVs.Count - uvIndex;
+                                    uvIndex--;
+                                }
+
+                                //set array values
+                                vertexIndices.Add(vertexIndex);
+                                normalIndices.Add(normalIndex);
+                                uvIndices.Add(uvIndex);
                             }
 
-                            //"postprocess" indices
-                            if (vertexIndex > int.MinValue)
-                            {
-                                if (vertexIndex < 0)
-                                    vertexIndex = Vertices.Count - vertexIndex;
-                                vertexIndex--;
-                            }
-                            if (normalIndex > int.MinValue)
-                            {
-                                if (normalIndex < 0)
-                                    normalIndex = Normals.Count - normalIndex;
-                                normalIndex--;
-                            }
-                            if (uvIndex > int.MinValue)
-                            {
-                                if (uvIndex < 0)
-                                    uvIndex = UVs.Count - uvIndex;
-                                uvIndex--;
-                            }
+                            //push to builder
+                            currentBuilder.PushFace(currentMaterial, vertexIndices, normalIndices, uvIndices);
 
-                            //set array values
-                            vertexIndices.Add(vertexIndex);
-                            normalIndices.Add(normalIndex);
-                            uvIndices.Add(uvIndex);
+                            //clear lists
+                            vertexIndices.Clear();
+                            normalIndices.Clear();
+                            uvIndices.Clear();
+
+                            continue;
                         }
 
-                        //push to builder
-                        currentBuilder.PushFace(currentMaterial, vertexIndices, normalIndices, uvIndices);
-
-                        //clear lists
-                        vertexIndices.Clear();
-                        normalIndices.Clear();
-                        uvIndices.Clear();
-
-                        continue;
+                        buffer.SkipUntilNewLine();
                     }
-
-                    buffer.SkipUntilNewLine();
                 }
-
             });
 
             //finally, put it all together

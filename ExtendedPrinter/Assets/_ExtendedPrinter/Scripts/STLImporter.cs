@@ -1,4 +1,5 @@
-﻿using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
+﻿using Assets._ExtendedPrinter.Scripts.Helper;
+using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
 using Parabox.Stl;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,6 +14,9 @@ public class STLImporter : MonoBehaviour
     public Material DefaultMaterial;
 
     public GameObject STLContainer;
+
+    public StringEvent ModelImported;
+
 
     public async Task<GameObject> ImportAsync(string stlPath, Transform parent, bool smooth = true)
     {
@@ -34,6 +38,9 @@ public class STLImporter : MonoBehaviour
             foreach (var mesh in meshes)
             {
                 var tmp = new GameObject();
+                tmp.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
+                tmp.transform.localRotation = new Quaternion(0, 0.7071068f, 0, 0.7071068f);//rotate object by 90 degree on y axis
+                tmp.transform.SetParent(stlContainer.transform);
                 tmp.AddComponent<MeshFilter>().mesh = mesh;
                 var renderer = tmp.AddComponent<MeshRenderer>();
                 if(DefaultMaterial != null)
@@ -44,8 +51,7 @@ public class STLImporter : MonoBehaviour
                 max.Add(renderer.bounds.max);
                 Debug.Log(renderer.bounds.center);
                 Debug.Log( renderer.bounds.size);
-                tmp.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
-                tmp.transform.SetParent(stlContainer.transform);
+                
             }
 
             var absMin = new Vector3();
@@ -59,14 +65,14 @@ public class STLImporter : MonoBehaviour
             absMax.z = max.Max(x => x.z);
 
             var size = new Vector3();
-            size.x = (absMax.x - absMin.x) / 1000f;
-            size.y = (absMax.y - absMin.y) / 1000f;
-            size.z = (absMax.z - absMin.z) / 1000f;
+            size.x = (absMax.x - absMin.x) ;
+            size.y = (absMax.y - absMin.y) ;
+            size.z = (absMax.z - absMin.z) ;
 
             var center = new Vector3();
-            center.x = (absMin.x + (absMax.x - absMin.x) / 2f) / 1000f;
-            center.y = (absMin.y + (absMax.y - absMin.y) / 2f) / 1000f;
-            center.z = (absMin.z + (absMax.z - absMin.z) / 2f) / 1000f;
+            center.x = (absMin.x + (absMax.x - absMin.x) / 2f) ;
+            center.y = (absMin.y + (absMax.y - absMin.y) / 2f) ;
+            center.z = (absMin.z + (absMax.z - absMin.z) / 2f) ;
 
             var collider = stlContainer.GetComponent<BoxCollider>();
             collider.center += new Vector3(center.x, 0, center.z);
@@ -78,6 +84,7 @@ public class STLImporter : MonoBehaviour
                 child.localPosition += new Vector3(0, -center.y, 0);
             }
 
+            ModelImported?.Invoke(Path.GetFileName(stlPath));
             return stlContainer;
         }
         return null;

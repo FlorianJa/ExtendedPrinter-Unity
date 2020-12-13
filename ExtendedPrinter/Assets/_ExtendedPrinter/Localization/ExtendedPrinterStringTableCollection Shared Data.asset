@@ -55,6 +55,14 @@ MonoBehaviour:
     m_Key: SETTINGS
     m_Metadata:
       m_Items: []
+  - m_Id: 2827750503817216
+    m_Key: SLICE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2827909518270464
+    m_Key: SaySlice
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

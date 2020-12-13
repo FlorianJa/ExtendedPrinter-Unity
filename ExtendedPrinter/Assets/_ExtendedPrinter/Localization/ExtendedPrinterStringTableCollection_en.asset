@@ -58,5 +58,13 @@ MonoBehaviour:
     m_Localized: Settings
     m_Metadata:
       m_Items: []
+  - m_Id: 2827750503817216
+    m_Localized: Slice
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2827909518270464
+    m_Localized: Say "Slice"
+    m_Metadata:
+      m_Items: []
   references:
     version: 1
