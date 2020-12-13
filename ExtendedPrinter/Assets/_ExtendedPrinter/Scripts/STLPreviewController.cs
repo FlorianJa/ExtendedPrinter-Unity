@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using Assets._ExtendedPrinter.Scripts.Helper;
+using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -11,6 +13,9 @@ public class STLPreviewController : MonoBehaviour
 
     [SerializeField]
     private STLImporter importer;
+
+    [SerializeField]
+    private BoundsControllVisuals boundsControlVisuals;
 
     public async void LoadSTLAsync(string fileName)
     {

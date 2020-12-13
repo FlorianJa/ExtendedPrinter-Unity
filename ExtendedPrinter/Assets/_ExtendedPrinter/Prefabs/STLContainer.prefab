@@ -1,0 +1,210 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1286488480501780488
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8343797251771965021}
+  - component: {fileID: 6958982506088671538}
+  - component: {fileID: 4218083238429431841}
+  - component: {fileID: 1862712812665986655}
+  - component: {fileID: 7663590311373392690}
+  - component: {fileID: 3566607069352355565}
+  - component: {fileID: 1729958404425518820}
+  - component: {fileID: 4039909871522547659}
+  m_Layer: 0
+  m_Name: STLContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8343797251771965021
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1286488480501780488}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &6958982506088671538
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1286488480501780488}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4218083238429431841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1286488480501780488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a98de877dee5fc341b4eb59dfdab266c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoConstraintSelection: 0
+  selectedConstraints:
+  - {fileID: 1729958404425518820}
+  - {fileID: 4039909871522547659}
+--- !u!114 &1862712812665986655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1286488480501780488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8200a044a5affb843ba856b902d9fd3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetObject: {fileID: 1286488480501780488}
+  boundsOverride: {fileID: 6958982506088671538}
+  boundsCalculationMethod: 0
+  activation: 0
+  flattenAxis: 0
+  boxPadding: {x: 0, y: 0, z: 0}
+  boxDisplayConfiguration: {fileID: 11400000, guid: bff645e747342874f91767ef6f4b462d,
+    type: 2}
+  linksConfiguration: {fileID: 11400000, guid: 2e0d1118bed8dd541840ca431213e2cd, type: 2}
+  scaleHandlesConfiguration: {fileID: 11400000, guid: 55d6cef33d47a834aa04a8c07d82c79b,
+    type: 2}
+  rotationHandlesConfiguration: {fileID: 11400000, guid: dfb1d9019c18ea44d8c395f2285d23d7,
+    type: 2}
+  translationHandlesConfiguration: {fileID: 11400000, guid: 403b5402d4cd6b34a832772fe32a8bfb,
+    type: 2}
+  handleProximityEffectConfiguration: {fileID: 11400000, guid: 0e72769bdf62eef4da7b5893d1e3b0a9,
+    type: 2}
+  hideElementsInInspector: 1
+  smoothingActive: 0
+  rotateLerpTime: 0.001
+  scaleLerpTime: 0.001
+  translateLerpTime: 0.001
+  enableConstraints: 1
+  constraintsManager: {fileID: 4218083238429431841}
+  rotateStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  rotateStopped:
+    m_PersistentCalls:
+      m_Calls: []
+  scaleStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  scaleStopped:
+    m_PersistentCalls:
+      m_Calls: []
+  translateStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  translateStopped:
+    m_PersistentCalls:
+      m_Calls: []
+  elasticsManager: {fileID: 0}
+--- !u!114 &7663590311373392690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1286488480501780488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 181cd563a8349c34ea8978b0bc8d9c7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hostTransform: {fileID: 8343797251771965021}
+  manipulationType: 3
+  twoHandedManipulationType: 7
+  allowFarManipulation: 1
+  useForcesForNearManipulation: 0
+  oneHandRotationModeNear: 1
+  oneHandRotationModeFar: 1
+  releaseBehavior: 3
+  smoothingFar: 1
+  smoothingNear: 1
+  moveLerpTime: 0.001
+  rotateLerpTime: 0.001
+  scaleLerpTime: 0.001
+  enableConstraints: 1
+  constraintsManager: {fileID: 4218083238429431841}
+  elasticsManager: {fileID: 0}
+  onManipulationStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  onManipulationEnded:
+    m_PersistentCalls:
+      m_Calls: []
+  onHoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  onHoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &3566607069352355565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1286488480501780488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5afd5316c63705643b3daba5a6e923bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTetherWhenManipulating: 0
+  IsBoundsHandles: 0
+--- !u!114 &1729958404425518820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1286488480501780488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 149fa3ae453128b41940b5caa905f8ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handType: 3
+  proximityType: 3
+  constraintOnMovement: 2
+  useLocalSpaceForConstraint: 0
+--- !u!114 &4039909871522547659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1286488480501780488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 820f94d57893bf843a0cd6d93313fe6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handType: 3
+  proximityType: 3
+  scaleMinimum: 0.2
+  scaleMaximum: 2
+  relativeToInitialState: 1
