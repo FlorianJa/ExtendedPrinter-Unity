@@ -13,7 +13,7 @@ public class STLImporter : MonoBehaviour
 
     public Material DefaultMaterial;
 
-    public GameObject STLContainer;
+    public GameObject STLContainerPrefab;
 
     public StringEvent ModelImported;
 
@@ -27,7 +27,7 @@ public class STLImporter : MonoBehaviour
                 DestroyImmediate(parent.GetChild(0).gameObject);
             }
 
-            var stlContainer = Instantiate<GameObject>(STLContainer, this.transform);
+            var stlContainer = Instantiate<GameObject>(STLContainerPrefab, this.transform);
             //stlContainer.transform.SetParent(parent, false);
 
             var min = new List<Vector3>();
@@ -78,12 +78,13 @@ public class STLImporter : MonoBehaviour
             collider.center += new Vector3(center.x, 0, center.z);
             collider.size = size;
                         
-            stlContainer.transform.localPosition += new Vector3(0,center.y,0);
+            stlContainer.transform.localPosition += new Vector3(0.075f,center.y, 0.075f); //0.075 for x and z = center of build plate
             foreach (Transform child in stlContainer.transform)
             {
                 child.localPosition += new Vector3(0, -center.y, 0);
             }
 
+            stlContainer.GetComponent<BoundsControl>().enabled = true;
             ModelImported?.Invoke(Path.GetFileName(stlPath));
             return stlContainer;
         }

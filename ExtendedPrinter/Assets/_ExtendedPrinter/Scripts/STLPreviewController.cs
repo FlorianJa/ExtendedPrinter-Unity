@@ -9,7 +9,7 @@ public class STLPreviewController : MonoBehaviour
 {
 
     [SerializeField]
-    private OctoprinController octoprinController;
+    private OctoprintController octoprinController;
 
     [SerializeField]
     private STLImporter importer;

@@ -17,7 +17,7 @@ public class ScrolinglListContentController : MonoBehaviour
     private GridObjectCollection gridObjectCollection;
 
     [SerializeField]
-    private OctoprinController octoprintConnector;
+    private OctoprintController octoprintConnector;
 
     [SerializeField]
     private GameObject ListItemPrefab;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class OctoprinController : MonoBehaviour
+public class OctoprintController : MonoBehaviour
 {
     [SerializeField] private string DomainNameOrIP;
     [SerializeField] private string APIKey;
