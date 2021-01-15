@@ -71,7 +71,7 @@ namespace Assets._ExtendedPrinter.Scripts.SlicingService
             WebSocketSend(cliCommand);
         }
 
-        public void SliceModel(string modelName, Vector2 center, float scale, float rotation)
+        public void SliceModel(string modelName, Vector2 center, float scale, Vector3 rotation)
         {
             var cliCommand = PrusaSlicerCLICommands.Default;
             cliCommand.File = modelName;
@@ -79,7 +79,9 @@ namespace Assets._ExtendedPrinter.Scripts.SlicingService
             cliCommand.GcodeComments = true;
             cliCommand.Center = center;
             cliCommand.Scale = scale;
-            cliCommand.Rotate = rotation;
+            cliCommand.Rotate = rotation.z;
+            cliCommand.RotateX = rotation.x;
+            cliCommand.RotateY = rotation.y;
             WebSocketSend(cliCommand);
         }
 

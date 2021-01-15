@@ -36,7 +36,7 @@ public class SlicingUIController : MonoBehaviour
             var stlContainer = STLPreview.transform.GetChild(0);
             var center = new Vector2(stlContainer.localPosition.x * 1000, stlContainer.localPosition.z * 1000);
             var scale = stlContainer.localScale.x;
-            var rotation = -stlContainer.localRotation.eulerAngles.y;
+            var rotation = new Vector3(-stlContainer.localRotation.eulerAngles.x, -stlContainer.localRotation.eulerAngles.z, - stlContainer.localRotation.eulerAngles.y);
             slicingServiceConnection.SliceModel(_modelFileName,center,scale, rotation);
         }
     }
