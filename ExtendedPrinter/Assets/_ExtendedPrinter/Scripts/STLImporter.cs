@@ -78,7 +78,7 @@ public class STLImporter : MonoBehaviour
             collider.center += new Vector3(center.x, 0, center.z);
             collider.size = size;
                         
-            stlContainer.transform.localPosition += new Vector3(0.075f,center.y, 0.075f); //0.075 for x and z = center of build plate
+            stlContainer.transform.localPosition += new Vector3(0.085f,center.y, 0.085f); //0.085 for x and z = center of build plate
             foreach (Transform child in stlContainer.transform)
             {
                 child.localPosition += new Vector3(0, -center.y, 0);

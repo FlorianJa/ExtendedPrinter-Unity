@@ -9,7 +9,7 @@ public class STLPreviewController : MonoBehaviour
 {
 
     [SerializeField]
-    private OctoprintController octoprinController;
+    private OctoprintController octoprintController;
 
     [SerializeField]
     private STLImporter importer;
@@ -17,13 +17,17 @@ public class STLPreviewController : MonoBehaviour
     [SerializeField]
     private BoundsControllVisuals boundsControlVisuals;
 
+    [SerializeField]
+    private TransformationUIController TransformationUIController;
+
+
     public async void LoadSTLAsync(string fileName)
     {
         var _fileName = Path.Combine(Application.persistentDataPath, "Downloads", fileName);
 
         if (!File.Exists(_fileName))
         {
-            var result = await octoprinController.DownloadFileAsync(fileName);
+            var result = await octoprintController.DownloadFileAsync(fileName);
 
             if (!result)
             {
@@ -33,7 +37,8 @@ public class STLPreviewController : MonoBehaviour
 
         if (importer != null)
         {
-            await importer.ImportAsync(_fileName, this.transform);
+           var stlContainer= await importer.ImportAsync(_fileName, this.transform);
+            TransformationUIController.Host = stlContainer.transform;
         }
     }
 
