@@ -1146,7 +1146,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DefaultMaterial: {fileID: 2100000, guid: b2371d09f26169e4db6091c94a09789f, type: 2}
-  STLContainer: {fileID: 1286488480501780488, guid: 980dea5e95234984390042dedd1c56db,
+  STLContainerPrefab: {fileID: 1286488480501780488, guid: 980dea5e95234984390042dedd1c56db,
     type: 3}
   ModelImported:
     m_PersistentCalls:
@@ -1253,8 +1253,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1848296126}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.085, y: 0, z: 0.085}
-  m_LocalScale: {x: 0.017, y: 1, z: 0.017}
+  m_LocalPosition: {x: 0.075, y: 0, z: 0.075}
+  m_LocalScale: {x: 0.015, y: 1, z: 0.015}
   m_Children: []
   m_Father: {fileID: 170920074}
   m_RootOrder: 0
