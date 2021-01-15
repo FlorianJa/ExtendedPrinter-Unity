@@ -68,5 +68,9 @@ MonoBehaviour:
     m_Localized: Sag "Slicen"
     m_Metadata:
       m_Items: []
+  - m_Id: 14759922800873472
+    m_Localized: Bitte warten
+    m_Metadata:
+      m_Items: []
   references:
     version: 1

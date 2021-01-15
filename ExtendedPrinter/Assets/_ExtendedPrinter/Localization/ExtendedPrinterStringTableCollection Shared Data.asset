@@ -63,6 +63,10 @@ MonoBehaviour:
     m_Key: SaySlice
     m_Metadata:
       m_Items: []
+  - m_Id: 14759922800873472
+    m_Key: WAIT
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

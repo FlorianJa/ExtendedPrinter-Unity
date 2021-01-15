@@ -47,8 +47,10 @@ namespace Assets._ExtendedPrinter.Scripts.ModelLoader
             ClearParent();
 
             var fileName = Uri.Segments[Uri.Segments.Length - 1];
-            await DownloadFileAsync(Uri, Path.Combine(Application.persistentDataPath, fileName + ".zip"));
-            var files = await Unzip(Path.Combine(Application.persistentDataPath, fileName + ".zip"));
+            var zipPath = Path.Combine(Application.persistentDataPath, fileName + ".zip");
+            await DownloadFileAsync(Uri, zipPath);
+            var files = await Unzip(zipPath);
+            File.Delete(zipPath);
 
             foreach (var file in files)
             {
@@ -80,6 +82,7 @@ namespace Assets._ExtendedPrinter.Scripts.ModelLoader
 
             ModelLoaded?.Invoke();
         }
+        
 
         private void ClearParent()
         {
@@ -141,6 +144,14 @@ namespace Assets._ExtendedPrinter.Scripts.ModelLoader
             if (!Directory.Exists(outputPath))
             {
                 Directory.CreateDirectory(outputPath);
+            }
+            else
+            {
+                var files = Directory.GetFiles(outputPath);
+                foreach (var file in files)
+                {
+                    File.Delete(file);
+                }
             }
 
             var paths = new List<string>();

@@ -66,5 +66,9 @@ MonoBehaviour:
     m_Localized: Say "Slice"
     m_Metadata:
       m_Items: []
+  - m_Id: 14759922800873472
+    m_Localized: Please wait
+    m_Metadata:
+      m_Items: []
   references:
     version: 1
