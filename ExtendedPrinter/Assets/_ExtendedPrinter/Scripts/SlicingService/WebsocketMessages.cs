@@ -11,4 +11,10 @@ namespace Assets._ExtendedPrinter.Scripts.SlicingService
         public string MessageType;
         public string Payload;
     }
+
+    public class ProfileListMessage 
+    {
+        public string MessageType;
+        public List<string> Payload;
+    }
 }

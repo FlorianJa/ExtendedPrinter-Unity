@@ -2,6 +2,7 @@
 using Assets._ExtendedPrinter.Scripts.ModelLoader;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
@@ -24,6 +25,7 @@ namespace Assets._ExtendedPrinter.Scripts.SlicingService
         [Tooltip("OBJLoader to load the objs")]
         public SlicedModelLoader objLoader;
 
+        public List<string> AvailableProfiles { get; private set; }
 
         async void Start()
         {
@@ -132,6 +134,11 @@ namespace Assets._ExtendedPrinter.Scripts.SlicingService
 
                 UnityThread.executeInUpdate(() => { objLoader.LoadObjTest(url); });
             }
+            else if (_type == typeof(ProfileListMessage))
+            {
+                AvailableProfiles = ((ProfileListMessage)JsonUtility.FromJson(data, _type)).Payload;
+                
+            }
         }
 
         /// <summary>
@@ -149,7 +156,7 @@ namespace Assets._ExtendedPrinter.Scripts.SlicingService
             switch (type)
             {
                 case "FileSliced": return typeof(FileSlicedMessage);
-
+                case "Profiles": return typeof(ProfileListMessage);
                 default: return null;
             }
         }
