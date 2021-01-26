@@ -1,18 +1,21 @@
-﻿using System.Collections;
+﻿using Microsoft.MixedReality.Toolkit.UI;
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
+[RequireComponent(typeof(TextMeshPro))]
 public class UpdateInfillText : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
+    private TextMeshPro textMeshPro;
+
+    private void Start()
     {
-        
+        textMeshPro = GetComponent<TextMeshPro>();
+    }
+    public void UpdateText(SliderEventData data)
+    {
+        textMeshPro.text = ((int)(data.NewValue*100)).ToString() + "%";
     }
 }
