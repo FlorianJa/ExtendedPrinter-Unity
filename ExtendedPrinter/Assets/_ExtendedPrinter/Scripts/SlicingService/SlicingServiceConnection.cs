@@ -1,5 +1,6 @@
 ﻿using Assets._ExtendedPrinter.Scripts.Helper;
 using Assets._ExtendedPrinter.Scripts.ModelLoader;
+using Microsoft.MixedReality.Toolkit.UI;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,12 @@ namespace Assets._ExtendedPrinter.Scripts.SlicingService
         public SlicedModelLoader objLoader;
 
         public List<string> AvailableProfiles { get; private set; }
+
+
+        private string selectedSlicingConfigFile;
+        private float infill = 0.25f;
+        private SupportType support = SupportType.None;
+        private AdhesionType adhesion = AdhesionType.None;
 
         async void Start()
         {
@@ -84,7 +91,38 @@ namespace Assets._ExtendedPrinter.Scripts.SlicingService
             cliCommand.Rotate = rotation.z;
             cliCommand.RotateX = rotation.x;
             cliCommand.RotateY = rotation.y;
+            cliCommand.LoadConfigFile = selectedSlicingConfigFile;
+            cliCommand.FillDensity = infill;
+            cliCommand.SupportMaterial = support == SupportType.Buildeplate || support == SupportType.Everywhere;
+            cliCommand.SupportMaterialBuildeplateOnly = support == SupportType.Buildeplate;
+            cliCommand.Raft = adhesion == AdhesionType.Raft ? 2 : 0;
+            cliCommand.Brim = adhesion == AdhesionType.Brim ? 5 : 0;
             WebSocketSend(cliCommand);
+        }
+        
+        public void SetSlicingConfig(string configName)
+        {
+            selectedSlicingConfigFile = configName;
+        }
+
+        public void SetInfill(SliderEventData sliderData)
+        {
+            infill = sliderData.NewValue;
+        }
+
+        public void SetInfill(float percentage)
+        {
+            infill = percentage;
+        }
+
+        public void SetSupport(SupportTypeSo supportType)
+        {
+            support = supportType.SupportType;
+        }
+
+        public void SetAdhesion(AdhesionTypeSo adhesionType)
+        {
+            adhesion = adhesionType.AdhesionType;
         }
 
         /// <summary>
@@ -137,7 +175,7 @@ namespace Assets._ExtendedPrinter.Scripts.SlicingService
             else if (_type == typeof(ProfileListMessage))
             {
                 AvailableProfiles = ((ProfileListMessage)JsonUtility.FromJson(data, _type)).Payload;
-                
+                selectedSlicingConfigFile = AvailableProfiles[AvailableProfiles.Count-1]; 
             }
         }
 
@@ -162,3 +200,4 @@ namespace Assets._ExtendedPrinter.Scripts.SlicingService
         }
     }
 }
+

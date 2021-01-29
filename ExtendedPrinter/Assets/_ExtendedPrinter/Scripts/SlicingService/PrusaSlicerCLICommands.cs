@@ -13,9 +13,17 @@ namespace Assets._ExtendedPrinter.Scripts.SlicingService
     [Serializable]
     public class PrusaSlicerCLICommands
     {
-        public static PrusaSlicerCLICommands Default { get { return new PrusaSlicerCLICommands() { ExportGCode = true, SupportMaterial = false, LayerHeight = 0.2f, FillDensity = 0.5f, GcodeComments = true, Loglevel = 3 }; } }
+        public static PrusaSlicerCLICommands Default { get { return new PrusaSlicerCLICommands() { ExportGCode = true, SupportMaterial = false, LayerHeight = 0.2f, FillDensity = 0.5f, GcodeComments = true, Loglevel = 0, FillPattern = "line" }; } }
 
-        #region Properties
+        [CLICommand("--raft-layers")]
+        public int? Raft;
+
+        [CLICommand("--brim-width")]
+        public int? Brim;
+
+        [CLICommand("--fill-pattern")]
+        public string FillPattern;
+
         [CLICommand("--export-gcode")]
         public bool? ExportGCode;
 
@@ -33,6 +41,9 @@ namespace Assets._ExtendedPrinter.Scripts.SlicingService
 
         [CLICommand("--support-material")]
         public bool? SupportMaterial;
+
+        [CLICommand("--support-material-buildplate-only")]
+        public bool? SupportMaterialBuildeplateOnly;
 
         [CLICommand("--rotate")]
         public float? Rotate;
@@ -79,7 +90,6 @@ namespace Assets._ExtendedPrinter.Scripts.SlicingService
 
         [CLICommand("")]
         public string File;
-        #endregion
 
         public bool isValid()
         {
@@ -150,7 +160,12 @@ namespace Assets._ExtendedPrinter.Scripts.SlicingService
                     }
                     else if (prop.FieldType == typeof(string))
                     {
-                        commandBuilder.Append((string)prop.GetValue(this));
+                        var tempStr = (string)prop.GetValue(this);
+                        if(tempStr.Contains(" "))
+                        {
+                            tempStr = "'" + tempStr + "'";
+                        }
+                        commandBuilder.Append(tempStr);
                         commandBuilder.Append(" ");
                     }
                     else if (prop.FieldType == typeof(int?))
