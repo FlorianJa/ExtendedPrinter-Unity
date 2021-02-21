@@ -71,7 +71,11 @@ public class ScrolinglListContentController : MonoBehaviour
     private async void Refresh()
     {
         var tmp = await octoprintConnector.FetchAllFilesAsync();
-
+        if (tmp == null)
+        {
+            Debug.LogWarning("Keine Dateien auf dem Octoprint");
+            return;
+        }
         if (tmp.files.Count > 0)
         {
             var files = tmp.files.OrderBy(x => x.name);

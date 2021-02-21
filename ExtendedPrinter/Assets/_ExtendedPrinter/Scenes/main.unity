@@ -522,6 +522,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 914861853155140836}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &987602691 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2934033507266584184, guid: 095c5310e999a01428e48b358c7c447b,
+    type: 3}
+  m_PrefabInstance: {fileID: 2080753464}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1070065139
 GameObject:
   m_ObjectHideFlags: 0
@@ -630,7 +636,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1073250115
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1081,6 +1087,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1685698536}
+  - component: {fileID: 1685698537}
   m_Layer: 0
   m_Name: UI
   m_TagString: Untagged
@@ -1107,6 +1114,22 @@ Transform:
   m_Father: {fileID: 1164063717}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1685698537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1685698535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afe9de6690ddc284780b4ed4c6413a52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ModelSelectionUI: {fileID: 1887774094}
+  SlicingUI: {fileID: 1073250114}
+  PreviewUI: {fileID: 987602691}
+  SlicedModelLoader: {fileID: 1891034348}
 --- !u!1 &1766071989
 GameObject:
   m_ObjectHideFlags: 0
@@ -1245,6 +1268,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f98e7663599230e419addf153615c144, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1887774094 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8362314513083552631, guid: 19a9149d9674dc6438e7b8c88d570a3b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1652210931}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1891034344
 GameObject:
   m_ObjectHideFlags: 0
@@ -1343,7 +1372,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DomainNameOrIP: localhost
-  APIKey: E01C8F4CEA1240DCB85DEF914447B41C
+  APIKey: 0C91C68A5F814FFC977730DDC4424427
   FileAdded:
     m_PersistentCalls:
       m_Calls: []
@@ -1550,6 +1579,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Preview
+      objectReference: {fileID: 0}
+    - target: {fileID: 2934033507266584184, guid: 095c5310e999a01428e48b358c7c447b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2934033507266584187, guid: 095c5310e999a01428e48b358c7c447b,
         type: 3}

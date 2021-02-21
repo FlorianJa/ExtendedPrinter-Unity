@@ -91,6 +91,8 @@ public class SlicingUIController : MonoBehaviour
             var scale = stlContainer.localScale.x;
             var rotation = new Vector3(-stlContainer.localRotation.eulerAngles.x, -stlContainer.localRotation.eulerAngles.z, - stlContainer.localRotation.eulerAngles.y);
             slicingServiceConnection.SliceModel(_modelFileName,center,scale, rotation);
+
+            gameObject.SetActive(false);
         }
     }
 }
