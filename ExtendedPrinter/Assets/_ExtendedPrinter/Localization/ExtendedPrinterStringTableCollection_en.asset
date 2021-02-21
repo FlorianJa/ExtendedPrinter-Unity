@@ -70,5 +70,41 @@ MonoBehaviour:
     m_Localized: Please wait
     m_Metadata:
       m_Items: []
+  - m_Id: 28237835509899264
+    m_Localized: Weclome to PrintARface
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28238586437115904
+    m_Localized: Say "Follow Me"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28238864787906560
+    m_Localized: Say "Close"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28243441159446528
+    m_Localized: CHANGE ME! HERE GOES SOME DESCRIPTION OF THE APPLICATION!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28246345639469056
+    m_Localized: Don't show this message again.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28249936764805120
+    m_Localized: Skip tutorial
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28250400260562944
+    m_Localized: Say "Skip Tutorial"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28250848208035840
+    m_Localized: Tutorial
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28251039980003328
+    m_Localized: Say "Tutorial"
+    m_Metadata:
+      m_Items: []
   references:
     version: 1

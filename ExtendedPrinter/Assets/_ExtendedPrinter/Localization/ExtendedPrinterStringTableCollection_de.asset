@@ -72,5 +72,42 @@ MonoBehaviour:
     m_Localized: Bitte warten
     m_Metadata:
       m_Items: []
+  - m_Id: 28237835509899264
+    m_Localized: Willkommen zu PrintARface
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28238586437115904
+    m_Localized: Sag "Folge mir"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28238864787906560
+    m_Localized: "Sag \"Schlie\xDFen\""
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28243441159446528
+    m_Localized: "\xC4NDER MICH! HERE MUSS EINE BESCHREIBUNG DER APP EINGEF\xDCGT
+      WERDEN!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28246345639469056
+    m_Localized: Die Meldeung nicht mehr anzeigen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28249936764805120
+    m_Localized: "Tutorial \xFCberpringen."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28250400260562944
+    m_Localized: "Sag \"Tutorial \xFCberspringen\""
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28250848208035840
+    m_Localized: Tutorial
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28251039980003328
+    m_Localized: Sag "Tutorial"
+    m_Metadata:
+      m_Items: []
   references:
     version: 1

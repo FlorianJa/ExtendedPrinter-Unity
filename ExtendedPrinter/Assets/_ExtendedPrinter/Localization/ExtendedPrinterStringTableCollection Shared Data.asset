@@ -67,6 +67,42 @@ MonoBehaviour:
     m_Key: WAIT
     m_Metadata:
       m_Items: []
+  - m_Id: 28237835509899264
+    m_Key: WELCOME_TITLE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28238586437115904
+    m_Key: SAY_FOLLOW_ME
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28238864787906560
+    m_Key: SAY_CLOSE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28243441159446528
+    m_Key: APP_WELCOME_DESCRIPTION
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28246345639469056
+    m_Key: DONTSHOWAGAIN
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28249936764805120
+    m_Key: SKIP_TUTORIAL
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28250400260562944
+    m_Key: SAY_SKIP_TUTORIAL
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28250848208035840
+    m_Key: TUTORIAL
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28251039980003328
+    m_Key: SAY_TUTORIAL
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
