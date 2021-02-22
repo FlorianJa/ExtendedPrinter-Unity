@@ -14,19 +14,17 @@ public class SelectLanguageDialog : Dialog
 
     protected override void FinalizeLayout()
     {
-        throw new System.NotImplementedException();
     }
 
     protected override void GenerateButtons()
     {
         foreach (var button in Buttons)
         {
-            button.ParentDialog = this;
+            //button.ParentDialog = this;
         }
     }
 
     protected override void SetTitleAndMessage()
     {
-        throw new System.NotImplementedException();
     }
 }
