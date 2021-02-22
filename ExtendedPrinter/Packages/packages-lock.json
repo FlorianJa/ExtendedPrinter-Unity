@@ -8,50 +8,51 @@
       "hash": "f0ea776757f445ede972e76f58f325ba60e0df47"
     },
     "com.microsoft.mixedreality.toolkit.examples": {
-      "version": "2.5.1",
+      "version": "file:MixedReality/com.microsoft.mixedreality.toolkit.examples-2.5.4.tgz",
       "depth": 0,
-      "source": "registry",
+      "source": "local-tarball",
       "dependencies": {
-        "com.microsoft.mixedreality.toolkit.foundation": "2.5.1",
-        "com.microsoft.mixedreality.toolkit.extensions": "2.5.1"
-      },
-      "url": "https://pkgs.dev.azure.com/aipmr/MixedReality-Unity-Packages/_packaging/Unity-packages/npm/registry"
+        "com.microsoft.mixedreality.toolkit.foundation": "2.5.4",
+        "com.microsoft.mixedreality.toolkit.extensions": "2.5.4"
+      }
     },
     "com.microsoft.mixedreality.toolkit.extensions": {
-      "version": "2.5.1",
-      "depth": 1,
-      "source": "registry",
+      "version": "file:MixedReality/com.microsoft.mixedreality.toolkit.extensions-2.5.4.tgz",
+      "depth": 0,
+      "source": "local-tarball",
       "dependencies": {
-        "com.microsoft.mixedreality.toolkit.foundation": "2.5.1"
-      },
-      "url": "https://pkgs.dev.azure.com/aipmr/MixedReality-Unity-Packages/_packaging/Unity-packages/npm/registry"
+        "com.microsoft.mixedreality.toolkit.foundation": "2.5.4"
+      }
     },
     "com.microsoft.mixedreality.toolkit.foundation": {
-      "version": "2.5.1",
+      "version": "file:MixedReality/com.microsoft.mixedreality.toolkit.foundation-2.5.4.tgz",
       "depth": 0,
-      "source": "registry",
+      "source": "local-tarball",
       "dependencies": {
-        "com.microsoft.mixedreality.toolkit.standardassets": "2.5.1"
-      },
-      "url": "https://pkgs.dev.azure.com/aipmr/MixedReality-Unity-Packages/_packaging/Unity-packages/npm/registry"
+        "com.microsoft.mixedreality.toolkit.standardassets": "2.5.4"
+      }
     },
     "com.microsoft.mixedreality.toolkit.standardassets": {
-      "version": "2.5.1",
-      "depth": 1,
-      "source": "registry",
+      "version": "file:MixedReality/com.microsoft.mixedreality.toolkit.standardassets-2.5.4.tgz",
+      "depth": 0,
+      "source": "local-tarball",
       "dependencies": {
         "com.unity.textmeshpro": "2.1.1"
-      },
-      "url": "https://pkgs.dev.azure.com/aipmr/MixedReality-Unity-Packages/_packaging/Unity-packages/npm/registry"
+      }
     },
     "com.microsoft.mixedreality.toolkit.tools": {
-      "version": "2.5.1",
+      "version": "file:MixedReality/com.microsoft.mixedreality.toolkit.tools-2.5.4.tgz",
       "depth": 0,
-      "source": "registry",
+      "source": "local-tarball",
       "dependencies": {
-        "com.microsoft.mixedreality.toolkit.foundation": "2.5.1"
-      },
-      "url": "https://pkgs.dev.azure.com/aipmr/MixedReality-Unity-Packages/_packaging/Unity-packages/npm/registry"
+        "com.microsoft.mixedreality.toolkit.foundation": "2.5.4"
+      }
+    },
+    "com.microsoft.spatialaudio.spatializer.unity": {
+      "version": "file:MixedReality/com.microsoft.spatialaudio.spatializer.unity-1.0.176.tgz",
+      "depth": 0,
+      "source": "local-tarball",
+      "dependencies": {}
     },
     "com.unity.addressables": {
       "version": "1.16.6",
