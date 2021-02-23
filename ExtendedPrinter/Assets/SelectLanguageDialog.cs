@@ -9,8 +9,6 @@ public class SelectLanguageDialog : Dialog
     [SerializeField]
     private SelectLanguageDialogButton[] Buttons;
 
-    private GameObject[] twoButtonSet;
-
     public override void DismissDialog()
     {
         State = DialogState.InputReceived;
