@@ -6,21 +6,28 @@
         "com.microsoft.mixedreality",
         "com.microsoft.spatialaudio"
       ],
-      "url": "https://pkgs.dev.azure.com/aipmr/MixedReality-Unity-Packages/_packaging/Unity-packages/npm/registry/"
+      "url": "https:\/\/pkgs.dev.azure.com\/aipmr\/MixedReality-Unity-Packages\/_packaging\/Unity-packages\/npm\/registry\/"
+    },
+    {
+      "name": "jilleJr",
+      "scopes": [
+        "jillejr.newtonsoft.json-for-unity"
+      ],
+      "url": "https:\/\/npm.cloudsmith.io\/jillejr\/newtonsoft-json-for-unity"
     }
   ],
   "dependencies": {
-    "co.parabox.stl": "https://github.com/florianja/pb_Stl.git",
-    "com.microsoft.mixedreality.toolkit.examples": "file:MixedReality/com.microsoft.mixedreality.toolkit.examples-2.5.4.tgz",
-    "com.microsoft.mixedreality.toolkit.extensions": "file:MixedReality/com.microsoft.mixedreality.toolkit.extensions-2.5.4.tgz",
-    "com.microsoft.mixedreality.toolkit.foundation": "file:MixedReality/com.microsoft.mixedreality.toolkit.foundation-2.5.4.tgz",
-    "com.microsoft.mixedreality.toolkit.standardassets": "file:MixedReality/com.microsoft.mixedreality.toolkit.standardassets-2.5.4.tgz",
-    "com.microsoft.mixedreality.toolkit.tools": "file:MixedReality/com.microsoft.mixedreality.toolkit.tools-2.5.4.tgz",
-    "com.microsoft.spatialaudio.spatializer.unity": "file:MixedReality/com.microsoft.spatialaudio.spatializer.unity-1.0.176.tgz",
+    "co.parabox.stl": "https:\/\/github.com\/florianja\/pb_Stl.git",
+    "com.microsoft.mixedreality.toolkit.examples": "file:MixedReality\/com.microsoft.mixedreality.toolkit.examples-2.6.0-preview.20210220.4.tgz",
+    "com.microsoft.mixedreality.toolkit.extensions": "file:MixedReality\/com.microsoft.mixedreality.toolkit.extensions-2.6.0-preview.20210220.4.tgz",
+    "com.microsoft.mixedreality.toolkit.foundation": "file:MixedReality\/com.microsoft.mixedreality.toolkit.foundation-2.6.0-preview.20210220.4.tgz",
+    "com.microsoft.mixedreality.toolkit.standardassets": "file:MixedReality\/com.microsoft.mixedreality.toolkit.standardassets-2.6.0-preview.20210220.4.tgz",
+    "com.microsoft.mixedreality.toolkit.tools": "file:MixedReality\/com.microsoft.mixedreality.toolkit.tools-2.6.0-preview.20210220.4.tgz",
+    "com.microsoft.spatialaudio.spatializer.unity": "file:MixedReality\/com.microsoft.spatialaudio.spatializer.unity-1.0.176.tgz",
     "com.unity.collab-proxy": "1.2.16",
     "com.unity.ide.rider": "1.1.4",
     "com.unity.ide.vscode": "1.2.3",
-    "com.unity.localization": "0.9.0-preview",
+    "com.unity.localization": "0.10.0-preview",
     "com.unity.test-framework": "1.1.22",
     "com.unity.textmeshpro": "2.1.1",
     "com.unity.timeline": "1.2.17",
@@ -57,6 +64,7 @@
     "com.unity.modules.video": "1.0.0",
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
-    "com.unity.modules.xr": "1.0.0"
+    "com.unity.modules.xr": "1.0.0",
+    "jillejr.newtonsoft.json-for-unity": "12.0.302"
   }
 }

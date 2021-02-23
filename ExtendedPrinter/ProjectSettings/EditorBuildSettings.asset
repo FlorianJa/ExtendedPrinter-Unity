@@ -5,9 +5,12 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/_ExtendedPrinter/Scenes/main.unity
     guid: 7a2e8f6acd6fc2e4b85be2341ee437c3
+  - enabled: 1
+    path: Assets/_ExtendedPrinter/Scenes/dev_WelcomeSlate.unity
+    guid: 0b5d9bdca8d934946a6fd0be5bee595d
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 91d454f1224707343a693eabeb9fe98e,
       type: 2}

@@ -37,6 +37,6 @@ public class Localize : MonoBehaviour
             _textMesh.text = translatedValue;
         };
 
-        return new LocalizedString.ChangeHandler(action);
+        return null;//new LocalizedString.ChangeHandler(action);
     }
 }
