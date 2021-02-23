@@ -1,12 +1,14 @@
-﻿using Microsoft.MixedReality.Toolkit.Experimental.Dialog;
+﻿using Microsoft.MixedReality.Toolkit.UI;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Localization;
 
 public class SelectLanguageDialogButton : DialogButton
 {
     [SerializeField]
-    private string Locale;
+    private Locale Locale;
 
     /// <summary>
     /// Event handler that runs when button is clicked.

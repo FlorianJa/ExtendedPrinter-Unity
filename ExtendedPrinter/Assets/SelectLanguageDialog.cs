@@ -1,4 +1,4 @@
-﻿using Microsoft.MixedReality.Toolkit.Experimental.Dialog;
+﻿using Microsoft.MixedReality.Toolkit.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,11 +6,15 @@ using UnityEngine;
 
 public class SelectLanguageDialog : Dialog
 {
-
+    [SerializeField]
     private SelectLanguageDialogButton[] Buttons;
 
     private GameObject[] twoButtonSet;
 
+    public override void DismissDialog()
+    {
+        State = DialogState.InputReceived;
+    }
 
     protected override void FinalizeLayout()
     {
@@ -20,7 +24,7 @@ public class SelectLanguageDialog : Dialog
     {
         foreach (var button in Buttons)
         {
-            //button.ParentDialog = this;
+            button.ParentDialog = this;
         }
     }
 
