@@ -8,7 +8,7 @@ using UnityEngine.Localization.Settings;
 
 public class OpenDialogController : MonoBehaviour
 {
-    public GameObject SelectLanguageDialogPrefab;
+    public GameObject SettingsDialogPrefab;
 
     public DialogResult result;
 
@@ -22,7 +22,7 @@ public class OpenDialogController : MonoBehaviour
     {
         result = new DialogResult();
 
-        Dialog myDialog = SelectLanguageDialog.Open(SelectLanguageDialogPrefab, result);
+        Dialog myDialog = SettingsDialog.Open(SettingsDialogPrefab, result, PlayerSettings.GetAllSettings());
 
         if (myDialog != null)
         {
@@ -32,6 +32,11 @@ public class OpenDialogController : MonoBehaviour
 
     private void OnClosedDialogEvent(DialogResult obj)
     {
-        LocalizationSettings.SelectedLocale = (Locale)obj.Variable;
+        if (obj.Result == DialogButtonType.OK)
+        {
+            var settings = (PlayerSettings)obj.Variable;
+            settings.Save();
+        }
+        //LocalizationSettings.SelectedLocale = (Locale)obj.Variable;
     }
 }

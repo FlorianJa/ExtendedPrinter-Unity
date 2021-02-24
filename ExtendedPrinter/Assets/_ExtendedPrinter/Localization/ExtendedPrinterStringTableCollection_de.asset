@@ -109,5 +109,37 @@ MonoBehaviour:
     m_Localized: Sag "Tutorial"
     m_Metadata:
       m_Items: []
+  - m_Id: 29213030051684352
+    m_Localized: Sprache
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29213450039926784
+    m_Localized: Deutsch
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29213683901734912
+    m_Localized: Sag "Deutsch"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29213901430923264
+    m_Localized: Englisch
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29214181690122240
+    m_Localized: Zeige Willkommensbildschirm beim Starten an
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29235729713012736
+    m_Localized: Sag "Cancel"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29236065328635904
+    m_Localized: Sag "Save"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29239179792293888
+    m_Localized: Sag "Englisch"
+    m_Metadata:
+      m_Items: []
   references:
     version: 1

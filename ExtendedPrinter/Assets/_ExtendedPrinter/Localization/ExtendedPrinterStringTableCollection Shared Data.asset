@@ -103,6 +103,38 @@ MonoBehaviour:
     m_Key: SAY_TUTORIAL
     m_Metadata:
       m_Items: []
+  - m_Id: 29213030051684352
+    m_Key: LANGUAGE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29213450039926784
+    m_Key: GERMAN
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29213683901734912
+    m_Key: SAY_GERMAN
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29213901430923264
+    m_Key: ENGLISH
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29214181690122240
+    m_Key: SHOW_WELCOME_SCREEN
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29235729713012736
+    m_Key: SAY_CANCEL
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29236065328635904
+    m_Key: SAY_SAVE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29239179792293888
+    m_Key: SAY_English
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

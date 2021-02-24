@@ -136,7 +136,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &15146586
 Transform:
   m_ObjectHideFlags: 0
@@ -982,7 +982,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04b4c8bc415c1504c8eddbbf13102971, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SelectLanguageDialogPrefab: {fileID: 7930043393315783105, guid: b5f4cddf5dd88ff48b0f141d2d4cb5ad,
+  SettingsDialogPrefab: {fileID: 2541674703130367101, guid: 5f3807120e2ae5345a65a71ee0c545cf,
     type: 3}
 --- !u!4 &951676521
 Transform:
