@@ -13,16 +13,31 @@ public class OpenDialogController : MonoBehaviour
     public DialogResult result;
 
     // Start is called before the first frame update
-    void Start()
+    IEnumerator Start()
     {
-        OnOpenDialog();
+        yield return LocalizationSettings.InitializationOperation;
+        if (LocalizationSettings.InitializationOperation.IsDone)
+        {
+            for (int i = 0; i < LocalizationSettings.AvailableLocales.Locales.Count; ++i)
+            {
+                var locale = LocalizationSettings.AvailableLocales.Locales[i];
+                print("L :" + locale.name);
+            }
+        }
     }
 
     public void OnOpenDialog()
     {
         result = new DialogResult();
+        var settings = PlayerSettings.GetAllSettings();
 
-        Dialog myDialog = SettingsDialog.Open(SettingsDialogPrefab, result, PlayerSettings.GetAllSettings());
+        Debug.Log(settings.OctoprintIP);
+        Debug.Log(settings.APIKey);
+        Debug.Log(settings.SlicingServiceIP);
+        Debug.Log(settings.Language.Identifier.Code);
+        Debug.Log(settings.ShowWelcomeScreen);
+
+        Dialog myDialog = SettingsDialog.Open(SettingsDialogPrefab, result, settings);
 
         if (myDialog != null)
         {

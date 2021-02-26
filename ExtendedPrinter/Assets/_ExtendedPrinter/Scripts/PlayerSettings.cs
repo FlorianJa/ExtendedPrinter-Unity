@@ -13,6 +13,9 @@ public class PlayerSettings
 
     public static PlayerSettings GetAllSettings()
     {
+        
+
+
         var octoprintIP = PlayerPrefs.GetString("OctoprintIP", string.Empty);
         var aPIKey = PlayerPrefs.GetString("APIKey", string.Empty);
         var slicingServiceIP = PlayerPrefs.GetString("SlicingServiceIP", string.Empty);

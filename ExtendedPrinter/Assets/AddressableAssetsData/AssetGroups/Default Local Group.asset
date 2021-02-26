@@ -16,7 +16,13 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 0b5d603cbd5e92346a72a5f80d82c17a
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 1156fb0d3a1754f42b565a8865e30343
+    m_Address: Assets/_ExtendedPrinter/Localization/Localization Settings.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: a58dcd3172037b94fa344088bcec6a39, type: 2}
   m_SchemaSet:
