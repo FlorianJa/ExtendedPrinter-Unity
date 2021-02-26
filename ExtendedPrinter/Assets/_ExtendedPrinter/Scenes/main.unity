@@ -911,6 +911,7 @@ MonoBehaviour:
     m_TableEntryReference:
       m_KeyId: 14759922800873472
       m_Key: 
+    m_FallbackState: 0
   textMesh: {fileID: 1441252119}
 --- !u!114 &1507979604 stripped
 MonoBehaviour:
@@ -941,75 +942,16 @@ PrefabInstance:
       propertyPath: octoprintConnector
       value: 
       objectReference: {fileID: 1891034349}
-    - target: {fileID: 1024970117, guid: 19a9149d9674dc6438e7b8c88d570a3b, type: 3}
-      propertyPath: ModelSelected.m_PersistentCalls.m_Calls.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1024970117, guid: 19a9149d9674dc6438e7b8c88d570a3b, type: 3}
-      propertyPath: ModelSelected.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1024970117, guid: 19a9149d9674dc6438e7b8c88d570a3b, type: 3}
-      propertyPath: ModelSelected.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1024970117, guid: 19a9149d9674dc6438e7b8c88d570a3b, type: 3}
-      propertyPath: ModelSelected.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1024970117, guid: 19a9149d9674dc6438e7b8c88d570a3b, type: 3}
-      propertyPath: ModelSelected.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1766071992}
-    - target: {fileID: 1024970117, guid: 19a9149d9674dc6438e7b8c88d570a3b, type: 3}
-      propertyPath: ModelSelected.m_PersistentCalls.m_Calls.Array.data[1].m_Target
-      value: 
-      objectReference: {fileID: 1931367432}
-    - target: {fileID: 1024970117, guid: 19a9149d9674dc6438e7b8c88d570a3b, type: 3}
-      propertyPath: ModelSelected.m_PersistentCalls.m_Calls.Array.data[2].m_Target
-      value: 
-      objectReference: {fileID: 1073250115}
-    - target: {fileID: 1024970117, guid: 19a9149d9674dc6438e7b8c88d570a3b, type: 3}
-      propertyPath: ModelSelected.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1024970117, guid: 19a9149d9674dc6438e7b8c88d570a3b, type: 3}
-      propertyPath: ModelSelected.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1024970117, guid: 19a9149d9674dc6438e7b8c88d570a3b, type: 3}
-      propertyPath: ModelSelected.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1024970117, guid: 19a9149d9674dc6438e7b8c88d570a3b, type: 3}
-      propertyPath: ModelSelected.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: LoadSTLAsync
-      objectReference: {fileID: 0}
-    - target: {fileID: 1024970117, guid: 19a9149d9674dc6438e7b8c88d570a3b, type: 3}
-      propertyPath: ModelSelected.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: RemoveChildren
-      objectReference: {fileID: 0}
-    - target: {fileID: 1024970117, guid: 19a9149d9674dc6438e7b8c88d570a3b, type: 3}
-      propertyPath: ModelSelected.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
-      value: SetupUI
-      objectReference: {fileID: 0}
-    - target: {fileID: 1024970117, guid: 19a9149d9674dc6438e7b8c88d570a3b, type: 3}
-      propertyPath: ModelSelected.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 1024970117, guid: 19a9149d9674dc6438e7b8c88d570a3b, type: 3}
-      propertyPath: ModelSelected.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 1024970117, guid: 19a9149d9674dc6438e7b8c88d570a3b, type: 3}
-      propertyPath: ModelSelected.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
     - target: {fileID: 3142352532280597345, guid: 19a9149d9674dc6438e7b8c88d570a3b,
         type: 3}
       propertyPath: cameraMethods
       value: 
       objectReference: {fileID: 219433494}
+    - target: {fileID: 3142352532280597346, guid: 19a9149d9674dc6438e7b8c88d570a3b,
+        type: 3}
+      propertyPath: localCenter.z
+      value: 0.0125
+      objectReference: {fileID: 0}
     - target: {fileID: 8362314513083552628, guid: 19a9149d9674dc6438e7b8c88d570a3b,
         type: 3}
       propertyPath: m_RootOrder
@@ -1070,7 +1012,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: ModelSelectionView
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1024970118, guid: 19a9149d9674dc6438e7b8c88d570a3b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 19a9149d9674dc6438e7b8c88d570a3b, type: 3}
 --- !u!4 &1652210932 stripped
 Transform:
