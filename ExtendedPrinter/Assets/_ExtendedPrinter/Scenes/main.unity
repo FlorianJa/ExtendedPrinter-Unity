@@ -586,6 +586,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &758300564 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2934033506387996487, guid: 095c5310e999a01428e48b358c7c447b,
+    type: 3}
+  m_PrefabInstance: {fileID: 2080753464}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &946794900 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4054056518954210186, guid: cb1eabd6ae6723a4cb2a42761e4563a6,
@@ -1520,6 +1532,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 1931367432}
+        m_MethodName: AddRenderersToClippingPlane
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!114 &1891034349
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1586,6 +1609,7 @@ MonoBehaviour:
   Perimetermaterial: {fileID: 2100000, guid: 367785cff52b18a4aa2a2d81d2ea1ba3, type: 2}
   InfillMaterial: {fileID: 2100000, guid: 4a32340e30d08114aa4466fb8597b3d1, type: 2}
   SupportMaterial: {fileID: 2100000, guid: 675a9e5c222c2684ba38d7f44c3c07eb, type: 2}
+  clippingPlane: {fileID: 2082632544}
 --- !u!1 &1986845908
 GameObject:
   m_ObjectHideFlags: 0
@@ -1854,6 +1878,76 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5607017358099473992, guid: 095c5310e999a01428e48b358c7c447b,
+        type: 3}
+      propertyPath: sliderValue
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5607017358099473992, guid: 095c5310e999a01428e48b358c7c447b,
+        type: 3}
+      propertyPath: OnValueUpdated.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5607017358099473992, guid: 095c5310e999a01428e48b358c7c447b,
+        type: 3}
+      propertyPath: OnValueUpdated.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5607017358099473992, guid: 095c5310e999a01428e48b358c7c447b,
+        type: 3}
+      propertyPath: OnValueUpdated.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5607017358099473992, guid: 095c5310e999a01428e48b358c7c447b,
+        type: 3}
+      propertyPath: OnValueUpdated.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1931367432}
+    - target: {fileID: 5607017358099473992, guid: 095c5310e999a01428e48b358c7c447b,
+        type: 3}
+      propertyPath: OnValueUpdated.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 758300564}
+    - target: {fileID: 5607017358099473992, guid: 095c5310e999a01428e48b358c7c447b,
+        type: 3}
+      propertyPath: OnValueUpdated.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5607017358099473992, guid: 095c5310e999a01428e48b358c7c447b,
+        type: 3}
+      propertyPath: OnValueUpdated.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5607017358099473992, guid: 095c5310e999a01428e48b358c7c447b,
+        type: 3}
+      propertyPath: OnValueUpdated.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnSliderValueChanged
+      objectReference: {fileID: 0}
+    - target: {fileID: 5607017358099473992, guid: 095c5310e999a01428e48b358c7c447b,
+        type: 3}
+      propertyPath: OnValueUpdated.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: set_fontSize
+      objectReference: {fileID: 0}
+    - target: {fileID: 5607017358099473992, guid: 095c5310e999a01428e48b358c7c447b,
+        type: 3}
+      propertyPath: OnValueUpdated.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_FloatArgument
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5607017358099473992, guid: 095c5310e999a01428e48b358c7c447b,
+        type: 3}
+      propertyPath: OnValueUpdated.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 5607017358099473992, guid: 095c5310e999a01428e48b358c7c447b,
+        type: 3}
+      propertyPath: OnValueUpdated.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 5607017358220416309, guid: 095c5310e999a01428e48b358c7c447b,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.1059
+      objectReference: {fileID: 0}
     - target: {fileID: 5608314418224561646, guid: 095c5310e999a01428e48b358c7c447b,
         type: 3}
       propertyPath: m_LocalPosition.z
@@ -1952,6 +2046,53 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2080753464}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2082632542
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2082632543}
+  - component: {fileID: 2082632544}
+  m_Layer: 0
+  m_Name: ClippingPlane
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2082632543
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2082632542}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2080753465}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2082632544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2082632542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1ae338a2aef44dab5e4cd3f11c6f5d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderers: []
+  clippingSide: -1
+  useOnPreRender: 0
+  applyToSharedMaterial: 0
 --- !u!1 &2103286734 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2304406980185087780, guid: 19a9149d9674dc6438e7b8c88d570a3b,
@@ -4338,6 +4479,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Prusa Mini
+      objectReference: {fileID: 0}
+    - target: {fileID: 7139915626225123117, guid: 2e889d53ed247354e98724c954996854,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2e889d53ed247354e98724c954996854, type: 3}
