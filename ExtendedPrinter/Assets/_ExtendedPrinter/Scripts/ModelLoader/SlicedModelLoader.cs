@@ -36,6 +36,8 @@ namespace Assets._ExtendedPrinter.Scripts.ModelLoader
         public List<string> FilterList;
 
 
+        private GameObject PerimeterContainer, InfillContainer, SupportContainer;
+
         public UnityEvent ModelLoaded;
 
         /// <summary>
@@ -54,20 +56,21 @@ namespace Assets._ExtendedPrinter.Scripts.ModelLoader
 
             foreach (var file in files)
             {
+                var componentParent = GetComponentParent(file);
                 if (useFilter)
                 {
                     foreach (var filter in FilterList)
                     {
                         if (file.Contains(filter))
                         {
-                            await LoadObjFromFileAsync(file, parent);
+                            await LoadObjFromFileAsync(file, componentParent);
                             break;
                         }
                     }
                 }
                 else
                 {
-                    await LoadObjFromFileAsync(file, parent);
+                    await LoadObjFromFileAsync(file, componentParent);
                 }
             }
 
@@ -82,7 +85,26 @@ namespace Assets._ExtendedPrinter.Scripts.ModelLoader
 
             ModelLoaded?.Invoke();
         }
-        
+
+        private Transform GetComponentParent(string file)
+        {
+            if(file.Contains("perimeter") || file.Contains("solid infill"))
+            {
+                return PerimeterContainer.transform;
+            }
+            else if(file.Contains("bridge infill") || file.Contains("gap infill") || file.Contains("internal infill"))
+            {
+                return InfillContainer.transform;
+            }
+            else if(file.Contains("support material-"))
+            {
+                return SupportContainer.transform;
+            }
+            else
+            { 
+                return null;
+            }
+        }
 
         private void ClearParent()
         {
@@ -90,6 +112,17 @@ namespace Assets._ExtendedPrinter.Scripts.ModelLoader
             {
                 DestroyImmediate(parent.GetChild(0).gameObject);
             }
+            AddComponentParents();
+        }
+
+        private void AddComponentParents()
+        {
+            PerimeterContainer = new GameObject("Perimeter");
+            PerimeterContainer.transform.SetParent(parent);
+            InfillContainer = new GameObject("Infill");
+            InfillContainer.transform.SetParent(parent);
+            SupportContainer = new GameObject("Support");
+            SupportContainer.transform.SetParent(parent);
         }
 
         private async Task DownloadFileAsync(Uri fileUri, string localFullPath)
@@ -181,6 +214,9 @@ namespace Assets._ExtendedPrinter.Scripts.ModelLoader
 
         public async Task LoadObjFromFileAsync(string objFullPath, Transform parent, bool WorldPositionStays = false)
         {
+            if (parent == null) return;
+
+
             var loader = new OBJLoader();
             loader.defaultMaterial = material;
             var tmp = await loader.LoadAsync(objFullPath);

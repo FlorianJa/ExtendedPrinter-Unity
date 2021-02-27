@@ -40,8 +40,8 @@ public class UIController : MonoBehaviour
             throw new NullReferenceException("SlicedModelLoader is not set.");
         }
 
-        ModelSelectionUI.GetComponent<ScrolinglListContentController>().ModelSelected.AddListener(onModelSelected);
-        SlicedModelLoader.ModelLoaded.AddListener(onModelLoaded);
+        //ModelSelectionUI.GetComponent<ScrolinglListContentController>().ModelSelected.AddListener(onModelSelected);
+        //SlicedModelLoader.ModelLoaded.AddListener(onModelLoaded);
     }
 
     private void onModelLoaded()
@@ -51,7 +51,7 @@ public class UIController : MonoBehaviour
 
     private void OnDisable()
     {
-        ModelSelectionUI.GetComponent<ScrolinglListContentController>().ModelSelected.RemoveListener(onModelSelected);
+        //ModelSelectionUI.GetComponent<ScrolinglListContentController>().ModelSelected.RemoveListener(onModelSelected);
     }
 
     public void onModelSelected(string modelName)
