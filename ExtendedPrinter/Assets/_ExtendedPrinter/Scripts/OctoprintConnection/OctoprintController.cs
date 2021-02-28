@@ -1,4 +1,5 @@
 ﻿using OctoPrintLib;
+using OctoPrintLib.File;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -72,5 +73,10 @@ public class OctoprintController : MonoBehaviour
             return await octoprintServer.FileOperations.DownloadFileAsync(fileName, Path.Combine(Application.persistentDataPath, "Downloads",fileName));
         }
         return false;
+    }
+
+    public async Task<OctoprintFile> GetFileInfo(string file)
+    {
+        return await octoprintServer.FileOperations.GetFileInfoAsync(file);
     }
 }

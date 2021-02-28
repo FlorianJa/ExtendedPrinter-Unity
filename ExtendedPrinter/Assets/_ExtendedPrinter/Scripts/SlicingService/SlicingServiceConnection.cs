@@ -28,6 +28,7 @@ namespace Assets._ExtendedPrinter.Scripts.SlicingService
 
         public List<string> AvailableProfiles { get; private set; }
 
+        public FileSlicedEvent FileSliced;
 
         private string selectedSlicingConfigFile;
         private float infill = 0.25f;
@@ -168,9 +169,16 @@ namespace Assets._ExtendedPrinter.Scripts.SlicingService
             if (_type == typeof(FileSlicedMessage))
             {
                 var tmp = (FileSlicedMessage)JsonUtility.FromJson(data, _type);
-                Uri url = new Uri("http://" + DomainNmaeOrIp + tmp.Payload);
 
-                UnityThread.executeInUpdate(() => { objLoader.LoadObjTest(url); });
+                Uri url = new Uri("http://" + DomainNmaeOrIp + tmp.Payload.File);
+
+                UnityThread.executeInUpdate(() => {
+                    var gcodeName = url.Segments[url.Segments.Length - 1] + ".gcode";
+                    FileSliced?.Invoke(new FileSlicedMessageArgs() {File = gcodeName, FilamentLength = tmp.Payload.FilamentLength, PrintTime = tmp.Payload.PrintTime });
+                    objLoader.LoadObjTest(url);
+                });
+
+                
             }
             else if (_type == typeof(ProfileListMessage))
             {
