@@ -16,6 +16,6 @@ public class UpdateInfillText : MonoBehaviour
     }
     public void UpdateText(SliderEventData data)
     {
-        textMeshPro.text = ((int)(data.NewValue*100)).ToString() + "%";
+        if(data != null && textMeshPro != null) textMeshPro.text = ((int)(data.NewValue*100)).ToString() + "%";
     }
 }
