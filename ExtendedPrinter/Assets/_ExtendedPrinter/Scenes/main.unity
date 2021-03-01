@@ -418,6 +418,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!4 &437699196 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2934033506050169035, guid: 095c5310e999a01428e48b358c7c447b,
+    type: 3}
+  m_PrefabInstance: {fileID: 2080753464}
+  m_PrefabAsset: {fileID: 0}
 --- !u!82 &437808614 stripped
 AudioSource:
   m_CorrespondingSourceObject: {fileID: 5855529747446006508, guid: cb1eabd6ae6723a4cb2a42761e4563a6,
@@ -1100,6 +1106,12 @@ MonoBehaviour:
   PerimeterButton: {fileID: 1182445434}
   InfillButton: {fileID: 2141019338}
   SupportButton: {fileID: 191704614}
+--- !u!4 &1570317672 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2934033506186672127, guid: 095c5310e999a01428e48b358c7c447b,
+    type: 3}
+  m_PrefabInstance: {fileID: 2080753464}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1652210931
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1636,7 +1648,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DomainNameOrIP: localhost
-  APIKey: 0C91C68A5F814FFC977730DDC4424427
+  APIKey: E01C8F4CEA1240DCB85DEF914447B41C
   FileAdded:
     m_PersistentCalls:
       m_Calls: []
@@ -1868,6 +1880,11 @@ PrefabInstance:
       propertyPath: m_text
       value: Component View
       objectReference: {fileID: 0}
+    - target: {fileID: 2934033506050169038, guid: 095c5310e999a01428e48b358c7c447b,
+        type: 3}
+      propertyPath: hostTransform
+      value: 
+      objectReference: {fileID: 437699196}
     - target: {fileID: 2934033506186672124, guid: 095c5310e999a01428e48b358c7c447b,
         type: 3}
       propertyPath: m_Name
@@ -1878,6 +1895,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Component View Titel
       objectReference: {fileID: 0}
+    - target: {fileID: 2934033507221577535, guid: 095c5310e999a01428e48b358c7c447b,
+        type: 3}
+      propertyPath: hostTransform
+      value: 
+      objectReference: {fileID: 1570317672}
     - target: {fileID: 2934033507266584184, guid: 095c5310e999a01428e48b358c7c447b,
         type: 3}
       propertyPath: m_Name
@@ -1886,7 +1908,7 @@ PrefabInstance:
     - target: {fileID: 2934033507266584184, guid: 095c5310e999a01428e48b358c7c447b,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2934033507266584187, guid: 095c5310e999a01428e48b358c7c447b,
         type: 3}
