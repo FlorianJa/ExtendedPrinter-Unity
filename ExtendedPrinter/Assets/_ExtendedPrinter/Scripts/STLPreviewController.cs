@@ -21,6 +21,8 @@ public class STLPreviewController : MonoBehaviour
     [SerializeField]
     private TransformationUIController TransformationUIController;
 
+    private GameObject stlContainer;
+    private Vector3 defaultPosition;
 
     public async void LoadSTLAsync(string fileName)
     {
@@ -38,7 +40,8 @@ public class STLPreviewController : MonoBehaviour
 
         if (importer != null)
         {
-           var stlContainer= await importer.ImportAsync(_fileName, this.transform);
+            stlContainer= await importer.ImportAsync(_fileName, this.transform);
+            defaultPosition = stlContainer.transform.localPosition;
             TransformationUIController.Host = stlContainer.transform;
         }
     }
@@ -46,5 +49,18 @@ public class STLPreviewController : MonoBehaviour
     public void RemoveSTLPreview()
     {
         Destroy(transform.GetChild(0).gameObject);
+    }
+
+    public void ResetPosition()
+    {
+        stlContainer.transform.localPosition = defaultPosition;
+    }
+    public void ResetRotation()
+    {
+        stlContainer.transform.localRotation = Quaternion.identity;
+    }
+    public void ResetScale()
+    {
+        stlContainer.transform.localScale = Vector3.one;
     }
 }
