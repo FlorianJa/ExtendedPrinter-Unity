@@ -45,6 +45,8 @@ namespace OctoPrintLib
         public event EventHandler<FileAddedEventArgs> FileAdded;
         public event EventHandler WebSocketConnectedEvent;
 
+        public event EventHandler<CurrentMessageEventArgs> CurrentDataReceived;
+
         public bool WebSocketConnected
         {
             get
@@ -238,9 +240,15 @@ namespace OctoPrintLib
                     {
                         try
                         {
-                            var tmp = JsonUtility.FromJson<CurrentMessage>(data);
+                            var tmp = JsonConvert.DeserializeObject<CurrentMessage>(data);
+                            UnityThread.executeInUpdate(() =>
+                            {
+                                CurrentDataReceived?.Invoke(this, new CurrentMessageEventArgs(tmp));
+                            }); 
+
+                            //var tmp = JsonUtility.FromJson<CurrentMessage>(data);
                         }
-                        catch (Exception)
+                        catch (Exception e)
                         {
 
                         }

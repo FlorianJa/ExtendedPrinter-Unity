@@ -1,4 +1,4 @@
-﻿namespace OctoPrintLib
+﻿namespace OctoPrintLib.DataClasses
 {
     public class Progress
     {

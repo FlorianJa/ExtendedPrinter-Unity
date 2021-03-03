@@ -1,20 +1,23 @@
-﻿using System;
+﻿using OctoPrintLib.DataClasses;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace OctoPrintLib
 {
-    class CurrentMessage
+    [Serializable]
+    public class CurrentMessage
     {
         public Current current { get; set; }
     }
     public class Current
     {
         public State state { get; set; }
-        public FileInCurrentMessage job { get; set; }
+        public JobInCurrentMessage job { get; set; }
         public float? currentZ { get; set; }
         public Progress progress { get; set; }
         public Offsets offsets { get; set; }
+        public Resends resends { get; set; }
         public double serverTime { get; set; }
         public List<HistoricTemperatureDataPoint> temps { get; set; }
         public List<string> logs { get; set; }

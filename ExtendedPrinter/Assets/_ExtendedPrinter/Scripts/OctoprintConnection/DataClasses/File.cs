@@ -21,6 +21,8 @@ namespace OctoPrintLib
         public int? size { get; set; }
         public string origin { get; set; }
         public int? date { get; set; }
+
+        public string display { get; set; }
     }
 
 

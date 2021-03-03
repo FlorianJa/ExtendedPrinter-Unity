@@ -1,10 +1,13 @@
-﻿namespace OctoPrintLib
+﻿namespace OctoPrintLib.DataClasses
 {
-    public class Filament
+    public class Tool0
     {
-        public int? length { get; set; }
-        public float? volume { get; set; }
+        public double? length { get; set; }
+        public double? volume { get; set; }
     }
 
-    
+    public class Filament
+    {
+        public Tool0 tool0 { get; set; }
+    }
 }

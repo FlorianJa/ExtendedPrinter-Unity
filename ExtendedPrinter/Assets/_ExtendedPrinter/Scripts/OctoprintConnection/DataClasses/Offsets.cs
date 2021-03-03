@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace OctoPrintLib
+namespace OctoPrintLib.DataClasses
 {
     public class Offsets
     {

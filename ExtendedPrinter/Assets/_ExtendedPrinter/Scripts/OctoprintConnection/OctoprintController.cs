@@ -1,4 +1,5 @@
-﻿using OctoPrintLib;
+﻿using Assets._ExtendedPrinter.Scripts.Helper;
+using OctoPrintLib;
 using OctoPrintLib.File;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ public class OctoprintController : MonoBehaviour
 
     public UnityEvent FileAdded;
     public UnityEvent WebsocketConnectedEvent;
+    public CurrentMessageEvent CurrentMessageReceived;
 
     public bool WebsocketConnected
     {
@@ -33,9 +35,15 @@ public class OctoprintController : MonoBehaviour
     {
         octoprintServer = new OctoprintServer(DomainNameOrIP, APIKey);
         octoprintServer.FileAdded += OctoprintServer_FileAdded;
+        octoprintServer.CurrentDataReceived += OctoprintServer_CurrentDataReceived;
         octoprintServer.WebSocketConnectedEvent += OctoprintServer_WebSocketConnectedEvent;
         var x = octoprintServer.GeneralOperations.Login();
         octoprintServer.StartWebsocketAsync(x.name, x.session);
+    }
+
+    private void OctoprintServer_CurrentDataReceived(object sender, CurrentMessageEventArgs e)
+    {
+        CurrentMessageReceived.Invoke(e.Message);
     }
 
     private void OctoprintServer_WebSocketConnectedEvent(object sender, System.EventArgs e)

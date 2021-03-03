@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OctoPrintLib.DataClasses;
+using System;
 using System.Collections.Generic;
 using System.Text;
 

@@ -6,8 +6,9 @@ namespace OctoPrintLib.DataClasses
 {
     public class JobBase
     {
-        public int? estimatedPrintTime { get; set; }
-        public int? lastPrintTime { get; set; }
+        public double? estimatedPrintTime { get; set; }
+        public double? averagePrintTime { get; set; }
+        public double? lastPrintTime { get; set; }
         public Filament filament { get; set; }
 
     }

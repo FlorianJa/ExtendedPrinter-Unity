@@ -1,4 +1,5 @@
 ﻿using Assets._ExtendedPrinter.Scripts.SlicingService;
+using OctoPrintLib;
 using UnityEngine.Events;
 
 namespace Assets._ExtendedPrinter.Scripts.Helper
@@ -11,6 +12,6 @@ namespace Assets._ExtendedPrinter.Scripts.Helper
 
     [System.Serializable]
     public class IntEvent : UnityEvent<int> { }
-
-    
+    [System.Serializable]
+    public class CurrentMessageEvent : UnityEvent<CurrentMessage> { }
 }
