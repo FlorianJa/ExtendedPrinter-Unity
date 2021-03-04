@@ -152,7 +152,7 @@ namespace OctoPrintLib
         private async Task HandleWebSocketDataAsync(string data)
         {
             var messageType = GetMessageType(data);
-
+            Debug.Log(data);
             switch (messageType)
             {
                 case MessageType.Connected:
