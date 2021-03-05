@@ -32,10 +32,10 @@ public class DiagramDataController : MonoBehaviour
             Graph.DataSource.AddPointToCategoryRealtime("BedTarget", System.DateTime.Now, (double)temps[0].bed.target, 1f); 
             Graph.DataSource.AddPointToCategoryRealtime("BedActual", System.DateTime.Now, (double)temps[0].bed.actual, 1f);
             Graph.DataSource.EndBatch();
-            ToolTargetText.text = temps[0].tool0.target.Value.ToString("F1");
-            ToolActualText.text = temps[0].tool0.actual.Value.ToString("F1");
-            BedTargetText.text = temps[0].bed.target.Value.ToString("F1");
-            BedActualText.text = temps[0].bed.actual.Value.ToString("F1");
+            ToolTargetText.text = temps[0].tool0.target.Value.ToString("F1") + " °C";
+            ToolActualText.text = temps[0].tool0.actual.Value.ToString("F1") + " °C";
+            BedTargetText.text = temps[0].bed.target.Value.ToString("F1") + " °C";
+            BedActualText.text = temps[0].bed.actual.Value.ToString("F1") + " °C";
         }
     }
 }

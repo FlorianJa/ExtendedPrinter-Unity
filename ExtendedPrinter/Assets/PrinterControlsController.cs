@@ -3,11 +3,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PrinterControlsController : MonoBehaviour
 {
     public GameObject DialogPrefab;
 
+
+    public UnityEvent StopPrintCanceled;
+    public UnityEvent StopPrint;
+    public UnityEvent PausePrint;
 
     public void OnPrinterStop()
     {
@@ -20,10 +25,15 @@ public class PrinterControlsController : MonoBehaviour
 
     private void OnClosedDialogEvent(DialogResult obj)
     {
+        if (obj.Result == DialogButtonType.No)
+        {
+            StopPrintCanceled.Invoke();
+        }
+        else
+        {
+            StopPrint.Invoke();
+        }
     }
 
-    public void OnPrinterPause()
-    {
-        
-    }
+    
 }

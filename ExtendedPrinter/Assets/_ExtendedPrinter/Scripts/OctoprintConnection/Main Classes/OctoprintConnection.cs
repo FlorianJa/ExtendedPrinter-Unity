@@ -87,6 +87,35 @@ namespace OctoPrintLib
         }
 
         /// <summary>
+        /// Posts a JSON object as a string, uses JObject from Newtonsoft.Json to a given <paramref name="location"/>.
+        /// </summary>
+        /// <returns>The Result if any exists. Doesn't handle exceptions</returns>
+        /// <param name="location">The url sub-address like "http://192.168.1.2/<paramref name="location"/>"</param>
+        /// <param name="arguments">The Newtonsoft Jobject to post tp the address</param>
+        protected async Task<HttpWebResponse> PostJsonAsync(string location, JObject arguments)
+        {
+            string strResponseValue = string.Empty;
+            String argumentString = string.Empty;
+            argumentString = JsonConvert.SerializeObject(arguments);
+            HttpWebRequest request = WebRequest.CreateHttp("http://" + server.DomainNmaeOrIp + "/" + location);// + "?apikey=" + apiKey);
+            request.Method = "POST";
+            request.Headers["X-Api-Key"] = server.ApplicationKey;
+            request.ContentType = "application/json";
+            using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+            {
+                await streamWriter.WriteAsync(argumentString);
+            }
+            HttpWebResponse httpResponse;
+            httpResponse = (HttpWebResponse)request.GetResponse();
+
+            //using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            //{
+            //    strResponseValue = await streamReader.ReadToEndAsync();
+            //}
+            return httpResponse;
+        }
+
+        /// <summary>
         /// Posts a Delete request to a given <paramref name="location"/>
         /// </summary>
         /// <returns>The Result if any, shouldn't return anything.</returns>

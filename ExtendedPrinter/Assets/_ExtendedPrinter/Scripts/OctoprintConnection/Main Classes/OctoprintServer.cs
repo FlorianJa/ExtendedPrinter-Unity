@@ -66,6 +66,9 @@ namespace OctoPrintLib
 
         public OctoprintGeneral GeneralOperations { get; private set; }
 
+
+        public OctoprintJobOperation JobOperations { get; private set; }
+
         private string username;
         
         private string sessionID;
@@ -81,6 +84,7 @@ namespace OctoPrintLib
             ApplicationKey = aPIKey;
             FileOperations = new OctoprintFileOperation(this);
             GeneralOperations = new OctoprintGeneral(this);
+            JobOperations = new OctoprintJobOperation(this);
         }
 
         public async Task ShutdownAsync()

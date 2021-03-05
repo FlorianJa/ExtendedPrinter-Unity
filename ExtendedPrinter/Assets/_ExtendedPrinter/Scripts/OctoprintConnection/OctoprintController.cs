@@ -19,6 +19,8 @@ public class OctoprintController : MonoBehaviour
     public UnityEvent WebsocketConnectedEvent;
     public CurrentMessageEvent CurrentMessageReceived;
 
+    public UnityEvent PrintPaused, PrintResumed, PrintStopped, PrintStarted;
+
     public bool WebsocketConnected
     {
         get
@@ -86,5 +88,32 @@ public class OctoprintController : MonoBehaviour
     public async Task<OctoprintFile> GetFileInfo(string file)
     {
         return await octoprintServer.FileOperations.GetFileInfoAsync(file);
+    }
+
+    public async void PausePrintAsync()
+    {
+        var result = await octoprintServer.JobOperations.PausePrintAsync();
+
+        if (result) PrintPaused.Invoke();
+    }
+
+    public async void ResumePrintAsync()
+    {
+        var result = await octoprintServer.JobOperations.ResumePrintAsync();
+
+        if (result) PrintResumed.Invoke();
+    }
+
+    public async void StopPrintAsync()
+    {
+        var result = await octoprintServer.JobOperations.StopPrintAsync();
+
+        if (result) PrintStopped.Invoke();
+    }
+    public async void StartPrintAsync()
+    {
+        var result = await octoprintServer.JobOperations.StartPrintAsync();
+
+        if (result) PrintStarted.Invoke();
     }
 }
