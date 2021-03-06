@@ -149,7 +149,26 @@ namespace OctoPrintLib.Operations
             }
         }
 
-        
+
+        public async Task<bool> SelectFileAsync(string path, bool print = false, string location = "local")
+        {
+            JObject data = new JObject
+            {
+                { "command", "select" },
+                { "print", print}
+            };
+
+            try
+            {
+                _ = await PostJsonAsync("api/files/" + location + "/" + path, data);
+                return true;
+            }
+            catch (WebException e)
+            {
+                return false;
+            }
+        }
+
 
         /// <summary>
         /// Deletes a File

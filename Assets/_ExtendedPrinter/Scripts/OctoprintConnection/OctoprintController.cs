@@ -1,4 +1,5 @@
 ﻿using Assets._ExtendedPrinter.Scripts.Helper;
+using Assets._ExtendedPrinter.Scripts.SlicingService;
 using OctoPrintLib;
 using OctoPrintLib.File;
 using System.Collections;
@@ -116,4 +117,15 @@ public class OctoprintController : MonoBehaviour
 
         if (result) PrintStarted.Invoke();
     }
+
+    public async void SelectFileAsync(FileSlicedMessageArgs message)
+    {
+        await SelectFileAsync(message.File);
+    }
+
+    public async Task SelectFileAsync(string fileName)
+    {
+        await octoprintServer.FileOperations.SelectFileAsync(fileName);
+    }
+
 }

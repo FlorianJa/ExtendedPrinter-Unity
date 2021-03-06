@@ -21,11 +21,16 @@ public class DiagramDataController : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI BedActualText;
 
+    private float lastTime = 0;
+    private float refreshIntervall = 2f;
     public void OnDataRecieved(CurrentMessage message)
     {
         var temps = message.current.temps;
-        if (temps.Count > 0)
+        float time = Time.time;
+        if (temps.Count > 0 && lastTime + refreshIntervall < time)
         {
+            lastTime = time;
+
             Graph.DataSource.StartBatch();
             Graph.DataSource.AddPointToCategoryRealtime("ToolTarget", System.DateTime.Now, (double)temps[0].tool0.target, 1f); 
             Graph.DataSource.AddPointToCategoryRealtime("ToolActual", System.DateTime.Now, (double)temps[0].tool0.actual, 1f);
