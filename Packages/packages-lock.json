@@ -8,44 +8,44 @@
       "hash": "f0ea776757f445ede972e76f58f325ba60e0df47"
     },
     "com.microsoft.mixedreality.toolkit.examples": {
-      "version": "file:MixedReality/com.microsoft.mixedreality.toolkit.examples-2.6.0-preview.20210220.4.tgz",
+      "version": "file:MixedReality/com.microsoft.mixedreality.toolkit.examples-2.6.0.tgz",
       "depth": 0,
       "source": "local-tarball",
       "dependencies": {
-        "com.microsoft.mixedreality.toolkit.foundation": "2.6.0-preview.20210220.4",
-        "com.microsoft.mixedreality.toolkit.extensions": "2.6.0-preview.20210220.4"
+        "com.microsoft.mixedreality.toolkit.foundation": "2.6.0",
+        "com.microsoft.mixedreality.toolkit.extensions": "2.6.0"
       }
     },
     "com.microsoft.mixedreality.toolkit.extensions": {
-      "version": "file:MixedReality/com.microsoft.mixedreality.toolkit.extensions-2.6.0-preview.20210220.4.tgz",
+      "version": "file:MixedReality/com.microsoft.mixedreality.toolkit.extensions-2.6.0.tgz",
       "depth": 0,
       "source": "local-tarball",
       "dependencies": {
-        "com.microsoft.mixedreality.toolkit.foundation": "2.6.0-preview.20210220.4"
+        "com.microsoft.mixedreality.toolkit.foundation": "2.6.0"
       }
     },
     "com.microsoft.mixedreality.toolkit.foundation": {
-      "version": "file:MixedReality/com.microsoft.mixedreality.toolkit.foundation-2.6.0-preview.20210220.4.tgz",
+      "version": "file:MixedReality/com.microsoft.mixedreality.toolkit.foundation-2.6.0.tgz",
       "depth": 0,
       "source": "local-tarball",
       "dependencies": {
-        "com.microsoft.mixedreality.toolkit.standardassets": "2.6.0-preview.20210220.4"
+        "com.microsoft.mixedreality.toolkit.standardassets": "2.6.0"
       }
     },
     "com.microsoft.mixedreality.toolkit.standardassets": {
-      "version": "file:MixedReality/com.microsoft.mixedreality.toolkit.standardassets-2.6.0-preview.20210220.4.tgz",
+      "version": "file:MixedReality/com.microsoft.mixedreality.toolkit.standardassets-2.6.0.tgz",
       "depth": 0,
       "source": "local-tarball",
       "dependencies": {
-        "com.unity.textmeshpro": "2.1.1"
+        "com.unity.textmeshpro": "2.1.4"
       }
     },
     "com.microsoft.mixedreality.toolkit.tools": {
-      "version": "file:MixedReality/com.microsoft.mixedreality.toolkit.tools-2.6.0-preview.20210220.4.tgz",
+      "version": "file:MixedReality/com.microsoft.mixedreality.toolkit.tools-2.6.0.tgz",
       "depth": 0,
       "source": "local-tarball",
       "dependencies": {
-        "com.microsoft.mixedreality.toolkit.foundation": "2.6.0-preview.20210220.4"
+        "com.microsoft.mixedreality.toolkit.foundation": "2.6.0"
       }
     },
     "com.microsoft.spatialaudio.spatializer.unity": {
@@ -130,8 +130,8 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.textmeshpro": {
-      "version": "2.1.1",
-      "depth": 0,
+      "version": "2.1.4",
+      "depth": 1,
       "source": "registry",
       "dependencies": {
         "com.unity.ugui": "1.0.0"
