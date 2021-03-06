@@ -40,7 +40,7 @@ public class STLImporter : MonoBehaviour
                 var tmp = new GameObject();
                 tmp.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
                 tmp.transform.localRotation = new Quaternion(0, 0.7071068f, 0, 0.7071068f);//rotate object by 90 degree on y axis
-                tmp.transform.SetParent(stlContainer.transform);
+                tmp.transform.SetParent(stlContainer.transform, false);
                 tmp.AddComponent<MeshFilter>().mesh = mesh;
                 var renderer = tmp.AddComponent<MeshRenderer>();
                 if(DefaultMaterial != null)
@@ -75,7 +75,7 @@ public class STLImporter : MonoBehaviour
             center.z = (absMin.z + (absMax.z - absMin.z) / 2f) ;
 
             var collider = stlContainer.GetComponent<BoxCollider>();
-            collider.center += new Vector3(center.x, 0, center.z);
+            //collider.center += new Vector3(center.x, 0, center.z);
             collider.size = size;
                         
             stlContainer.transform.localPosition += new Vector3(0.085f,center.y, 0.085f); //0.085 for x and z = center of build plate

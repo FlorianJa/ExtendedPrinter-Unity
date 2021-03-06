@@ -22,7 +22,8 @@ public class DiagramDataController : MonoBehaviour
     private TextMeshProUGUI BedActualText;
 
     private float lastTime = 0;
-    private float refreshIntervall = 2f;
+    [SerializeField]
+    private float refreshIntervall = 6f;
     public void OnDataRecieved(CurrentMessage message)
     {
         var temps = message.current.temps;

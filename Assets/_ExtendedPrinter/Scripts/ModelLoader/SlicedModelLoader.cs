@@ -118,11 +118,11 @@ namespace Assets._ExtendedPrinter.Scripts.ModelLoader
         private void AddComponentParents()
         {
             PerimeterContainer = new GameObject("Perimeter");
-            PerimeterContainer.transform.SetParent(parent);
+            PerimeterContainer.transform.SetParent(parent, false);
             InfillContainer = new GameObject("Infill");
-            InfillContainer.transform.SetParent(parent);
+            InfillContainer.transform.SetParent(parent, false);
             SupportContainer = new GameObject("Support");
-            SupportContainer.transform.SetParent(parent);
+            SupportContainer.transform.SetParent(parent, false);
         }
 
         private async Task DownloadFileAsync(Uri fileUri, string localFullPath)
