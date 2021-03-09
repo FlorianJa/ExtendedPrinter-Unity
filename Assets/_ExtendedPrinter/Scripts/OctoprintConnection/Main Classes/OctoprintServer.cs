@@ -47,6 +47,8 @@ namespace OctoPrintLib
 
         public event EventHandler<CurrentMessageEventArgs> CurrentDataReceived;
 
+        public event EventHandler<PrintDoneEventArgs> PrintDone;
+
         public bool WebSocketConnected
         {
             get
@@ -206,6 +208,7 @@ namespace OctoPrintLib
                                 try
                                 {
                                     eventtype = _event.Value<string>("type");
+                                    Debug.Log("Received event: " + eventtype);
                                 }
                                 catch (Exception)
                                 {
@@ -230,6 +233,18 @@ namespace OctoPrintLib
                                     {
 
                                     }
+                                }
+                                else if(eventtype == "PrintDone")
+                                {
+
+                                    JToken payloadJtoken = null;
+                                    PrintDoneEventPayload printDoneEventPayload;
+                                    UnityThread.executeInUpdate(() =>
+                                    {
+                                        payloadJtoken = _event.Value<JToken>("payload");
+                                        printDoneEventPayload = payloadJtoken.ToObject<PrintDoneEventPayload>();
+                                        PrintDone?.Invoke(this, new PrintDoneEventArgs(printDoneEventPayload.name));
+                                    });
                                 }
                             }
                             

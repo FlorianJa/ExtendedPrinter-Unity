@@ -19,6 +19,7 @@ public class OctoprintController : MonoBehaviour
     public UnityEvent FileAdded;
     public UnityEvent WebsocketConnectedEvent;
     public CurrentMessageEvent CurrentMessageReceived;
+    public StringEvent PrintDone;
 
     public UnityEvent PrintPaused, PrintResumed, PrintStopped, PrintStarted;
 
@@ -40,8 +41,14 @@ public class OctoprintController : MonoBehaviour
         octoprintServer.FileAdded += OctoprintServer_FileAdded;
         octoprintServer.CurrentDataReceived += OctoprintServer_CurrentDataReceived;
         octoprintServer.WebSocketConnectedEvent += OctoprintServer_WebSocketConnectedEvent;
+        octoprintServer.PrintDone += OctoprintServer_PrintDone;
         var x = octoprintServer.GeneralOperations.Login();
         octoprintServer.StartWebsocketAsync(x.name, x.session);
+    }
+
+    private void OctoprintServer_PrintDone(object sender, PrintDoneEventArgs e)
+    {
+        PrintDone.Invoke(e.File);
     }
 
     private void OctoprintServer_CurrentDataReceived(object sender, CurrentMessageEventArgs e)
@@ -126,6 +133,16 @@ public class OctoprintController : MonoBehaviour
     public async Task SelectFileAsync(string fileName)
     {
         await octoprintServer.FileOperations.SelectFileAsync(fileName);
+    }
+
+    public async void DoHotendMoveDemo()
+    {
+        await octoprintServer.FileOperations.SelectFileAsync("demos/mixedHotendMovement.gcode", true);
+    }
+
+    public async void DoBuildplateMoveDemo()
+    {
+        await octoprintServer.FileOperations.SelectFileAsync("demos/moveBuildplate.gcode", true);
     }
 
 }

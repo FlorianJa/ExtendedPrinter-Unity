@@ -74,4 +74,27 @@ namespace OctoPrintLib.Messages
     }
 
 
+    [Serializable]
+    public class PrintDoneEvent
+    {
+        public string type { get; set; }
+        public PrintDoneEventPayload payload { get; set; }
+    }
+    [Serializable]
+    public class PrintDoneEventMessage
+    {
+        [JsonProperty("event")]
+        public PrintDoneEvent Event { get; set; }
+    }
+    [Serializable]
+    public class PrintDoneEventPayload
+    {
+        public string origin { get; set; }
+        public string name { get; set; }
+        public float time { get; set; }
+        public string owner { get; set; }
+        public string path { get; set; }
+        public int size { get; set; }
+    }
+
 }
