@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 3566607069352355565}
   - component: {fileID: 1729958404425518820}
   - component: {fileID: 4039909871522547659}
+  - component: {fileID: 2512702220952000674}
   m_Layer: 0
   m_Name: STLContainer
   m_TagString: Untagged
@@ -62,10 +63,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a98de877dee5fc341b4eb59dfdab266c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoConstraintSelection: 0
+  autoConstraintSelection: 1
   selectedConstraints:
   - {fileID: 1729958404425518820}
   - {fileID: 4039909871522547659}
+  - {fileID: 2512702220952000674}
 --- !u!114 &1862712812665986655
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -83,6 +85,7 @@ MonoBehaviour:
   boundsCalculationMethod: 0
   activation: 0
   flattenAxis: 0
+  uniformScaleOnFlattenedAxis: 1
   boxPadding: {x: 0, y: 0, z: 0}
   boxDisplayConfiguration: {fileID: 11400000, guid: bff645e747342874f91767ef6f4b462d,
     type: 2}
@@ -134,7 +137,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hostTransform: {fileID: 8343797251771965021}
-  manipulationType: 3
+  manipulationType: 1
   twoHandedManipulationType: 7
   allowFarManipulation: 1
   useForcesForNearManipulation: 0
@@ -208,3 +211,19 @@ MonoBehaviour:
   scaleMinimum: 0.2
   scaleMaximum: 2
   relativeToInitialState: 1
+--- !u!114 &2512702220952000674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1286488480501780488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b3e6359c9750ad4fb8a05c9b8704d7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handType: 3
+  proximityType: 3
+  constraintOnRotation: -1
+  useLocalSpaceForConstraint: 0

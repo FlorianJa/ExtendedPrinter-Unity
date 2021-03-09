@@ -17484,7 +17484,6 @@ Transform:
   - {fileID: 1771862017}
   - {fileID: 1073250116}
   - {fileID: 1652210932}
-  - {fileID: 1766071990}
   m_Father: {fileID: 1685698536}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -21868,10 +21867,10 @@ Transform:
   m_GameObject: {fileID: 1766071989}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.83333325, y: 0.83333325, z: 0.83333325}
   m_Children: []
-  m_Father: {fileID: 1443103885}
-  m_RootOrder: 5
+  m_Father: {fileID: 695195345}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1766071991
 MonoBehaviour:
