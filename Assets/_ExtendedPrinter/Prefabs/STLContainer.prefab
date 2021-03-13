@@ -16,7 +16,6 @@ GameObject:
   - component: {fileID: 3566607069352355565}
   - component: {fileID: 1729958404425518820}
   - component: {fileID: 4039909871522547659}
-  - component: {fileID: 2512702220952000674}
   m_Layer: 0
   m_Name: STLContainer
   m_TagString: Untagged
@@ -67,7 +66,7 @@ MonoBehaviour:
   selectedConstraints:
   - {fileID: 1729958404425518820}
   - {fileID: 4039909871522547659}
-  - {fileID: 2512702220952000674}
+  - {fileID: 0}
 --- !u!114 &1862712812665986655
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -211,19 +210,3 @@ MonoBehaviour:
   scaleMinimum: 0.2
   scaleMaximum: 2
   relativeToInitialState: 1
---- !u!114 &2512702220952000674
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1286488480501780488}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b3e6359c9750ad4fb8a05c9b8704d7b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  handType: 3
-  proximityType: 3
-  constraintOnRotation: -1
-  useLocalSpaceForConstraint: 0
