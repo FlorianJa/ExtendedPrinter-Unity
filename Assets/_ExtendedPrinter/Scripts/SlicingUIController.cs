@@ -74,7 +74,7 @@ public class SlicingUIController : MonoBehaviour
             {
                 var listItem = Instantiate(ProfileListItemPrefab, ProfileCollection);
                 var bch = listItem.GetComponent<ButtonConfigHelper>();
-                bch.MainLabelText = profile;
+                bch.MainLabelText = profile.Remove(profile.LastIndexOf('.'));
                 listItem.GetComponent<Interactable>().OnClick.AddListener(() => ProfileListItemSelected(profile));
             }
             SelectedProfile = SelectedProfile ?? profiles[profiles.Count - 1];

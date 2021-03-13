@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &8639410987642692033
+--- !u!1001 &6421606220282874552
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -37,11 +37,6 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 1999411330361731041, guid: 8e686c90124b8e14cbf8093893109e9a,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 7f923a721d963974aa6f986d8ad50c54, type: 2}
     - target: {fileID: 2022130049607222541, guid: 8e686c90124b8e14cbf8093893109e9a,
         type: 3}
       propertyPath: m_textAlignment
@@ -145,7 +140,7 @@ PrefabInstance:
     - target: {fileID: 2680377478557818543, guid: 8e686c90124b8e14cbf8093893109e9a,
         type: 3}
       propertyPath: m_Name
-      value: StopPrintDialog
+      value: DialogSmall_192x96Near
       objectReference: {fileID: 0}
     - target: {fileID: 3000857994780467417, guid: 8e686c90124b8e14cbf8093893109e9a,
         type: 3}
@@ -167,11 +162,6 @@ PrefabInstance:
       propertyPath: m_HorizontalAlignment
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 3317581592429756981, guid: 8e686c90124b8e14cbf8093893109e9a,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: ec72a3a105768f746b556a8dfdae61a8, type: 2}
     - target: {fileID: 4439329060279784821, guid: 8e686c90124b8e14cbf8093893109e9a,
         type: 3}
       propertyPath: m_Mesh
@@ -185,7 +175,7 @@ PrefabInstance:
     - target: {fileID: 4733889500858254147, guid: 8e686c90124b8e14cbf8093893109e9a,
         type: 3}
       propertyPath: minDistance
-      value: 0.25
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 4763430499752804846, guid: 8e686c90124b8e14cbf8093893109e9a,
         type: 3}
@@ -267,11 +257,6 @@ PrefabInstance:
       propertyPath: m_HorizontalAlignment
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 7223745823930495866, guid: 8e686c90124b8e14cbf8093893109e9a,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: ec72a3a105768f746b556a8dfdae61a8, type: 2}
     - target: {fileID: 8623872316314199098, guid: 8e686c90124b8e14cbf8093893109e9a,
         type: 3}
       propertyPath: m_Mesh
