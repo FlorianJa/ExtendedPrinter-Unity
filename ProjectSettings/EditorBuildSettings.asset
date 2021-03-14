@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/_ExtendedPrinter/Scenes/main.unity
+    path: Assets/_ExtendedPrinter/Scenes/Deploy.unity
     guid: 7a2e8f6acd6fc2e4b85be2341ee437c3
   - enabled: 0
     path: Assets/_ExtendedPrinter/Scenes/dev_WelcomeSlate.unity

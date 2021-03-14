@@ -18,6 +18,8 @@ public class UIController : MonoBehaviour
     [SerializeField]
     private SlicedModelLoader SlicedModelLoader;
 
+    [SerializeField]
+    private GameObject offsetSetter;
     private void Awake()
     {
         if(ModelSelectionUI == null)
@@ -57,5 +59,11 @@ public class UIController : MonoBehaviour
     public void onModelSelected(string modelName)
     {
         SlicingUI.SetActive(true);
+    }
+
+
+    private void Update()
+    {
+        this.transform.localPosition = offsetSetter.transform.localPosition;
     }
 }

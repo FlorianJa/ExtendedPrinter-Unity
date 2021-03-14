@@ -77,11 +77,15 @@ public class STLImporter : MonoBehaviour
             var collider = stlContainer.GetComponent<BoxCollider>();
             //collider.center += new Vector3(center.x, 0, center.z);
             collider.size = size;
+            //collider.center = new Vector3(0, -stlContainer.transform.localPosition.y + (size.y/2f), 0);
                         
-            stlContainer.transform.localPosition += new Vector3(0.085f,center.y, 0.085f); //0.085 for x and z = center of build plate
+            stlContainer.transform.localPosition += new Vector3(0.085f,size.y/2f, 0.085f); //0.085 for x and z = center of build plate
+
+            //collider.center = new Vector3(0, -stlContainer.transform.localPosition.y + (size.y / 2f), 0);
+
             foreach (Transform child in stlContainer.transform)
             {
-                child.localPosition += new Vector3(0, -center.y, 0);
+                child.localPosition += new Vector3(0, -size.y/2f, 0);
             }
 
             stlContainer.GetComponent<BoundsControl>().enabled = true;
