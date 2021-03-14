@@ -13,7 +13,7 @@ namespace Assets._ExtendedPrinter.Scripts.SlicingService
     [Serializable]
     public class PrusaSlicerCLICommands
     {
-        public static PrusaSlicerCLICommands Default { get { return new PrusaSlicerCLICommands() { ExportGCode = true, SupportMaterial = false, LayerHeight = 0.2f, FillDensity = 0.5f, GcodeComments = true, Loglevel = 0, FillPattern = "line" }; } }
+        public static PrusaSlicerCLICommands Default { get { return new PrusaSlicerCLICommands() { ExportGCode = true, GcodeComments = true, Loglevel = 0, FillPattern = "line" }; } }
 
         [CLICommand("--raft-layers")]
         public int? Raft;

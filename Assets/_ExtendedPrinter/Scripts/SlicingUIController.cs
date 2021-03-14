@@ -42,6 +42,9 @@ public class SlicingUIController : MonoBehaviour
     [SerializeField]
     private GCodeController GCodeController;
 
+    [SerializeField]
+    private GameObject ToolTipProfiles;
+
     private string _modelFileName;
 
     public StringEvent ProfileSelected;
@@ -51,6 +54,7 @@ public class SlicingUIController : MonoBehaviour
     private bool SettingsChanged = true;
     
     public UnityEvent ClosedWithoutSlicing;
+ 
 
     public void OnDisable()
     {
@@ -75,11 +79,11 @@ public class SlicingUIController : MonoBehaviour
                 var listItem = Instantiate(ProfileListItemPrefab, ProfileCollection);
                 var bch = listItem.GetComponent<ButtonConfigHelper>();
                 bch.MainLabelText = profile.Remove(profile.LastIndexOf('.'));
-                listItem.GetComponent<Interactable>().OnClick.AddListener(() => ProfileListItemSelected(profile));
+                listItem.GetComponent<Interactable>().OnClick.AddListener(() => { ProfileListItemSelected(profile); ToolTipProfiles.SetActive(false); });
             }
             SelectedProfile = SelectedProfile ?? profiles[profiles.Count - 1];
             //SelectedProfile ??= profiles[profiles.Count - 1];
-            SelectedProfileTextMesh.text = SelectedProfile;
+            SelectedProfileTextMesh.text = SelectedProfile.Remove(SelectedProfile.LastIndexOf('.'));
             ProfileCollection.GetComponent<GridObjectCollection>().UpdateCollection();
         }
 
@@ -99,7 +103,7 @@ public class SlicingUIController : MonoBehaviour
     private void ProfileListItemSelected(string profile)
     {
         SelectedProfile = profile; 
-        SelectedProfileTextMesh.text = SelectedProfile;
+        SelectedProfileTextMesh.text = SelectedProfile.Remove(SelectedProfile.LastIndexOf('.'));
         ProfileSelected?.Invoke(SelectedProfile);
         ProfileCollection.gameObject.SetActive(false);
         ProfileToggleButton.IsToggled = false;

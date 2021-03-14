@@ -22,7 +22,7 @@ public class OctoprintController : MonoBehaviour
     public StringEvent PrintDone;
 
     public UnityEvent PrintPaused, PrintResumed, PrintStopped, PrintStarted;
-
+    public UnityEvent PrinterHoming, PrinterCalibrating, PrinterHeatingUp, PrinterActualStarting;
     public bool WebsocketConnected
     {
         get
@@ -42,8 +42,39 @@ public class OctoprintController : MonoBehaviour
         octoprintServer.CurrentDataReceived += OctoprintServer_CurrentDataReceived;
         octoprintServer.WebSocketConnectedEvent += OctoprintServer_WebSocketConnectedEvent;
         octoprintServer.PrintDone += OctoprintServer_PrintDone;
+        octoprintServer.Home += OctoprintServer_Home;
+        octoprintServer.StartCalibration += OctoprintServer_StartCalibration;
+        octoprintServer.WaitForNozzleTemperature += OctoprintServer_WaitForNozzleTemperature;
+        octoprintServer.ActualPrintStarting += OctoprintServer_ActualPrintStarting;
+        octoprintServer.NozzleTemperatureReached += OctoprintServer_NozzleTemperatureReached;
+
         var x = octoprintServer.GeneralOperations.Login();
         octoprintServer.StartWebsocketAsync(x.name, x.session);
+    }
+
+    private void OctoprintServer_NozzleTemperatureReached(object sender, System.EventArgs e)
+    {
+        PrinterActualStarting.Invoke();
+    }
+
+    private void OctoprintServer_WaitForNozzleTemperature(object sender, System.EventArgs e)
+    {
+        PrinterHeatingUp.Invoke();
+    }
+
+    private void OctoprintServer_StartCalibration(object sender, System.EventArgs e)
+    {
+        PrinterCalibrating.Invoke();
+    }
+
+    private void OctoprintServer_Home(object sender, System.EventArgs e)
+    {
+        PrinterHoming.Invoke();
+    }
+
+    private void OctoprintServer_ActualPrintStarting(object sender, System.EventArgs e)
+    {
+        PrinterActualStarting.Invoke();
     }
 
     private void OctoprintServer_PrintDone(object sender, PrintDoneEventArgs e)

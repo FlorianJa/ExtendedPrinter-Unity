@@ -49,6 +49,12 @@ namespace OctoPrintLib
 
         public event EventHandler<PrintDoneEventArgs> PrintDone;
 
+        public event EventHandler Home;
+        public event EventHandler StartCalibration;
+        public event EventHandler WaitForNozzleTemperature;
+        public event EventHandler NozzleTemperatureReached;
+        public event EventHandler ActualPrintStarting;
+
         public bool WebSocketConnected
         {
             get
@@ -70,10 +76,14 @@ namespace OctoPrintLib
 
 
         public OctoprintJobOperation JobOperations { get; private set; }
+        public int PositionUpdateCount { get; private set; }
 
         private string username;
         
         private string sessionID;
+        private bool checkForM109;
+        private int targetM109Temp = -1;
+        private bool targetM109TempReached = false;
 
         /// <summary>
         /// Creates a <see cref="T:OctoprintClient.OctoprintConnection"/> 
@@ -158,7 +168,7 @@ namespace OctoPrintLib
         private async Task HandleWebSocketDataAsync(string data)
         {
             var messageType = GetMessageType(data);
-            //Debug.Log(data);
+            Debug.Log(data);
             switch (messageType)
             {
                 case MessageType.Connected:
@@ -246,6 +256,35 @@ namespace OctoPrintLib
                                         PrintDone?.Invoke(this, new PrintDoneEventArgs(printDoneEventPayload.name));
                                     });
                                 }
+                                else if (eventtype == "Home")
+                                {
+                                    PositionUpdateCount = 0;
+                                    targetM109TempReached = false;
+                                    UnityThread.executeInUpdate(() =>
+                                    {
+                                        Home?.Invoke(this, null);
+                                    });
+                                }
+                                else if (eventtype == "PositionUpdate")
+                                {
+                                    if(PositionUpdateCount < 1)
+                                    {
+                                        checkForM109 = true;
+                                        UnityThread.executeInUpdate(() =>
+                                        {
+                                            StartCalibration?.Invoke(this, null);
+                                        });
+                                    }
+                                    if (PositionUpdateCount >= 1 && targetM109TempReached)
+                                    {
+                                        targetM109TempReached = false;
+                                        UnityThread.executeInUpdate(() =>
+                                        {
+                                            ActualPrintStarting?.Invoke(this, null);
+                                        });
+                                    }
+                                    PositionUpdateCount++;
+                                }
                             }
                             
                         }
@@ -266,6 +305,41 @@ namespace OctoPrintLib
                             }); 
 
                             //var tmp = JsonUtility.FromJson<CurrentMessage>(data);
+
+
+                            if(checkForM109)
+                            {
+                                if(tmp != null)
+                                {
+                                    foreach (var log in tmp.current.logs)
+                                    {
+                                        if(log.Contains("M109"))
+                                        {
+                                            targetM109Temp = int.Parse(log.Substring(log.LastIndexOf('S') + 1, 3));
+                                            UnityThread.executeInUpdate(() =>
+                                            {
+                                                WaitForNozzleTemperature?.Invoke(this, null);
+                                            });
+                                        }
+                                    }
+                                }
+                            }
+                            if (targetM109Temp > 0 && checkForM109)
+                            {
+                                if (tmp != null)
+                                {
+
+                                    if(tmp.current.temps[0].tool0.actual >= targetM109Temp - 1)
+                                    {
+                                        targetM109TempReached = true;
+                                        checkForM109 = false;
+                                        UnityThread.executeInUpdate(() =>
+                                        {
+                                            NozzleTemperatureReached?.Invoke(this, null);
+                                        });
+                                    }
+                                }
+                            }
                         }
                         catch (Exception e)
                         {
