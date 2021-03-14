@@ -54,7 +54,7 @@ public class OctoprintController : MonoBehaviour
 
     private void OctoprintServer_NozzleTemperatureReached(object sender, System.EventArgs e)
     {
-        PrinterActualStarting.Invoke();
+        //PrinterActualStarting.Invoke();
     }
 
     private void OctoprintServer_WaitForNozzleTemperature(object sender, System.EventArgs e)

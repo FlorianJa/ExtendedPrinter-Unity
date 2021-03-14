@@ -4530,7 +4530,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "Das Hotend\n\nIm Hotend wird das Material auf ungef\xE4hr 200 \xB0C erhitzt
-    und unten aus der D\xFCse gepresst. Die D\xFCse wird auch Nozzel genannt. Aufgrund
+    und unten aus der D\xFCse gepresst. Die D\xFCse wird auch Nozzle genannt. Aufgrund
     der hohen Temperatur darf die D\xFCse w\xE4hrend des Betriebs nicht ber\xFChrt
     werden, es besteht Verbrennungsgefahr. In der nebenstehenden Abbildung ist der
     schematische Aufbau des Hotends dargestellt."
@@ -9061,6 +9061,7 @@ Transform:
   m_LocalPosition: {x: 0.0851, y: 0.2947, z: 0.1358}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 2012994057}
   - {fileID: 1008957330}
   - {fileID: 1336939867}
   - {fileID: 1737834230}
@@ -12124,7 +12125,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &952023351
 Transform:
   m_ObjectHideFlags: 0
@@ -12800,7 +12801,7 @@ PrefabInstance:
     - target: {fileID: 2204069623020599746, guid: 3f1f46cbecbe08e46a303ccfdb5b498a,
         type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2204069623020599746, guid: 3f1f46cbecbe08e46a303ccfdb5b498a,
         type: 3}
@@ -13339,7 +13340,6 @@ Transform:
   m_Children:
   - {fileID: 1623599297}
   - {fileID: 1580752680}
-  - {fileID: 2012994057}
   m_Father: {fileID: 2073113304}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -18171,7 +18171,7 @@ Transform:
   m_LocalScale: {x: 0.23206429, y: 0.059716914, z: 0.01}
   m_Children: []
   m_Father: {fileID: 732945368}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &1336939868
 MeshCollider:
@@ -22964,6 +22964,7 @@ MonoBehaviour:
   SlicingUI: {fileID: 1073250114}
   PreviewUI: {fileID: 987602691}
   SlicedModelLoader: {fileID: 1891034348}
+  offsetSetter: {fileID: 0}
 --- !u!1001 &1688252854
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23933,7 +23934,7 @@ RectTransform:
   m_LocalScale: {x: 0.008260832, y: 0.008260832, z: 0.008260832}
   m_Children: []
   m_Father: {fileID: 732945368}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -28147,9 +28148,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Ein 3D-Modell slicen\n\nDu befindest dich jetzt in Slicing-Ansicht. Hier
-    kannst du die wichtigsten Parameter f\xFCr den Druck einstellen. Du kannst die
-    voreingestellten Parameter so \xFCbernehmen oder nach deinen Bed\xFCrfnissen
+  m_text: "Ein 3D-Modell slicen\n\nDu befindest dich jetzt in der Slicing-Ansicht.
+    Hier kannst du die wichtigsten Parameter f\xFCr den Druck einstellen. Du kannst
+    die voreingestellten Parameter so \xFCbernehmen oder nach deinen Bed\xFCrfnissen
     anpassen. Wenn du fertig bist, klicke auf \"Slicen\"."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -28299,8 +28300,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: -0.004999995}
   m_LocalScale: {x: 0.008260832, y: 0.008260832, z: 0.008260832}
   m_Children: []
-  m_Father: {fileID: 1061703612}
-  m_RootOrder: 2
+  m_Father: {fileID: 732945368}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -28653,13 +28654,14 @@ GameObject:
   m_Component:
   - component: {fileID: 2073113304}
   - component: {fileID: 2073113305}
+  - component: {fileID: 2073113306}
   m_Layer: 0
   m_Name: Printing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2073113304
 Transform:
   m_ObjectHideFlags: 0
@@ -28700,6 +28702,109 @@ MonoBehaviour:
   Calibration: {fileID: 732945367}
   HeatUP2: {fileID: 921453929}
   Start: {fileID: 1465459062}
+  audio: {fileID: 2073113306}
+  HomeAudioClip: {fileID: 8300000, guid: 30bfda88ef1cde44da6793aa4f89a8d7, type: 3}
+  Heatup1AudioClip: {fileID: 8300000, guid: f9a421de49209e542b020de8edc50737, type: 3}
+  Heatup2AudioClip: {fileID: 8300000, guid: 456e80447dd24b34eaa49b59b2597301, type: 3}
+  CalibrationAudioClip: {fileID: 8300000, guid: 560222ca792772943b721eec1f6ffed9,
+    type: 3}
+  StartAudioClip: {fileID: 8300000, guid: 35fa6fdd92306ac4b94bb55119cb2acc, type: 3}
+--- !u!82 &2073113306
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2073113303}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: f9a421de49209e542b020de8edc50737, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 1
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &2075904229
 GameObject:
   m_ObjectHideFlags: 0
@@ -29058,6 +29163,15 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.z
       value: 0.1358
+      objectReference: {fileID: 0}
+    - target: {fileID: 8006140879476077908, guid: 095c5310e999a01428e48b358c7c447b,
+        type: 3}
+      propertyPath: m_text
+      value: "\xDCber die Druckvorschau\n\nIn dieser Ansicht wird dir das Modell
+        so angezeigt, wie es sp\xE4ter ausgedruckt wird. Mit dem linken Men\xFC kannst
+        du unterschiedliche Komponenten ein- und ausblenden. Mit dem rechten Slider
+        kannst du Schichten entfernen und von oben in das Modell schauen. Die Einstellungen
+        in dieser Ansicht haben keine Auswirkung auf den Druck."
       objectReference: {fileID: 0}
     - target: {fileID: 9010586711873314971, guid: 095c5310e999a01428e48b358c7c447b,
         type: 3}
